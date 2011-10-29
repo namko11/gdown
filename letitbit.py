@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from browser import browser
+from libs.browser import browser
 import datetime
 import time
 import re
 
-def letitbit_geturl(link, login, passwd):
+def geturl(link, login, passwd):
 	link = re.search('http://[w\.]{,4}letitbit.net/download/([0-9]+)/(.+)/(.+)\.html', link)		# own | uid | name
 	opera = browser()
 	values = { 'act':'login', 'login':login, 'password':passwd }

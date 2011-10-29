@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from browser import browser
+from libs.browser import browser
 import datetime
 import time
 import re
 
-def oron_geturl(link, login, passwd):
+def geturl(link, login, passwd):
 	opera = browser()
 	values = { 'login':login, 'password':passwd, 'op':'login', 'redirect':'', 'rand':'' }	# redirect is not working?
 	opera.get('http://oron.com/login', values)

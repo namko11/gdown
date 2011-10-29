@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from browser import browser
+from libs.browser import browser
 import datetime
 import time
 import re
 
-def fileserve_geturl(link, login, passwd):
+def geturl(link, login, passwd):
 	opera = browser()
 	values = {'loginUserName':login, 'loginUserPassword':passwd, 'loginFormSubmit':'Login'}
 	opera.get('http://www.fileserve.com/login.php', values)
 	return opera.get(link, log=False, stream=True)	# return connection
-def fileserve_status(login, passwd):
+def status(login, passwd):
 	opera = browser()
 	values = {'loginUserName':login, 'loginUserPassword':passwd, 'loginFormSubmit':'Login'}
 	content = opera.get('http://www.fileserve.com/login.php', values)	# sprawdz haslo

@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from browser import browser
+from libs.browser import browser
 import datetime
 import time
 import re
 
-def x7_geturl(link, login, passwd):
+def geturl(link, login, passwd):
 	opera = browser()
 	values = { 'id':login, 'pw':passwd }
 	opera.get('http://x7.to/james/login', values, referer='x7.to')

@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from browser import browser
+from libs.browser import browser
 import datetime
 import time
 import re
 
-def megashares_geturl(link, login, passwd):
+def geturl(link, login, passwd):
 	fileid = re.match('http://d01.megashares.com/dl/(.+)/.+', link).group(1)
 	link = 'http://d01.megashares.com/index.php?d01='+fileid
 	opera = browser()

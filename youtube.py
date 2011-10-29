@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from browser import browser
+from libs.browser import browser
 import datetime
 import time
 import re
 from urllib import unquote
 from urlparse import parse_qs
 
-def youtube_geturl(link, login=None, passwd=None):
+def geturl(link, login=None, passwd=None):
 	opera = browser()
 	content = opera.get(link)
 	content = unquote(re.search('url_encoded_fmt_stream_map=(.+?)&', content).group(1)).split()

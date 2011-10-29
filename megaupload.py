@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from browser import browser
+from libs.browser import browser
 import datetime
 import time
 import re
 
-def megaupload_geturl(link, login, passwd):
+def geturl(link, login, passwd):
 	opera = browser()
 	fileid = re.match('^http://[w\.]{,4}megaupload.com/\?d=(.+)$', link).group(1)
 	values = {'c':'login', 'login':'1', 'setlang':'en', 'next':'d='+fileid, 'username':login, 'password':passwd}
 	return opera.get('http://www.megaupload.com', values, log=False, stream=True)	# return connection
-def megaupload_status(login, passwd):
+def status(login, passwd):
 	opera = browser()
 	values = {'c':'login', 'login':'1', 'setlang':'en', 'next':'c=account', 'username':login, 'password':passwd}
 	content = opera.get('http://www.megaupload.com', values)

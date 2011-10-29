@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from browser import browser
+from libs.browser import browser
 import datetime
 import time
 import re
 
-def turbobit_geturl(link, login, passwd):
+def geturl(link, login, passwd):
 	opera = browser()
 	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory]':'1', 'user[submit]':'Zaloguj się' }
 	opera.get('http://turbobit.net/user/login', values)

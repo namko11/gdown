@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from browser import browser
+from libs.browser import browser
 import datetime
 import time
 import re
 
-def depositfiles_geturl(link, login, passwd):
+def geturl(link, login, passwd):
 	opera = browser()
 	values = { 'login':login, 'password':passwd, 'go':'1', 'submit':'enter' }
 	opera.get('http://depositfiles.com/en/login.php', values)	# login
