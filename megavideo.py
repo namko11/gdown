@@ -5,6 +5,7 @@ from browser import browser
 import datetime
 import time
 import re
+from urllib import unquote
 
 def megavideo_geturl(link, hash, login=None, passwd=None):
 	opera = browser()

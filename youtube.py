@@ -5,6 +5,8 @@ from browser import browser
 import datetime
 import time
 import re
+from urllib import unquote
+from urlparse import parse_qs
 
 def youtube_geturl(link, login=None, passwd=None):
 	opera = browser()
