@@ -1,20 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from libs.browser import browser
+import requests
 import datetime
 import time
 import re
+from config import *
 
 def geturl(link, login, passwd):
-	opera = browser()
+	opera = requests.session(headers=headers)
 	fileid = re.match('^http://[w\.]{,4}filesonic.[plcom]{2,3}/file/([0-9]+)/?.*$', link).group(1)
 	values = { 'u':login, 'p':passwd, 'ids':fileid, 'redirect':'true' }
-	return opera.get('http://api.filesonic.com/link?method=getDownloadLink', values, log=False, stream=True)	# return connection
+	return opera.post('http://api.filesonic.com/link?method=getDownloadLink', values).url	# return connection
 def status(login, passwd):
-	opera = browser()
+	opera = requests.session(headers=headers)
 	values = { 'u':login, 'p':passwd }
-	content = opera.get('http://api.filesonic.com/user?method=getInfo', values)
+	content = opera.post('http://api.filesonic.com/user?method=getInfo', values).content
 	if 'Your account has been deleted' in content: 	return -1
 	elif 'Login failed. Please check username or password' in content:	return -1
 	#login = re.search('email":"(.+?)"', content).group(1)

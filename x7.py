@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from libs.browser import browser
+import requests
 import datetime
 import time
 import re
+from config import *
 
 def geturl(link, login, passwd):
-	opera = browser()
+	opera = requests.session(headers=headers)
 	values = { 'id':login, 'pw':passwd }
-	opera.get('http://x7.to/james/login', values, referer='x7.to')
-	return opera.get(link, log=False, stream=True)
+	opera.post('http://x7.to/james/login', values, referer='x7.to')
+	return opera.get(link).url

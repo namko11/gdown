@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from libs.browser import browser
+import requests
 import datetime
 import time
 import re
+from config import *
 
 def geturl(link, login=None, passwd=None):
-	opera = browser()
+	opera = requests.session(headers=headers)
 	videoid = re.match('$http://[w\.]{,4}youporn.com/watch/(.+?)/.+^', link).group(1)
 	link = 'http://download.youporn.com/download/'+videoid+'?xml=1'
-	content = opera.get(link)
+	content = opera.get(link).content
 	link = re.search('<location>(.+)</location>', content).group(1)
-	return opera.get(link, log=False, stream=True)
+	return opera.get(link).url

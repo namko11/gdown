@@ -1,17 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from libs.browser import browser
+import requests
 import datetime
 import time
 import re
+from config import *
 
 def geturl(link, login, passwd):
 	link = re.search('http://[w\.]{,4}letitbit.net/download/([0-9]+)/(.+)/(.+)\.html', link)		# own | uid | name
-	opera = browser()
+	opera = requests.session(headers=headers)
 	values = { 'act':'login', 'login':login, 'password':passwd }
-	content = opera.get('http://letitbit.net/download.php?own='+link.group(1)+'&uid='+link.group(2)+'&name='+link.group(3)+'&page=1', values)	# login && get download page
+	content = opera.post('http://letitbit.net/download.php?own=%s&uid=%s&name=%s&page=1' %(link.group(1), link.group(2), link.group(3)), values).content	# login && get download page
 	link = re.search('src="(http://.*letitbit.net/sms/check2_iframe.php\?ac_syml_uid.+)"', content).group(1)
-	content = opera.get(link)								# get download iframe
+	content = opera.get(link).content					# get download iframe
 	link = re.findall('href="(.+)" style', content)[0]	# get first link
-	return opera.get(link, log=False, stream=True)
+	return opera.get(link).url
