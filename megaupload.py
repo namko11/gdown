@@ -15,7 +15,7 @@ def geturl(link, login, passwd):
 def status(login, passwd):
 	opera = requests.session(headers=headers)
 	values = {'c':'login', 'login':'1', 'setlang':'en', 'next':'c=account', 'username':login, 'password':passwd}
-	content = opera.post('http://www.megaupload.com', values).content
+	content = opera.post('http://www.megaupload.com/?c=account', values).content
 	if '<b>Premium</b>' in content:
 		return time.time()+int(re.search('<b>Premium</b> <font style="font-size:12px;">\(([0-9]+) days remaining', content).group(1))*60*60*24
 	return 0
