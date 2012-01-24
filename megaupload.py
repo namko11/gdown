@@ -16,7 +16,9 @@ def status(login, passwd):
 	opera = requests.session(headers=headers)
 	values = {'c':'login', 'login':'1', 'setlang':'en', 'next':'c=account', 'username':login, 'password':passwd}
 	content = opera.post('http://www.megaupload.com/?c=account', values).content
-	status = re.search('<div class="account_txt">(.+) &nbsp;&nbsp;</div>', content).group(1)
-	if status == 'Premium':
-		return time.time()+int(re.search('<div class="account_txt"> ([0-9]+) days remaining  </div>', content).group(1))*60*60*24
+	status = re.search('<div class="account_txt">(.+) &nbsp;&nbsp;</div>', content)
+	if status:
+		status = status.group(1)
+		if status == 'Premium':
+			return time.time()+int(re.search('<div class="account_txt"> ([0-9]+) days remaining  </div>', content).group(1))*60*60*24
 	return 0

@@ -10,7 +10,7 @@ import netload
 import oron
 import depositfiles
 import uploadstation
-#import uploaded
+import uploaded
 #import freakshare
 import bitshare
 #import uploading
