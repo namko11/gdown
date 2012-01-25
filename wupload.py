@@ -16,6 +16,10 @@ def status(login, passwd):
 	opera = requests.session(headers=headers)
 	values = { 'u':login, 'p':passwd }
 	content = opera.post('http://api.wupload.com/user?method=getInfo', values).content
+	while 'We have detected some suspicious behaviour coming from your IP address' in content:
+		print '[IP blocked] waiting 60s...'
+		time.sleep(60)
+		content = opera.post('http://api.filesonic.com/user?method=getInfo', values).content
 	if 'Your account has been deleted' in content: return -1
 	elif 'Login failed. Please check username or password' in content:	return -1
 	#login = re.search('email":"(.+?)"', content).group(1)
