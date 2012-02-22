@@ -27,19 +27,17 @@ def status(login, passwd):
 		# 6 Wochen 2 Tage und 19 Stunden
 		# 7 Wochen 6 Tage und 0 Stunden
 		# 5 semaines 2 jours et 21 heures
-		weeks = re.search('([0-9]+) [week|Woche]', content)
-		days = re.search('([0-9]+) [day|Tag]', content)
-		hours = re.search('([0-9]+) [hour|Stunde]', content)
-		minutes = re.search('([0-9]+) M|minute', content)
-		seconds = re.search('([0-9]+) [second|Sekunde]', content)
+		seconds = re.search('([0-9]+) (second|Sekunde)', content)
+		minutes = re.search('([0-9]+) (M|minute)', content)
+		hours = re.search('([0-9]+) (hour|Stunde)', content)
+		days = re.search('([0-9]+) (day|Tag)', content)
+		weeks = re.search('([0-9]+) ([wW]{1}eek|Woche)', content)
 		i = time.time()
-		if seconds:	i+=int(seconds.group(1))
-		if minutes:	i+=int(minutes.group(1))*60
-		if hours:	i+=int(hours.group(1))*60*60
-		if days:	i+=int(days.group(1))*60*60*24
-		if weeks:	i+=int(weeks.group(1))*30*24*60*60
-		print content
-		print i
+		if seconds:		i+=int(seconds.group(1))
+		if minutes:		i+=int(minutes.group(1))*60
+		if hours:		i+=int(hours.group(1))*60*60
+		if days:		i+=int(days.group(1))*60*60*24
+		if weeks:		i+=int(weeks.group(1))*30*24*60*60
 		return i
 	else:
 		return 0
