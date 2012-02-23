@@ -22,4 +22,4 @@ def status(login, passwd):
 	elif 'No Bonus' in content or 'Kein Premium' in content:
 		return 0
 	else:
-		return time.time() + int(re.search('<div style="float: left; width: 150px; color: #FFFFFF;"><span style="color: green">([0-9]+) Tage.+</span></div>', content).group(1))*60*60*24
+		return time.time() + int(re.search('<div style="float: left; width: 150px; color: #FFFFFF;"><span style="color: green">([0-9]+) Tage?.+</span></div>', content).group(1))*60*60*24
