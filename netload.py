@@ -16,10 +16,11 @@ def status(login, passwd):
 	opera = requests.session(headers=headers)
 	values = { 'txtuser':login, 'txtpass':passwd, 'txtcheck':'login', 'txtlogin':'Login' }
 	opera.post('http://netload.in/index.php', values)
-	content = opera.get('http://netload.in/index.php?id=2').content
-	if 'This account was locked' in content or 'not found in our records!' in content:
+	content = opera.get('http://netload.in/index.php?id=15').content
+	if 'This account was locked' in content or 'not found in our records!' in content or 'Invali?d Password' in content:
 		return -1
-	elif 'No Bonus' in content or 'Kein Premium' in content:
+	content = opera.get('http://netload.in/index.php?id=2').content
+	if 'No Bonus' in content or 'Kein Premium' in content:
 		return 0
 	else:
 		return time.time() + int(re.search('<div style="float: left; width: 150px; color: #FFFFFF;"><span style="color: green">([0-9]+) Tage?.+</span></div>', content).group(1))*60*60*24
