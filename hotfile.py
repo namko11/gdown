@@ -5,8 +5,8 @@ import requests
 import datetime
 import time
 import re
-from config import *
 import os
+from config import *
 
 def geturl(link, login, passwd):
 	opera = requests.session(headers=headers)
