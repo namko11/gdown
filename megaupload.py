@@ -12,6 +12,7 @@ def geturl(link, login, passwd):
 	fileid = re.match('^http://[w\.]{,4}megaupload.com/\?d=(.+)$', link).group(1)
 	values = {'c':'login', 'login':'1', 'setlang':'en', 'next':'d='+fileid, 'username':login, 'password':passwd}
 	return opera.post('http://www.megaupload.com', values).url	# return connection
+	
 def status(login, passwd):
 	opera = requests.session(headers=headers)
 	values = {'c':'login', 'login':'1', 'setlang':'en', 'next':'c=account', 'username':login, 'password':passwd}

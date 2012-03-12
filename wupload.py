@@ -12,6 +12,7 @@ def geturl(link, login, passwd):
 	fileid = re.match('^http://[w\.]{,4}wupload.[plcom]{2,3}/file/([0-9]+)/?.*$', link).group(1)
 	values = { 'u':login, 'p':passwd, 'ids':fileid, 'redirect':'true' }
 	return opera.post('http://api.wupload.com/link?method=getDownloadLink', values).url	# return connection
+	
 def status(login, passwd):
 	opera = requests.session(headers=headers)
 	values = { 'u':login, 'p':passwd }

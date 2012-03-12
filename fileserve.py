@@ -12,6 +12,7 @@ def geturl(link, login, passwd):
 	values = {'loginUserName':login, 'loginUserPassword':passwd, 'loginFormSubmit':'Login'}
 	opera.post('http://www.fileserve.com/login.php', values)
 	return opera.get(link).url	# return connection
+	
 def status(login, passwd):
 	opera = requests.session(headers=headers)
 	values = {'loginUserName':login, 'loginUserPassword':passwd, 'loginFormSubmit':'Login'}

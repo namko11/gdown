@@ -12,6 +12,7 @@ def geturl(link, login, passwd):	# not checked
 	values = {'id':login, 'pw':passwd, 'loginFormSubmit':'Login'}
 	opera.post('http://www.uploaded.to/io/login', values)
 	return opera.get(link).url	# return connection	
+	
 def status(login, passwd):
 	opera = requests.session(headers=headers)
 	values = { 'id':login, 'pw':passwd }

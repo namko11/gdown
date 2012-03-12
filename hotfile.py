@@ -11,6 +11,7 @@ def geturl(link, login, passwd):
 	opera = requests.session(headers=headers)
 	link = opera.get('http://api.hotfile.com/?action=getdirectdownloadlink&username=%s&password=%s&link=%s' %(login, passwd, link)).content
 	return opera.get(link).url	# return connection
+	
 def status(login, passwd):
 	opera = requests.session(headers=headers)
 	content = opera.get('http://api.hotfile.com/?action=getuserinfo&username=%s&password=%s' %(login, passwd)).content

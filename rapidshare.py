@@ -15,6 +15,7 @@ def geturl(link, login, passwd):
 	content = opera.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=download&fileid=%s&filename=%s&try=1&login=%s&password=%s' %(fileid, filename, login, passwd)).content
 	server = re.match('DL:(.+?),', content).group(1)
 	return opera.get('https://'+server+'/cgi-bin/rsapi.cgi?sub=download&fileid=%s&filename=%s&try=0&login=%s&password=%s' %(fileid, filename, login, passwd)).url	# return connection
+	
 def status(login, passwd):
 	opera = requests.session(headers=headers)
 	content = opera.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails&login=%s&password=%s&withpublicid=1' %(login, passwd)).content
