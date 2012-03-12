@@ -6,6 +6,7 @@ import datetime
 import time
 import re
 from config import *
+import os
 
 def geturl(link, login, passwd):
 	opera = requests.session(headers=headers)
@@ -18,3 +19,13 @@ def status(login, passwd):
 	if 'is_premium=1' in content:
 		return time.mktime(datetime.datetime.strptime(re.search('premium_until=(.+?)&', content).group(1)[:-6],'%Y-%m-%dT%H:%M:%S').timetuple())
 	return 0
+
+def upload(login, passwd, filename):
+	file_size = os.path.getsize(filename)	# get file size
+	opera = requests.session(headers=headers)
+	host = opera.get('http://api.hotfile.com/?action=getuploadserver').content[:-1]																			# get server to upload
+	upload_id = opera.post('http://%s/segmentupload.php?action=start' %(host), {'size':file_size}).content[:-1]												# start upload
+	opera.post('http://%s/segmentupload.php?action=upload' %(host), {'id':upload_id, 'offset':0}, files={'segment':open(filename, 'rb')}).content			# upload
+	return opera.post('http://%s/segmentupload.php?action=finish' %(host), {'id':upload_id, 'name':filename, 'username':login, 'password':passwd}).content	# start upload
+	
+	
