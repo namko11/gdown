@@ -4,6 +4,7 @@ import bitshare
 import depositfiles
 #import easyshare
 #import enterupload
+import filefactory
 import fileserve
 import filesonic
 #import freakshare
