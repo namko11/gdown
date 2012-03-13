@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import datetime
-import time
+#import datetime
+#import time
 import re
-import os
 from config import *
 
 def upload(login, passwd, filename):
