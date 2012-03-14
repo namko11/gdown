@@ -14,3 +14,11 @@ def geturl(link, login, passwd):
 	content = opera.get(link).content	# get download page
 	link = re.search('<a href="(.+)" onClick="download_started\(\);" class="hide_download_started">Download the file', content).group(1)
 	return opera.get(link).url
+
+def status(login, passwd):
+	opera = requests.session(headers=headers)
+	values = { 'login':login, 'password':passwd, 'go':'1', 'submit':'enter' }
+	opera.post('http://depositfiles.com/en/login.php', values)	# login
+	#opera.get('http://depositfiles.com/gold/')
+	#<div class="access">You have Gold access until: <b>2012-08-02 20:52:29</b></div>
+	
