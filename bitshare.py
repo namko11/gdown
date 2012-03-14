@@ -20,5 +20,7 @@ def upload(login, passwd, filename):
 	opera = requests.session(headers=headers)
 	hashkey = opera.post('http://bitshare.com/api/openapi/login.php', {'user':login, 'password':md5(passwd).hexdigest()}).content[8:]	# get hashkey (login)
 	host = opera.post('http://bitshare.com/api/openapi/upload.php', {'action':'getFileserver'}).content[8:]								# get host
-	content = opera.post(host, {'hashkey':hashkey, 'filesize':file_size}, files={'file':open(filename, 'rb')}).content					# upload
+	content = ''
+	while 'SUCCESS' not in content:
+		content = opera.post(host, {'hashkey':hashkey, 'filesize':file_size}, files={'file':open(filename, 'rb')}).content					# upload
 	return re.search('SUCCESS:(.+?)#\[URL', content).group(1)
