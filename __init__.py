@@ -11,7 +11,6 @@ import fileserve
 import hotfile
 import letitbit
 import mediafire
-import megaporn
 import megashares
 import netload
 import oron
