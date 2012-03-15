@@ -6,7 +6,6 @@ import depositfiles
 #import enterupload
 import filefactory
 import fileserve
-import filesonic
 #import freakshare
 #import gigasize
 import hotfile
