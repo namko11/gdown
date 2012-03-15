@@ -32,3 +32,10 @@ def status(login, passwd):
 	print content
 #	else:
 #		return 0
+
+def upload(login, passwd, filename):
+	opera = requests.session(headers=headers)
+	server_id = opera.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=nextuploadserver').content
+	content = opera.post('https://rs%s.rapidshare.com/cgi-bin/rsapi.cgi?sub=upload' %(server_id), {'login':login, 'password':passwd}, files={'filecontent':open(filename, 'rb')}).content
+	file_id = re.search('([0-9]+),[0-9]+,.+', content).group(1)
+	return 'https://rapidshare.com/files/%s/%s' %(file_id, filename)
