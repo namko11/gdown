@@ -25,7 +25,6 @@ import uploaded
 import uploadstation
 #import usershare
 import wupload
-import x7
 import xhamster
 import xvideos
 import youjizz
