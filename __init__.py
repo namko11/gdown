@@ -13,7 +13,6 @@ import letitbit
 import mediafire
 import megaporn
 import megashares
-import megaupload
 import megavideo
 import netload
 import oron
