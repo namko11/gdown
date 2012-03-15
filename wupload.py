@@ -27,3 +27,12 @@ def status(login, passwd):
 	status = re.search('"is_premium":(.+?),', content).group(1)
 	if status != 'true':		return 0
 	else:						return time.mktime(datetime.datetime.strptime(re.search('premium_expiration":"(.+?)"', content).group(1),'%Y-%m-%d %H:%M:%S').timetuple())
+
+def upload(login, passwd, filename):
+	opera = requests.session(headers=headers)
+	content = opera.get('http://api.wupload.com/upload?method=getUploadUrl&u=%s&p=%s' %(login, passwd)).content
+	host = re.search('"url":"(.+?)"', content).group(1).replace('\/', '\\')
+	print host
+	content = opera.post(host, files={'files[]':open(filename, 'rb')}).content	# upload
+	print content
+	return 0
