@@ -13,12 +13,13 @@ def geturl(link, login, passwd):
 	opera.post('http://www.fileserve.com/login.php', values)
 	return opera.get(link).url	# return connection
 	
-def status(login, passwd):
+def status(login, passwd, proxy=None):
+	if proxy: proxy = {'http':proxy, 'https':proxy}
 	opera = requests.session(headers=headers)
 	values = {'loginUserName':login, 'loginUserPassword':passwd, 'loginFormSubmit':'Login'}
-	content = opera.post('http://www.fileserve.com/login.php', values).content	# sprawdz haslo
+	content = opera.post('http://www.fileserve.com/login.php', values, proxies=proxy).content	# sprawdz haslo
 	if 'Invalid login. Please check username or password.' in content:		return -1
-	content = opera.get('http://www.fileserve.com/dashboard.php').content
+	content = opera.get('http://www.fileserve.com/dashboard.php', proxies=proxy).content
 	#earnings = re.search('</h5><h3><span>\$ </span><span style="font-size:20px;font-weight:normal;">(.+)</span></h3>', content).group(1)
 	try: premium = re.search('<td><h5>(.+) EST</h5></td>', content).group(1)
 	except: 	return 0
