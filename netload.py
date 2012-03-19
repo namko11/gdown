@@ -25,3 +25,9 @@ def status(login, passwd):
 		return 0
 	else:
 		return time.time() + int(re.search('<div style="float: left; width: 150px; color: #FFFFFF;"><span style="color: green">([0-9]+) Tage?.+</span></div>', content).group(1))*60*60*24
+
+def upload(login, passwd, filename):
+	opera = requests.session(headers=headers)
+	host = opera.get('http://api.netload.in/getserver.php').content
+	content = opera.post(host, {'user_id':login, 'user_password':passwd, 'modus':'file_upload'}, files={'file':open(filename, 'rb')}).content
+	return re.search('UPLOAD_OK;.+;[0-9]+;(.+);.+', content).group(1)
