@@ -20,8 +20,12 @@ def status(login, passwd):
 	content = opera.get('http://netload.in/index.php?id=15').content
 	if 'This account was locked' in content or 'not found in our records!' in content or 'Invald Password' in content:
 		return -1
-	elif 'Sorry, please activate first your account.' in content:
+	elif 'Sorry, please activate first your account.' in content:	# account not activated
 		return 0
+	elif 'Please wait a moment before tryingto log in again!' in content:	# ip blocked
+		print 'ip blocked'
+		asd
+		return -2
 	content = opera.get('http://netload.in/index.php?id=2').content
 	if 'No Bonus' in content or 'Kein Premium' in content:
 		return 0
