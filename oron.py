@@ -40,7 +40,6 @@ def upload(login, passwd, filename, proxy=None):
 def status(login, passwd):
 	opera = requests.session(headers=headers)
 	values = { 'login':login, 'password':passwd, 'op':'login', 'redirect':'', 'rand':'' }	# redirect is not working?
-	opera.post('http://oron.com/login', values)
-	content = opera.get('http://oron.com/?op=my_account').content
+	content = opera.post('http://oron.com/login', values).content
 	return time.mktime(datetime.datetime.strptime(re.search('<td>([0-9]+ [a-zA-Z]+ [0-9]+)</td>', content).group(1), '%d %B %Y').timetuple())
 	
