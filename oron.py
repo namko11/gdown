@@ -43,3 +43,4 @@ def status(login, passwd):
 	opera.post('http://oron.com/login', values)
 	content = opera.get('http://oron.com/?op=my_account').content
 	return time.mktime(datetime.datetime.strptime(re.search('<td>([0-9]+ [a-zA-Z]+ [0-9]+)</td>', content).group(1), '%d %B %Y').timetuple())
+	
