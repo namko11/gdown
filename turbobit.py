@@ -28,3 +28,8 @@ def upload(login, passwd, filename):
 	file_id = re.search('{"result":true,"id":"(.+)","message":"Everything is ok"}', content).group(1)
 	return 'http://turbobit.net/%s.html' %(file_id)
 	
+def status(login, passwd):
+	opera = requests.session(headers=headers)
+	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory':'1', 'user[submit]':'Zaloguj się' }
+	content = opera.post('http://turbobit.net/user/login', values).content				# login
+	
