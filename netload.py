@@ -21,7 +21,7 @@ def status(login, passwd):
 		return -1
 	elif 'Sorry, please activate first your account.' in content:	# account not activated
 		return 0
-	elif 'Please wait a moment before tryingto log in again!' in content:	# ip blocked
+	elif 'Please wait a moment before tryingto log in again!' in content or 'Invalid User ID!' in content:	# ip blocked
 		print 'ip blocked'
 		asd
 		return -2
