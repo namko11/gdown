@@ -18,6 +18,9 @@ def status(login, passwd):
 	content = opera.get('http://api.hotfile.com/?action=getuserinfo&username=%s&password=%s' %(login, passwd)).content
 	if 'is_premium=1' in content:
 		return time.mktime(datetime.datetime.strptime(re.search('premium_until=(.+?)&', content).group(1)[:-6],'%Y-%m-%dT%H:%M:%S').timetuple())
+	elif 'too many failed attemtps':
+		print 'ip blocked'
+		asd
 	return 0
 
 def upload(login, passwd, filename):
