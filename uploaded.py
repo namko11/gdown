@@ -41,4 +41,4 @@ def status(login, passwd):
 		if weeks:		i+=int(weeks.group(1))*30*24*60*60
 		return i
 	else:
-		return 0
+		return time.time()
