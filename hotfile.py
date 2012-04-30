@@ -20,7 +20,7 @@ def status(login, passwd):
 		return time.mktime(datetime.datetime.strptime(re.search('premium_until=(.+?)&', content).group(1)[:-6],'%Y-%m-%dT%H:%M:%S').timetuple())
 	elif 'is_premium=0' in content:
 		return time.time()
-	elif 'invalid username or password' in content:
+	elif 'invalid username or password' in content or 'user account is suspended' in content:
 		return -1
 	elif 'too many failed attemtps' in content:
 		print 'ip blocked'
