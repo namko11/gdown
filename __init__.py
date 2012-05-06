@@ -1,6 +1,7 @@
 #import 4shared
 import bitshare
 #import chomikuj
+import crocko
 import depositfiles
 #import easyshare
 #import enterupload
