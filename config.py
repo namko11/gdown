@@ -1,5 +1,5 @@
 headers = {
-	'User-Agent'		:	'Opera/9.80 (X11; Linux x86_64; U; en) Presto/2.10.229 Version/11.61',
+	'User-Agent'		:	'Opera/9.80 (X11; Linux x86_64; U; en) Presto/2.10.229 Version/11.64',
 	'Accept'			:	'text/html, application/xml;q=0.9, application/xhtml+xml, image/png, image/jpeg, image/gif, image/x-xbitmap, */*;q=0.1',
 	'Accept-Encoding'	:	'deflate, gzip, x-gzip, identity, *;q=0',
 	'Accept-Language'	:	'en;q=0.8',
