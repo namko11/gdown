@@ -32,4 +32,12 @@ def status(login, passwd):
 	opera = requests.session(headers=headers)
 	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory]':'1', 'user[submit]':'Zaloguj się' }
 	content = opera.post('http://turbobit.net/user/login', values).content				# login
-	
+	if 'Limit of login attempts exeeded.' in content:
+		print 'captcha'
+		asd
+		return -2
+	content = re.search('<u>Turbo Access</u> [to ]{,3}(.*?)\.?					</div>', content).group(1)
+	if content == 'denied':
+		return 0
+	else:
+		return time.mktime(datetime.datetime.strptime(content,'%d.%m.%Y').timetuple())
