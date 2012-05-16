@@ -36,6 +36,8 @@ def status(login, passwd):
 		print 'captcha'
 		asd
 		return -2
+	elif 'Incorrect login or password' in content:
+		return -1
 	content = re.search('<u>Turbo Access</u> [to ]{,3}(.*?)\.?					</div>', content).group(1)
 	if content == 'denied':
 		return 0
