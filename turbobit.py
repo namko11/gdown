@@ -18,7 +18,7 @@ def geturl(link, login, passwd):
 def upload(login, passwd, filename):
 	#file_size = os.path.getsize(filename)	# get file size
 	opera = requests.session(headers=headers)
-	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory':'1', 'user[submit]':'Zaloguj się' }
+	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory']:'1', 'user[submit]':'Zaloguj się' }
 	opera.post('http://turbobit.net/user/login', values).content				# login
 	content = opera.get('http://turbobit.net/').content
 	content = re.search('urlSite=(http://s[0-9]+.turbobit.ru/uploadfile)&userId=(.+)&', content)
@@ -30,6 +30,6 @@ def upload(login, passwd, filename):
 	
 def status(login, passwd):
 	opera = requests.session(headers=headers)
-	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory':'1', 'user[submit]':'Zaloguj się' }
+	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory']:'1', 'user[submit]':'Zaloguj się' }
 	content = opera.post('http://turbobit.net/user/login', values).content				# login
 	
