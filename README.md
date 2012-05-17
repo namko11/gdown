@@ -3,7 +3,7 @@ Dependencies
 
 * requests (Python HTTP Requests for Humans™)
 
-# Contributing
+Contributing
 ------------
 
 1. Fork it.
