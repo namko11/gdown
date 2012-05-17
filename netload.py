@@ -29,8 +29,12 @@ def status(login, passwd):
 	if 'No Bonus' in content or 'Kein Premium' in content:
 		return time.time()
 	else:
-		return time.time() + int(re.search('<div style="float: left; width: 150px; color: #FFFFFF;"><span style="color: green">([0-9]+) Tage?.+</span></div>', content).group(1))*60*60*24
-	print content
+		content = re.search('<div style="float: left; width: 150px; color: #FFFFFF;"><span style="color: green">([0-9]*?)[ Tage,]{,7}([0-9]+) Stunden</span></div>', content)
+		if content.group(1):
+			content = time.time()+int(content.group(1))*24*60*60+int(content.group(2))*60*60
+		else:
+			content = time.time()+int(content.group(2))*60*60
+		return content
 
 def upload(login, passwd, filename):
 	opera = requests.session(headers=headers)
