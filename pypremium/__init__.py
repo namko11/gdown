@@ -1,3 +1,36 @@
+__all__ = [
+	#'4shared',
+	'bitshare',
+	#'chomikuj',
+	'crocko',
+	'depositfiles',
+	#'easyshare',
+	#'enterupload',
+	'filefactory',
+	'freakshare',
+	#'gigasize',
+	'hotfile',
+	'letitbit',
+	'mediafire',
+	'megashares',
+	'netload',
+	'oron',
+	'pornhub',
+	'rapidshare',
+	'redtube',
+	'shareonline',
+	#'soundclound',
+	'turbobit',
+	'uploaded',
+	#'uploading',
+	#'usershare',
+	'xhamster',
+	'xvideos',
+	'youjizz',
+	'youporn',
+	'youtube',
+	]
+
 #import 4shared
 import bitshare
 #import chomikuj
