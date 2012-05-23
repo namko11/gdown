@@ -9,6 +9,24 @@ import os
 from hashlib import md5
 from config import *
 
+def status(login, passwd):
+	opera = requests.session(headers=headers)
+	''' # api version (do not return expire date)
+	hashkey = opera.post('http://bitshare.com/api/openapi/login.php', {'user':login, 'password':md5(passwd).hexdigest()}).content[8:]	# get hashkey (login)
+	content = opera.post('http://bitshare.com/api/openapi/accountdetails.php', {'hashkey':hashkey}).content
+	content = re.search('SUCCESS:([0-9]+)#[0-9]+#[0-9]+#[0-9]+#.+', content).group(1)	# 0=noPremium | 1=premium
+	'''
+	values = { 'user':login, 'password':passwd, 'rememberlogin':'1', 'submit':'Login' }
+	content = opera.post('http://bitshare.com/login.html', values).content
+	if '(<b>Premium</b>)' in content:
+		opera.get('http://bitshare.com/?language=EN')	# change language
+		content = opera.get('http://bitshare.com/myaccount.html').content
+		content = re.search('Valid until: ([0-9]+\-[0-9]+\-[0-9]+)', content).group(1)
+		content = time.mktime(datetime.datetime.strptime(content, '%Y-%m-%d').timetuple())
+		return content
+	else:
+		return 0
+
 def geturl(link, login, passwd):
 	opera = requests.session(headers=headers)
 	values = { 'user':login, 'password':passwd, 'rememberlogin':'1', 'submit':'Login' }
