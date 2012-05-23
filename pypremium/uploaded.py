@@ -38,7 +38,7 @@ def status(login, passwd):
 		if minutes:		i+=int(minutes.group(1))*60
 		if hours:		i+=int(hours.group(1))*60*60
 		if days:		i+=int(days.group(1))*60*60*24
-		if weeks:		i+=int(weeks.group(1))*30*24*60*60
+		if weeks:		i+=int(weeks.group(1))*7*24*60*60
 		return i
 	else:
 		return time.time()
