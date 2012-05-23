@@ -8,7 +8,7 @@ from config import *
 
 def geturl(link, login, passwd):
 	opera = requests.session(headers=headers)
-	content = re.match('^http://[w\.]{,4}rapidshare.com/files/([0-9]+)/(.+)$', link)
+	content = re.match('^https?://[w\.]{,4}rapidshare.com/files/([0-9]+)/(.+)$', link)
 	fileid = content.group(1)
 	filename = content.group(2)
 	content = opera.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=download&fileid=%s&filename=%s&try=1&login=%s&password=%s' %(fileid, filename, login, passwd)).content
