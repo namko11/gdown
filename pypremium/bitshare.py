@@ -16,16 +16,21 @@ def status(login, passwd):
 	content = opera.post('http://bitshare.com/api/openapi/accountdetails.php', {'hashkey':hashkey}).content
 	content = re.search('SUCCESS:([0-9]+)#[0-9]+#[0-9]+#[0-9]+#.+', content).group(1)	# 0=noPremium | 1=premium
 	'''
+	opera.get('http://bitshare.com/?language=EN')	# change language (regex)
 	values = { 'user':login, 'password':passwd, 'rememberlogin':'1', 'submit':'Login' }
 	content = opera.post('http://bitshare.com/login.html', values).content
 	if '(<b>Premium</b>)' in content:
-		opera.get('http://bitshare.com/?language=EN')	# change language
 		content = opera.get('http://bitshare.com/myaccount.html').content
 		content = re.search('Valid until: ([0-9]+\-[0-9]+\-[0-9]+)', content).group(1)
 		content = time.mktime(datetime.datetime.strptime(content, '%Y-%m-%d').timetuple())
 		return content
-	else:
+	elif 'Free' in content:
 		return 0
+	elif 'Wrong Username or Password!' in content:
+		return -1
+	else:
+		open('log.log', 'w').write(content)
+		new_status
 
 def geturl(link, login, passwd):
 	opera = requests.session(headers=headers)
