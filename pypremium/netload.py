@@ -20,14 +20,14 @@ def status(login, passwd):
 	if 'This account was locked' in content or 'not found in our records!' in content or 'Invald Password' in content or 'Invalid User ID!' in content:
 		return -1
 	elif 'Sorry, please activate first your account.' in content:	# account not activated
-		return time.time()
+		return 0
 	elif 'Please wait a moment before tryingto log in again!' in content:	# ip blocked
 		print 'ip blocked'
 		asd
 		return -2
 	content = opera.get('http://netload.in/index.php?id=2').content
 	if 'No Bonus' in content or 'Kein Premium' in content:
-		return time.time()
+		return 0
 	else:
 		content = re.search('<div style="float: left; width: 150px; color: #FFFFFF;"><span style="color: green">([0-9]*?)[ Tage,]{,7}([0-9]+) Stunden</span></div>', content)
 		if content.group(1):
