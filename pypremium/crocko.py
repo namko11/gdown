@@ -10,18 +10,21 @@ from config import *
 
 def getApikey(login, passwd):
 	opera = requests.session(headers=headers)
-	return re.search('<content type="text">(.+)</content>', opera.post('http://api.crocko.com/apikeys', {'login':login, 'password':passwd}).content).group(1)
+	content = re.search('<content type="text">(.+)</content>', opera.post('http://api.crocko.com/apikeys', {'login':login, 'password':passwd}).content).group(1)
+	if content == 'Invalid login or password':
+		return False
+	else:
+		return content
 
 def status(login, passwd):
 	# get apikey
 	apikey = getApikey(login, passwd)
+	if not apikey:	return -1		# invalid login or password
 	opera = requests.session(headers=headers)
 	content = opera.get('http://api.crocko.com/account', headers={'Authorization':apikey}).content
 	premium_end = re.search('<ed:premium_end>(.*?)</ed:premium_end>', content).group(1)
-	if not premium_end:
-		return 0
-	else:
-		return premium_end	# convert to timestamp
+	if not premium_end:	return 0	# free
+	else:	return premium_end		# premium
 
 def upload(login, passwd, filename):
 	# get apikey
