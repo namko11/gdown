@@ -7,6 +7,7 @@ import re
 from config import *
 
 def geturl(link, login, passwd):
+	''' IP validator is NOT present '''
 	opera = requests.session(headers=headers)
 	content = re.match('^https?://[w\.]{,4}rapidshare.com/files/([0-9]+)/(.+)$', link)
 	fileid = content.group(1)

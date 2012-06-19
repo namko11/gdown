@@ -7,6 +7,7 @@ import re
 from config import *
 
 def geturl(link, login, passwd):
+	''' IP validator is present '''
 	opera = requests.session(headers=headers)
 	values = { 'txtuser':login, 'txtpass':passwd, 'txtcheck':'login', 'txtlogin':'' }
 	opera.post('http://netload.in/index.php', values)

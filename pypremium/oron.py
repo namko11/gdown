@@ -8,6 +8,7 @@ import re
 from config import *
 
 def geturl(link, login, passwd):
+	''' IP validator is present '''
 	opera = requests.session(headers=headers)
 	values = { 'login':login, 'password':passwd, 'op':'login', 'redirect':'', 'rand':'' }	# redirect is not working?
 	opera.post('http://oron.com/login', values)

@@ -33,6 +33,7 @@ def status(login, passwd):
 		new_status
 
 def geturl(link, login, passwd):
+	''' IP validator is NOT present '''
 	opera = requests.session(headers=headers)
 	values = { 'user':login, 'password':passwd, 'rememberlogin':'1', 'submit':'Login' }
 	opera.post('http://bitshare.com/login.html', values)

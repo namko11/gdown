@@ -8,6 +8,7 @@ import re
 from config import *
 
 def geturl(link, login, passwd):
+	''' IP validator is present '''
 	opera = requests.session(headers=headers)
 	values = { 'login':login, 'password':passwd, 'go':'1', 'submit':'enter' }
 	opera.post('http://depositfiles.com/en/login.php', values)	# login

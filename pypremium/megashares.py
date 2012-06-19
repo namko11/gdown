@@ -8,6 +8,7 @@ import re
 from config import *
 
 def geturl(link, login, passwd):
+	''' IP validator is present (?) '''
 	fileid = re.match('http://d01.megashares.com/dl/(.+)/.+', link).group(1)
 	link = 'http://d01.megashares.com/index.php?d01='+fileid
 	opera = requests.session(headers=headers)

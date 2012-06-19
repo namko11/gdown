@@ -9,6 +9,7 @@ import os
 from config import *
 
 def geturl(link, login, passwd):
+	''' IP validator is present '''
 	opera = requests.session(headers=headers)
 	link = opera.get('http://api.hotfile.com/?action=getdirectdownloadlink&username=%s&password=%s&link=%s' %(login, passwd, link)).content
 	return opera.get(link).url	# return connection
