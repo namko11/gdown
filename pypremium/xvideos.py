@@ -11,5 +11,5 @@ from config import *
 def geturl(link, login=None, passwd=None):
 	opera = requests.session(headers=headers)
 	content = opera.get(link).content
-	link = unquote(re.search('flv_url=(.+)&amp;', content).group(1))
+	link = unquote(re.search('flv_url=(.*?)&amp;', content).group(1))
 	return opera.get(link).url
