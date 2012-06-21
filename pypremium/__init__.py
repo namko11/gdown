@@ -1,7 +1,7 @@
 __all__ = [
 	#'4shared',
 	'bitshare',
-	#'chomikuj',
+	'chomikuj',
 	'crocko',
 	'depositfiles',
 	#'easyshare',
