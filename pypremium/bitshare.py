@@ -24,7 +24,7 @@ def status(login, passwd):
 		content = re.search('Valid until: ([0-9]+\-[0-9]+\-[0-9]+)', content).group(1)
 		content = time.mktime(datetime.datetime.strptime(content, '%Y-%m-%d').timetuple())
 		return content
-	elif 'Free' in content:
+	elif '(<b><a href="http://bitshare.com/myupgrade.html">Free</a></b>)' in content:
 		return 0
 	elif 'Wrong Username or Password!' in content:
 		return -1
