@@ -9,6 +9,7 @@ __all__ = [
 	'filefactory',
 	'freakshare',
 	#'gigasize',
+	'hellshare',
 	'hotfile',
 	'letitbit',
 	'mediafire',
