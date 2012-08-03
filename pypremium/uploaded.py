@@ -18,7 +18,7 @@ def status(login, passwd):
 	values = { 'id':login, 'pw':passwd }
 	if 'User and password do not match!' in opera.post('http://uploaded.to/io/login', values).content:	return -1	# wrong password / acc deleted
 	content = opera.get('http://uploaded.to').content
-	if re.search('<th style="width:36%"><a href="me#premium"><em>(.+)</em></a></th>', content).group(1) == 'Premium':
+	if re.search('<th style="width:36%"><a href="register"><em>(.+)</em></a></th>', content).group(1) == 'Premium':
 		content = re.search('<th>([0-9]+.+)</th>			</tr>', content).group(1)
 		# 2 weeks 6 days and 4 hours
 		# 4 weeks 0 days and 8 hours
