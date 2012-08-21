@@ -18,7 +18,7 @@ def status(login, passwd):
 	values = { 'txtuser':login, 'txtpass':passwd, 'txtcheck':'login', 'txtlogin':'Login' }
 	opera.post('http://netload.in/index.php', values)
 	content = opera.get('http://netload.in/index.php?id=15').content
-	if 'This account was locked' in content or 'not found in our records!' in content or 'Invald Password' in content or 'Invalid User ID!' in content:
+	if 'This account was locked' in content or 'not found in our records!' in content or 'Invalid User ID or password!' in content:
 		return -1
 	elif 'Sorry, please activate first your account.' in content:	# account not activated
 		return 0
