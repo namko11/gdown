@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import requests
@@ -16,7 +16,8 @@ def geturl(link, login, passwd):	# not checked
 def status(login, passwd):
 	opera = requests.session(headers=headers)
 	values = { 'id':login, 'pw':passwd }
-	if 'User and password do not match!' in opera.post('http://uploaded.net/io/login', values).content:	return -1	# wrong password / acc deleted
+	content = opera.post('http://uploaded.net/io/login', values).content
+	if 'User and password do not match!' in content or 'Benutzer wurde gelöscht' in content:	return -1	# wrong password / acc deleted
 	content = opera.get('http://uploaded.net').content
 	if re.search('<th style="width:36%"><a href="register"><em>(.+)</em></a></th>', content).group(1) == 'Premium':
 		content = re.search('<th>([0-9]+.+)</th>			</tr>', content).group(1)
