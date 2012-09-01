@@ -43,10 +43,10 @@ def status(login, passwd):
 	values = { 'login':login, 'password':passwd, 'op':'login', 'redirect':'', 'rand':'' }	# redirect is not working?
 	content = opera.post('http://oron.com/login', values).content
 	if 'Incorrect Login or Password' in content:
-		return -1
+		return -2
 	elif 'Enter correct captcha' in content:
 		print 'captcha'
-		asd
-		return -2
+		captcha
+		return -999
 	return time.mktime(datetime.datetime.strptime(re.search('<td>([0-9]+ [a-zA-Z]+ [0-9]+)</td>', content).group(1), '%d %B %Y').timetuple())
 	

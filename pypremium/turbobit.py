@@ -32,16 +32,17 @@ def status(login, passwd):
 	opera = requests.session(headers=headers)
 	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory]':'1', 'user[submit]':'Zaloguj się' }
 	content = opera.post('http://turbobit.net/user/login', values).content				# login
-	if 'Limit of login attempts exeeded.' in content:
-		print 'captcha'
-		asd
+	if 'Incorrect login or password' in content or 'E-Mail address appears to be invalid. Please try again' in content:
 		return -2
-	elif 'Incorrect login or password' in content or 'E-Mail address appears to be invalid. Please try again' in content:
-		return -1
+	elif 'Limit of login attempts exeeded.' in content:
+		print 'captcha'
+		captcha
+		return -999
 	try:	content = re.search('<u>Turbo Access</u> [to ]{,3}(.*?)\.?					</div>', content).group(1)
 	except:
 		open('log.log', 'w').write(content)
 		new_status
+		return -999
 	if content == 'denied':
 		return 0
 	else:

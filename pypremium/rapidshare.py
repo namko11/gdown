@@ -17,14 +17,24 @@ def geturl(link, login, passwd):
 	return opera.get('https://'+server+'/cgi-bin/rsapi.cgi?sub=download&fileid=%s&filename=%s&try=0&login=%s&password=%s' %(fileid, filename, login, passwd)).url	# return connection
 	
 def status(login, passwd):
+	'''	errors:
+	ERROR: Login failed. Password incorrect or account not found. (221a75e5)
+	ERROR: Login failed. Account locked. Please contact us if you have questions. (b45c2518)
+	'''
 	opera = requests.session(headers=headers)
 	content = opera.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails&login=%s&password=%s&withpublicid=1' %(login, passwd)).content
-	if 'IP blocked' in content:	# ip blocked (too many wrong passwords)
-		print 'ip bloked'
-		asd
-		return -2
-	elif 'Login failed' in content:
+	if 'Login failed. Account locked.' in content:
 		return -1
+	elif 'Login failed. Password incorrect or account not found.' in content:
+		return -2
+	elif 'IP blocked' in content:	# ip blocked (too many wrong passwords)
+		print 'ip bloked'
+		ip_blocked
+		return -101
+	elif 'Login failed' in content:
+		print content
+		new_status
+		return -999
 	elif 'billeduntil=' in content:
 		return int(re.search('billeduntil=(.+)\n', content).group(1))
 

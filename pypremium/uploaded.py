@@ -17,7 +17,8 @@ def status(login, passwd):
 	opera = requests.session(headers=headers)
 	values = { 'id':login, 'pw':passwd }
 	content = opera.post('http://uploaded.net/io/login', values).content
-	if 'User and password do not match!' in content or 'Benutzer wurde gelöscht' in content:	return -1	# wrong password / acc deleted
+	if 'User and password do not match!' in content or 'Benutzer wurde gelöscht' in content:	# wrong password / acc deleted
+		return -2
 	content = opera.get('http://uploaded.net').content
 	if re.search('<th style="width:36%"><a href="register"><em>(.+)</em></a></th>', content).group(1) == 'Premium':
 		content = re.search('<th>([0-9]+.+)</th>			</tr>', content).group(1)

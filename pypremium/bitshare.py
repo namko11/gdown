@@ -27,10 +27,11 @@ def status(login, passwd):
 	elif '(<b><a href="http://bitshare.com/myupgrade.html">Free</a></b>)' in content:
 		return 0
 	elif 'Wrong Username or Password!' in content:
-		return -1
+		return -2
 	else:
 		open('log.log', 'w').write(content)
 		new_status
+		return -999
 
 def geturl(link, login, passwd):
 	''' IP validator is NOT present '''

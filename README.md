@@ -3,6 +3,16 @@ Dependencies
 
 * requests (Python HTTP Requests for Humans™)
 
+Status reponses
+------------
+
+>0		premium expire date timestamp
+0		no premium (free account)
+-1		blocked (can be unblocked)
+-2		wrong id or password/permanently blocked
+-101	ip blocked
+-999	new status/unknown error
+
 Contributing
 ------------
 

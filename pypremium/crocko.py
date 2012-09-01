@@ -19,7 +19,7 @@ def getApikey(login, passwd):
 def status(login, passwd):
 	# get apikey
 	apikey = getApikey(login, passwd)
-	if not apikey:	return -1		# invalid login or password
+	if not apikey:	return -2		# invalid login or password (?)
 	opera = requests.session(headers=headers)
 	content = opera.get('http://api.crocko.com/account', headers={'Authorization':apikey}).content
 	premium_end = re.search('<ed:premium_end>(.*?)</ed:premium_end>', content).group(1)
