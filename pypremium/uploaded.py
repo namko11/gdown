@@ -20,8 +20,12 @@ def status(login, passwd):
 	if 'User and password do not match!' in content or 'Benutzer wurde gelöscht' in content:	# wrong password / acc deleted
 		return -2
 	content = opera.get('http://uploaded.net').content
+	lang = re.search('<meta name="language" http-equiv="content-language" content="(.+)" />', content).group(1)
+	if lang != 'en':
+		content = opera.get('http://uploaded.net/language/en').content
+		opera.get('http://uploaded.net/language/%s' %(lang))	# restore old language
 	if re.search('<em>(.+)</em>', content).group(1) == 'Premium':
-		if '<th>unbegrenzt</th>			</tr>' in content:	# lifetime premium
+		if '<th>unbegrenzt</th>                 </tr>' in content:      # lifetime premium
 			return 32503680000
 		content = re.search('<th>([0-9]+.+)</th>			</tr>', content).group(1)
 		# 2 weeks 6 days and 4 hours
@@ -32,11 +36,11 @@ def status(login, passwd):
 		# 6 Wochen 2 Tage und 19 Stunden
 		# 7 Wochen 6 Tage und 0 Stunden
 		# 5 semaines 2 jours et 21 heures
-		seconds = re.search('([0-9]+) (second|Sekunde)', content)
-		minutes = re.search('([0-9]+) (M|minute)', content)
-		hours = re.search('([0-9]+) (hour|Stunde)', content)
-		days = re.search('([0-9]+) (day|Tag)', content)
-		weeks = re.search('([0-9]+) ([wW]{1}eek|Woche)', content)
+		seconds = re.search('([0-9]+) second', content)
+		minutes = re.search('([0-9]+) M|minute', content)
+		hours = re.search('([0-9]+) hour', content)
+		days = re.search('([0-9]+) day', content)
+		weeks = re.search('([0-9]+) [wW]{1}eek', content)
 		i = time.time()
 		if seconds:		i+=int(seconds.group(1))
 		if minutes:		i+=int(minutes.group(1))*60
