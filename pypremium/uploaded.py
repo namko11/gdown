@@ -25,7 +25,7 @@ def status(login, passwd):
 		content = opera.get('http://uploaded.net/language/en').content
 		opera.get('http://uploaded.net/language/%s' %(lang))	# restore old language
 	if re.search('<em>(.+)</em>', content).group(1) == 'Premium':
-		if '<th>unbegrenzt</th>                 </tr>' in content:      # lifetime premium
+		if '<th>unlimited</th>			</tr>' in content:      # lifetime premium
 			return 32503680000
 		content = re.search('<th>([0-9]+.+)</th>			</tr>', content).group(1)
 		# 2 weeks 6 days and 4 hours
