@@ -19,6 +19,8 @@ def status(login, passwd):
 	content = opera.post('http://uploaded.net/io/login', values).content
 	if 'User and password do not match!' in content or 'Benutzer wurde gelöscht' in content:	# wrong password / acc deleted
 		return -2
+	elif 'Account locked. Please contact Support.' in content:
+		return -1
 	content = opera.get('http://uploaded.net').content
 	lang = re.search('<meta name="language" http-equiv="content-language" content="(.+)" />', content).group(1)
 	if lang != 'en':
