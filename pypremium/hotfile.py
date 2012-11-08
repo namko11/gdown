@@ -31,6 +31,9 @@ def status(login, passwd):
 		return -101
 	else:
 		open('log.log', 'w').write(content)
+		print content
+		new_status
+		return -999
 
 def upload(login, passwd, filename):
 	file_size = os.path.getsize(filename)	# get file size
