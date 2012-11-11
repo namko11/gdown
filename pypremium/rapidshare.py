@@ -20,12 +20,13 @@ def status(login, passwd):
 	'''	errors:
 	ERROR: Login failed. Password incorrect or account not found. (221a75e5)
 	ERROR: Login failed. Account locked. Please contact us if you have questions. (b45c2518)
+	ERROR: Login failed. Login data invalid. (0320f9f0)
 	'''
 	opera = requests.session(headers=headers)
 	content = opera.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails&login=%s&password=%s&withpublicid=1' %(login, passwd)).content
 	if 'Login failed. Account locked.' in content:
 		return -1
-	elif 'Login failed. Password incorrect or account not found.' in content:
+	elif 'Login failed. Password incorrect or account not found.' in content or 'Login failed. Login data invalid.' in content:
 		return -2
 	elif 'IP blocked' in content:	# ip blocked (too many wrong passwords)
 		print 'ip bloked'
