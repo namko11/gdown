@@ -18,7 +18,11 @@ def status(login, passwd):
 	if 'Wrong user name or wrong password' in content:
 		return -2
 	content = opera.get('http://www.hellshare.com/members/').content
+	if 'Active until: ' in content:
+		expire_date = re.search('Active until: ([0-9]+\.[0-9]+\.[0-9]+)<br />', content).group(1)
+		expire_date = time.mktime(datetime.datetime.strptime(expire_date, '%d.%m.%Y').timetuple())
+		return expire_date
 	if 'Inactive' in content:
-		return -1
+		return 0
 	else:
 		open('log.log', 'w').write(content)
