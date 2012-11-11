@@ -11,11 +11,27 @@ from config import *
 
 def status(login, passwd):
 	opera = requests.session(headers=headers)
-	''' # api version (do not return expire date)
-	hashkey = opera.post('http://bitshare.com/api/openapi/login.php', {'user':login, 'password':md5(passwd).hexdigest()}).content[8:]	# get hashkey (login)
-	content = opera.post('http://bitshare.com/api/openapi/accountdetails.php', {'hashkey':hashkey}).content
+	 # api version (do not return expire date)
+	content = opera.post('http://bitshare.com/api/openapi/login.php', {'user':login, 'password':md5(passwd).hexdigest()}).content	# get hashkey (login)
+	if content == 'ERROR:Username is not matching to the provided password!':
+		return -2
+	elif content == 'ERROR:Due to an IP-Block because of security reasons you are not allowed to send more than 10 login requests per 10 minutes!':
+		print 'ip bloked'
+		ip_blocked
+		return -101
+	elif 'ERROR' in content:
+		open('log.log', 'w').write(content)
+		new_status
+		return -999
+	content = opera.post('http://bitshare.com/api/openapi/accountdetails.php', {'hashkey':content[8:]}).content
 	content = re.search('SUCCESS:([0-9]+)#[0-9]+#[0-9]+#[0-9]+#.+', content).group(1)	# 0=noPremium | 1=premium
-	'''
+	if content == '1':
+		return status_manual(login, passwd)		# check expire date
+	elif content == '0':
+		return 0
+		
+def status_manual(login, passwd):
+	opera = requests.session(headers=headers)
 	opera.get('http://bitshare.com/?language=EN')	# change language (regex)
 	values = { 'user':login, 'password':passwd, 'rememberlogin':'1', 'submit':'Login' }
 	content = opera.post('http://bitshare.com/login.html', values).content
@@ -24,10 +40,10 @@ def status(login, passwd):
 		content = re.search('Valid until: ([0-9]+\-[0-9]+\-[0-9]+)', content).group(1)
 		content = time.mktime(datetime.datetime.strptime(content, '%Y-%m-%d').timetuple())
 		return content
-	elif '(<b><a href="http://bitshare.com/myupgrade.html">Free</a></b>)' in content:
-		return 0
-	elif 'Wrong Username or Password!' in content:
-		return -2
+	#elif '(<b><a href="http://bitshare.com/myupgrade.html">Free</a></b>)' in content:		# no need to check this
+	#	return 0
+	#elif 'Wrong Username or Password!' in content:
+	#	return -2
 	else:
 		open('log.log', 'w').write(content)
 		new_status
