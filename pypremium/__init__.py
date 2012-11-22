@@ -18,6 +18,7 @@ __all__ = [
 	'oron',
 	'pornhub',
 	'rapidshare',
+	'rapidgator',
 	'redtube',
 	'shareonline',
 	#'soundclound',
