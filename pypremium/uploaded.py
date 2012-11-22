@@ -14,7 +14,7 @@ def geturl(link, login, passwd):	# not checked
 	return opera.get(link).url	# return connection	
 	
 def status(login, passwd):
-	opera = requests.session(headers=headers)
+	opera = requests.session(headers=headers, config={'max_retries':2})
 	values = { 'id':login, 'pw':passwd }
 	content = opera.post('http://uploaded.net/io/login', values).content
 	if 'User and password do not match!' in content or 'Benutzer wurde gelöscht' in content:	# wrong password / acc deleted
