@@ -12,6 +12,8 @@ def status(login, passwd):
 	content = opera.post('https://rapidgator.net/auth/login', {'LoginForm[email]':login, 'LoginForm[password]':passwd, 'LoginForm[rememberMe]':'1'}).content
 	if 'Error e-mail or password.' in content:
 		return -2
+	elif 'The code from a picture does not coincide' in content:
+		return -1
 	elif 'Account:&nbsp;<a href="/article/premium">Free</a>' in content:
 		return 0
 	elif 'Premium till' in content:
