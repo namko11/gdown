@@ -20,6 +20,7 @@ __all__ = [
 	'rapidshare',
 	'rapidgator',
 	'redtube',
+	'ryushare',
 	'shareonline',
 	#'soundclound',
 	'turbobit',
