@@ -15,7 +15,6 @@ __all__ = [
 	'mediafire',
 	'megashares',
 	'netload',
-	'oron',
 	'pornhub',
 	'rapidshare',
 	'rapidgator',
