@@ -7,6 +7,7 @@ import re
 from config import *
 
 def geturl(link, premium_key, login=None, passwd=None):
+	'''Returns direct file url'''
 	fileid = re.match('http://[w\.]{,4}mediafire.com/\?(.+)', link).group(1)
 	opera = requests.session(headers=headers)
 	values = { 'premium_key':premium_key, 'files':fileid }

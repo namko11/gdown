@@ -8,6 +8,7 @@ import re
 from config import *
 
 def geturl(link, login, passwd):
+	'''Returns direct file url'''
 	link = re.search('http://[w\.]{,4}letitbit.net/download/([0-9]+)/(.+)/(.+)\.html', link)		# own | uid | name
 	opera = requests.session(headers=headers)
 	values = { 'act':'login', 'login':login, 'password':passwd }

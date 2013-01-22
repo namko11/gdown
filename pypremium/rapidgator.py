@@ -8,6 +8,12 @@ import re
 from config import *
 
 def status(login, passwd):
+	'''Returns account premium status:
+	-999	unknown error
+	-2		invalid password
+	-1		account temporary blocked
+	0		free account
+	>0		premium date end timestamp'''
 	opera = requests.session(headers=headers, config={'max_retries':2})
 	content = opera.post('https://rapidgator.net/auth/login', {'LoginForm[email]':login, 'LoginForm[password]':passwd, 'LoginForm[rememberMe]':'1'}).content
 	if 'Error e-mail or password.' in content:

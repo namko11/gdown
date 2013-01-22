@@ -8,6 +8,7 @@ import re
 from config import *
 
 def geturl(link, login=None, passwd=None):
+	'''Returns direct file url'''
 	opera = requests.session(headers=headers)
 	content = opera.get(link).content
 	srv = re.search("'srv': '(.+)',", content).group(1)

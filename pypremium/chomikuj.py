@@ -7,6 +7,7 @@ import re
 from config import *
 
 def geturl(link, login, passwd):
+	'''Returns direct file url'''
 	opera = requests.session(headers=headers)
 	# get token
 	content = opera.get('http://chomikuj.pl').content

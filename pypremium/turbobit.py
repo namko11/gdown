@@ -8,6 +8,7 @@ import re
 from config import *
 
 def geturl(link, login, passwd):
+	'''Returns direct file url'''
 	opera = requests.session(headers=headers)
 	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory]':'1', 'user[submit]':'Zaloguj się' }
 	opera.post('http://turbobit.net/user/login', values)
@@ -16,6 +17,7 @@ def geturl(link, login, passwd):
 	return opera.get(link).url	# return connection
 
 def upload(login, passwd, filename):
+	'''Returns uploaded file url'''
 	#file_size = os.path.getsize(filename)	# get file size
 	opera = requests.session(headers=headers)
 	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory]':'1', 'user[submit]':'Zaloguj się' }
@@ -29,6 +31,12 @@ def upload(login, passwd, filename):
 	return 'http://turbobit.net/%s.html' %(file_id)
 	
 def status(login, passwd):
+	'''Returns account premium status:
+	-999	unknown error
+	-2		invalid password
+	-1		account temporary blocked
+	0		free account
+	>0		premium date end timestamp'''
 	opera = requests.session(headers=headers)
 	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory]':'1', 'user[submit]':'Zaloguj się' }
 	content = opera.post('http://turbobit.net/user/login', values).content				# login

@@ -17,6 +17,12 @@ def getApikey(login, passwd):
 		return content
 
 def status(login, passwd):
+	'''Returns account premium status:
+	-999	unknown error
+	-2		invalid password
+	-1		account temporary blocked
+	0		free account
+	>0		premium date end timestamp'''
 	# get apikey
 	apikey = getApikey(login, passwd)
 	if not apikey:	return -2		# invalid login or password (?)
@@ -27,6 +33,7 @@ def status(login, passwd):
 	else:	return premium_end		# premium
 
 def upload(login, passwd, filename):
+	'''Returns uploaded file url'''
 	# get apikey
 	apikey = getApikey(login, passwd)
 	opera = requests.session(headers=headers)

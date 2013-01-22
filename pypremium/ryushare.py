@@ -9,6 +9,12 @@ import os
 from config import *
 	
 def status(login, passwd):
+	'''Returns account premium status:
+	-999	unknown error
+	-2		invalid password
+	-1		account temporary blocked
+	0		free account
+	>0		premium date end timestamp'''
 	opera = requests.session(headers=headers)
 	content = opera.post('http://ryushare.com', {'op':'login', 'redirect':'http://ryushare.com/my-account.python', 'login':login, 'password':passwd, 'loginFormSubmit':'Login'}).content
 	if 'Your account was banned by administrator.' in content:

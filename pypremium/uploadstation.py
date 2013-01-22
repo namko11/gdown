@@ -8,12 +8,14 @@ import re
 from config import *
 
 def geturl(link, login, passwd):
+	'''Returns direct file url'''
 	opera = requests.session(headers=headers)
 	values = {'loginUserName':login, 'loginUserPassword':passwd, 'loginFormSubmit':'Login', 'autoLogin':'on'}
 	opera.post('http://www.uploadstation.com/login.php', values)
 	return opera.get(link).url	# return connection	
 
 def upload(login, passwd, filename):
+	'''Returns uploaded file url'''
 	opera = requests.session(headers=headers)
 	values = {'loginUserName':login, 'loginUserPassword':passwd, 'loginFormSubmit':'Login', 'autoLogin':'on'}
 	opera.post('http://uploadstation.com/login.php', values)

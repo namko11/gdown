@@ -8,7 +8,8 @@ import re
 from config import *
 
 def geturl(link, login, passwd):
-	''' IP validator is present '''
+	'''Returns direct file url
+	IP validator is present'''
 	opera = requests.session(headers=headers)
 	values = { 'login':login, 'password':passwd, 'op':'login', 'redirect':'', 'rand':'' }	# redirect is not working?
 	opera.post('http://oron.com/login', values)
@@ -26,6 +27,7 @@ def geturl(link, login, passwd):
 	return opera.get(link).url	# return connection
 
 def upload(login, passwd, filename, proxy=None):
+	'''Returns uploaded file url'''
 	if proxy:	proxy = {'http':proxy, 'https':proxy}
 	opera = requests.session(headers=headers)
 	values = { 'login':login, 'password':passwd, 'op':'login', 'redirect':'', 'rand':'' }	# redirect is not working?
@@ -39,6 +41,12 @@ def upload(login, passwd, filename, proxy=None):
 	return 'http://oron.com/%s' %(file_id)
 	
 def status(login, passwd):
+	'''Returns account premium status:
+	-999	unknown error
+	-2		invalid password
+	-1		account temporary blocked
+	0		free account
+	>0		premium date end timestamp'''
 	opera = requests.session(headers=headers)
 	values = { 'login':login, 'password':passwd, 'op':'login', 'redirect':'', 'rand':'' }	# redirect is not working?
 	content = opera.post('http://oron.com/login', values).content

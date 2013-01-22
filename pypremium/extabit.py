@@ -9,6 +9,7 @@ import os
 from config import *
 
 def upload(login, passwd, filename):
+	'''Returns uploaded file url'''
 	#file_size = os.path.getsize(filename)	# get file size
 	opera = requests.session(headers=headers)
 	

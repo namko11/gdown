@@ -9,12 +9,19 @@ import os
 from config import *
 
 def geturl(link, login, passwd):
-	''' IP validator is present '''
+	'''Returns direct file url
+	IP validator is present'''
 	opera = requests.session(headers=headers)
 	link = opera.get('http://api.hotfile.com/?action=getdirectdownloadlink&username=%s&password=%s&link=%s' %(login, passwd, link)).content
 	return opera.get(link).url	# return connection
 	
 def status(login, passwd):
+	'''Returns account premium status:
+	-999	unknown error
+	-2		invalid password
+	-1		account temporary blocked
+	0		free account
+	>0		premium date end timestamp'''
 	opera = requests.session(headers=headers)
 	content = opera.get('http://api.hotfile.com/?action=getuserinfo&username=%s&password=%s' %(login, passwd)).content
 	if 'is_premium=1' in content:	# premium
@@ -36,6 +43,7 @@ def status(login, passwd):
 		return -999
 
 def upload(login, passwd, filename):
+	'''Returns uploaded file url'''
 	file_size = os.path.getsize(filename)	# get file size
 	opera = requests.session(headers=headers)
 	host = opera.get('http://api.hotfile.com/?action=getuploadserver').content[:-1]																				# get server to upload

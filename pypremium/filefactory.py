@@ -8,6 +8,7 @@ import re
 from config import *
 
 def upload(login, passwd, filename):
+	'''Returns uploaded file url'''
 	opera = requests.session(headers=headers)
 	opera.post('http://www.filefactory.com/member/login.php', {'email':login, 'password':passwd})																		# login to get ff_membership cookie
 	#host = opera.get('http://www.filefactory.com/servers.php?single=1').content																					# get best server to upload
@@ -17,6 +18,12 @@ def upload(login, passwd, filename):
 	return 'http://www.filefactory.com/file/%s/n/%s' %(viewhash, filename)
 	
 def status(login, passwd):
+	'''Returns account premium status:
+	-999	unknown error
+	-2		invalid password
+	-1		account temporary blocked
+	0		free account
+	>0		premium date end timestamp'''
 	opera = requests.session(headers=headers)
 	content = opera.post('http://www.filefactory.com/member/login.php', {'redirect':'/', 'email':login, 'password':passwd, 'socialID':'', 'socialType':'facebook'}).content
 	if '<p class="greenText">Free member</p>' in content:
