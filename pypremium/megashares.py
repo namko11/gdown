@@ -7,7 +7,7 @@ import time
 import re
 from config import *
 
-def geturl(link, login, passwd):
+def getUrl(link, login, passwd):
 	'''Returns direct file url
 	IP validator is present (?)'''
 	fileid = re.match('http://d01.megashares.com/dl/(.+)/.+', link).group(1)

@@ -7,7 +7,7 @@ import time
 import re
 from config import *
 
-def geturl(link, login, passwd):	# not checked
+def getUrl(link, login, passwd):	# not checked
 	'''Returns direct file url'''
 	opera = requests.session(headers=headers)
 	values = {'id':login, 'pw':passwd, 'loginFormSubmit':'Login'}

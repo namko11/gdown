@@ -6,7 +6,7 @@ import time
 import re
 from config import *
 
-def geturl(link, login, passwd):
+def getUrl(link, login, passwd):
 	'''Returns direct file url
 	IP validator is NOT present'''
 	opera = requests.session(headers=headers)

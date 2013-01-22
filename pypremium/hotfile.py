@@ -8,7 +8,7 @@ import re
 import os
 from config import *
 
-def geturl(link, login, passwd):
+def getUrl(link, login, passwd):
 	'''Returns direct file url
 	IP validator is present'''
 	opera = requests.session(headers=headers)
