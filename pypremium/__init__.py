@@ -6,6 +6,7 @@ __all__ = [
 	'depositfiles',
 	#'easyshare',
 	#'enterupload',
+	'extabit',
 	'filefactory',
 	'freakshare',
 	#'gigasize',
