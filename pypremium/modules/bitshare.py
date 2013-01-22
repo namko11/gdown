@@ -7,7 +7,7 @@ import time
 import re
 import os
 from hashlib import md5
-from config import *
+from ..config import *
 
 def status(login, passwd):
 	'''Returns account premium status:

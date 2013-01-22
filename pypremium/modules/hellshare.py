@@ -6,7 +6,7 @@ import datetime
 import time
 import re
 import os
-from config import *
+from ..config import *
 
 def status(login, passwd):
 	'''Returns account premium status:

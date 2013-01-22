@@ -7,7 +7,7 @@ import time
 import re
 from urllib import unquote
 from urlparse import parse_qs
-from config import *
+from ..config import *
 
 def getUrl(link, login=None, passwd=None):
 	'''Returns direct file url'''

@@ -5,7 +5,7 @@ import requests
 import datetime
 import time
 import re
-from config import *
+from ..config import *
 
 def getUrl(link, login=None, passwd=None):
 	'''Returns direct file url'''

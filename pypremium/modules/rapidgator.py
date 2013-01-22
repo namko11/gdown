@@ -5,7 +5,7 @@ import requests
 import datetime
 import time
 import re
-from config import *
+from ..config import *
 
 def status(login, passwd):
 	'''Returns account premium status:

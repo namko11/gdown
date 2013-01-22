@@ -5,7 +5,7 @@ import requests
 import datetime
 import time
 import re
-from config import *
+from ..config import *
 
 def upload(login, passwd, filename):
 	'''Returns uploaded file url'''

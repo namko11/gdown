@@ -5,12 +5,11 @@ import requests
 import datetime
 import time
 import re
-from urllib import unquote
-from config import *
+from ..config import *
 
 def getUrl(link, login=None, passwd=None):
 	'''Returns direct file url'''
 	opera = requests.session(headers=headers)
 	content = opera.get(link).content
-	link = unquote(re.search('to.addVariable\("video_url","(.+)"\);', content).group(1))
+	link = re.search('so.addVariable\("file","(.+)"\);', content).group(1)
 	return opera.get(link).url

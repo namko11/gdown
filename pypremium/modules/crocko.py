@@ -6,7 +6,7 @@ import datetime
 import time
 import re
 import os
-from config import *
+from ..config import *
 
 def getApikey(login, passwd):
 	opera = requests.session(headers=headers)

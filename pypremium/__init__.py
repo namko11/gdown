@@ -1,35 +1,8 @@
-__all__ = [
-	#'4shared',
-	'bitshare',
-	'chomikuj',
-	'crocko',
-	'depositfiles',
-	#'easyshare',
-	#'enterupload',
-	'extabit',
-	'filefactory',
-	'freakshare',
-	#'gigasize',
-	'hellshare',
-	'hotfile',
-	'letitbit',
-	'mediafire',
-	'megashares',
-	'netload',
-	'pornhub',
-	'rapidshare',
-	'rapidgator',
-	'redtube',
-	'ryushare',
-	'shareonline',
-	#'soundclound',
-	'turbobit',
-	'uploaded',
-	#'uploading',
-	#'usershare',
-	'xhamster',
-	'xvideos',
-	'youjizz',
-	'youporn',
-	'youtube',
-	]
+__title__ = 'pypremium'
+__version__ = '0.0.1'
+__author__ = 'oczkers'
+__license__ = 'GNU GPL v3'
+__copyright__ = 'Copyright 2013 oczkers'
+
+from . import config
+from .modules import *
