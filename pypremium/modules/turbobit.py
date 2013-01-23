@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import requests
@@ -10,7 +10,7 @@ from ..config import *
 def getUrl(link, login, passwd):
 	'''Returns direct file url'''
 	opera = requests.session(headers=headers)
-	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory]':'1', 'user[submit]':'Zaloguj się' }
+	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory]':'1', 'user[submit]':'Login' }
 	opera.post('http://turbobit.net/user/login', values)
 	content = opera.get(link).content
 	link = re.search("<h1><a href='(.+)'>", content).group(1)
@@ -20,7 +20,7 @@ def upload(login, passwd, filename):
 	'''Returns uploaded file url'''
 	#file_size = os.path.getsize(filename)	# get file size
 	opera = requests.session(headers=headers)
-	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory]':'1', 'user[submit]':'Zaloguj się' }
+	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory]':'1', 'user[submit]':'Login' }
 	opera.post('http://turbobit.net/user/login', values).content				# login
 	content = opera.get('http://turbobit.net/').content
 	content = re.search('urlSite=(http://s[0-9]+.turbobit.ru/uploadfile)&userId=(.+)&', content)
@@ -38,7 +38,7 @@ def status(login, passwd):
 	0		free account
 	>0		premium date end timestamp'''
 	opera = requests.session(headers=headers)
-	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory]':'1', 'user[submit]':'Zaloguj się' }
+	values = { 'user[login]':login, 'user[pass]':passwd, 'user[memory]':'1', 'user[submit]':'Login' }
 	content = opera.post('http://turbobit.net/user/login', values).content				# login
 	if 'Incorrect login or password' in content or 'E-Mail address appears to be invalid. Please try again' in content:
 		return -2
