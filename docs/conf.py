@@ -50,7 +50,7 @@ copyright = u'2013, oczkers'
 # built documents.
 #
 # The short X.Y version.
-version = __version
+version = __version__
 # The full version, including alpha/beta/rc tags.
 release = version
 
