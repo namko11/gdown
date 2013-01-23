@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import requests
@@ -24,7 +24,7 @@ def status(login, passwd):
 	opera = requests.session(headers=headers, config={'max_retries':2})
 	values = { 'id':login, 'pw':passwd }
 	content = opera.post('http://uploaded.net/io/login', values).content
-	if 'User and password do not match!' in content or 'Benutzer wurde gel�scht' in content:	# wrong password / acc deleted
+	if 'User and password do not match!' in content or 'Benutzer wurde gelöscht' in content:	# wrong password / acc deleted
 		return -2
 	elif 'Account locked. Please contact Support.' in content:
 		return -1
