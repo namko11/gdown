@@ -29,7 +29,7 @@ class PypremiumTestCase(unittest.TestCase):
 		'''Tests status function on free account'''
 		for module in modules():
 			if hasattr(module, 'status'):
-				self.assertEqual(module.status('oczkers', 'mandrake'), 0)
+				self.assertEqual(module.status('pypremium', 'test'), 0)
 
 def modules():
 	modules_list = []
