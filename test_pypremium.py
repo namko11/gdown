@@ -19,9 +19,6 @@ class PypremiumTestCase(unittest.TestCase):
 		"""Teardown."""
 		pass
 
-	def test_assertion(self):
-		assert 1
-
 	def test_entry_points(self):
 		pypremium.modules
 	
@@ -30,7 +27,7 @@ class PypremiumTestCase(unittest.TestCase):
 		for module in modules():
 			if hasattr(module, 'status'):
 				print module.__name__
-				self.assertEqual(module.status('pypremium', 'test'), 0)
+				self.assertEqual(module.status('pypremium', 'pypremium'), 0)
 
 def modules():
 	modules_list = []
