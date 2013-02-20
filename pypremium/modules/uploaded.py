@@ -12,8 +12,8 @@ def getUrl(link, login, passwd):	# not checked
 	opera = requests.session(headers=headers)
 	values = {'id':login, 'pw':passwd, 'loginFormSubmit':'Login'}
 	opera.post('http://www.uploaded.net/io/login', values)
-	return opera.get(link).url	# return connection	
-	
+	return opera.get(link).url	# return connection
+
 def status(login, passwd):
 	'''Returns account premium status:
 	-999	unknown error
@@ -24,7 +24,7 @@ def status(login, passwd):
 	opera = requests.session(headers=headers, config={'max_retries':2})
 	values = { 'id':login, 'pw':passwd }
 	content = opera.post('http://uploaded.net/io/login', values).content
-	if 'User and password do not match!' in content or 'Benutzer wurde gelöscht' in content:	# wrong password / acc deleted
+	if 'User and password do not match!' in content or 'Benutzer wurde gelöscht' in content or 'Account has been deleted' in content:	# wrong password / acc deleted
 		return -2
 	elif 'Account locked. Please contact Support.' in content:
 		return -1

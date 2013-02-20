@@ -29,7 +29,7 @@ def upload(login, passwd, filename):
 	content = opera.post(host, {'Filename':filename, 'user_id':user_id, 'stype':'null', 'apptype':'fd1', 'id':'null', 'Upload':'Submit Query'}, files={'Filedata':open(filename, 'rb')}).content	# upload
 	file_id = re.search('{"result":true,"id":"(.+)","message":"Everything is ok"}', content).group(1)
 	return 'http://turbobit.net/%s.html' %(file_id)
-	
+
 def status(login, passwd):
 	'''Returns account premium status:
 	-999	unknown error
