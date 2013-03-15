@@ -81,8 +81,12 @@ def status(username, passwd, captcha=False):
     elif rc['status'] == 'Error':
         if rc['error'] == 'CaptchaRequired':
             return status(username, passwd, captcha=True)
+        elif rc['error'] == 'CaptchaInvalid':
+            decaptcha_wrong()  # add captcha_id
+            return status(username, passwd, captcha=True)
         elif rc['error'] == 'LoginInvalid':
             return -2
-    open('log.log').write(rc)
+    print rc
+    #open('log.log', 'w').write(rc)  # encode json dict->string
     new_status
     return -999
