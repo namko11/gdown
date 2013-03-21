@@ -1,11 +1,11 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import requests
 import datetime
 import time
 import re
-from ..config import *
+
+from ..config import headers
 
 
 def status(login, passwd):

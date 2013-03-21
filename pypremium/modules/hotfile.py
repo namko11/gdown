@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import requests
@@ -6,7 +5,8 @@ import datetime
 import time
 import re
 import os
-from ..config import *
+
+from ..config import headers
 
 
 def getUrl(link, login, passwd):
