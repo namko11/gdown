@@ -50,7 +50,7 @@ def status(login, passwd):
         captcha
         return -999
     try:
-        content = re.search('<u>Turbo Access</u> [to ]{,3}(.*?)\.?                  </div>', content).group(1)
+        content = re.search('<u>Turbo Access</u> [to ]{,3}(.*?)\.?					</div>', content).group(1)
     except:
         open('log.log', 'w').write(content)
         new_status
