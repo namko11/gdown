@@ -37,7 +37,7 @@ def status(login, passwd):
     if re.search('<em>(.+)</em>', content).group(1) == 'Premium':
         if '<th>unlimited</th>          </tr>' in content:  # lifetime premium
             return 32503680000
-        content = re.search('<th>([0-9]+.+)</th>[   ]+</tr>', content).group(1)
+        content = re.search('<th>([0-9]+.+)</th>[ 	]+</tr>', content).group(1)
         # 2 weeks 6 days and 4 hours
         # 4 weeks 0 days and 8 hours
         # 36 weeks 6 days and 5 hours
