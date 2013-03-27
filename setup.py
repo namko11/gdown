@@ -11,9 +11,7 @@ packages = [
     'gdown.modules',
 ]
 
-requires = [
-    'requests<1.0',
-]
+requires = []
 
 setup(
     name=gdown.__title__,
