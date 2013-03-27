@@ -1,82 +1,109 @@
-+-------------+-----------------+-----------+-----------+-----------+
-|   Module    |     Website     |  getUrl   |  upload   |   status  |
-+=============+=================+===========+===========+===========+
-|bitshare     |bitshare.com     |yes        |yes        |yes        |
-+-------------+-----------------+-----------+-----------+-----------+
-|chomikuj     |chomikuj.pl      |yes        |no         |no         |
-+-------------+-----------------+-----------+-----------+-----------+
-|crocko       |crocko.com       |no         |yes        |yes        |
-+-------------+-----------------+-----------+-----------+-----------+
-|depositfiles |depositfiles.com |yes        |no         |not working|
-+-------------+-----------------+-----------+-----------+-----------+
-|extabit      |extabit.com      |no         |not working|no         |
-+-------------+-----------------+-----------+-----------+-----------+
-|filefactory  |filefactory.com  |no         |yes        |yes        |
-+-------------+-----------------+-----------+-----------+-----------+
-|freakshare   |freakshare.com   |no         |not working|not working|
-+-------------+-----------------+-----------+-----------+-----------+
-|hellshare    |hellshare.com    |no         |no         |yes        |
-+-------------+-----------------+-----------+-----------+-----------+
-|hotfile      |hotfile.com      |yes        |yes        |yes        |
-+-------------+-----------------+-----------+-----------+-----------+
-|letitbit     |letitbit.net     |yes        |no         |yes        |
-+-------------+-----------------+-----------+-----------+-----------+
-|mediafire    |mediafire.com    |yes        |no         |no         |
-+-------------+-----------------+-----------+-----------+-----------+
-|megashares   |megashares.com   |yes        |no         |no         |
-+-------------+-----------------+-----------+-----------+-----------+
-|netload      |netload.in       |yes        |yes        |yes        |
-+-------------+-----------------+-----------+-----------+-----------+
-|pornhub      |pornhub.com      |yes        |no         |no         |
-+-------------+-----------------+-----------+-----------+-----------+
-|rapidshare   |rapidshare.com   |no         |no         |yes        |
-+-------------+-----------------+-----------+-----------+-----------+
-|rapidgator   |rapidgator.com   |yes        |yes        |yes        |
-+-------------+-----------------+-----------+-----------+-----------+
-|redtube      |redtube.com      |yes        |no         |no         |
-+-------------+-----------------+-----------+-----------+-----------+
-|ryushare     |ryushare.com     |no         |no         |yes        |
-+-------------+-----------------+-----------+-----------+-----------+
-|shareonline  |share-online.biz |no         |yes        |no         |
-+-------------+-----------------+-----------+-----------+-----------+
-|turbobit     |turbobit.net     |yes        |yes        |yes        |
-+-------------+-----------------+-----------+-----------+-----------+
-|uploaded     |uploaded.net     |yes        |no         |yes        |
-+-------------+-----------------+-----------+-----------+-----------+
-|uploadstation|uploadstation.com|yes        |yes        |no         |
-+-------------+-----------------+-----------+-----------+-----------+
-|xhamster     |xhamster.com     |yes        |no         |no         |
-+-------------+-----------------+-----------+-----------+-----------+
-|xvideos      |xvideos.com      |yes        |no         |no         |
-+-------------+-----------------+-----------+-----------+-----------+
-|youjizz      |youjizz.com      |yes        |no         |no         |
-+-------------+-----------------+-----------+-----------+-----------+
-|youporn      |youporn.com      |yes        |no         |no         |
-+-------------+-----------------+-----------+-----------+-----------+
-|youtube      |youtube.com      |yes        |no         |no         |
-+-------------+-----------------+-----------+-----------+-----------+
+gdown
+=====
 
-Dependencies
-=============
+gdown is a library for managing sharing websites (like netload.in and uploaded.net).
+It is written entirely in Python.
 
-* requests (Python HTTP Requests for Humans™)
+Check gdown script for CLI interface.
 
-Status reponses
+
+Usage
+-----
+
+.. code-block:: pycon
+
+    >>> from gdown import hotfile
+    >>> hotfile.expireDate('login', 'password')
+    datetime.datetime(2014, 5, 28, 11, 16, 33, tzinfo=tzoffset(None, -18000))
+    >>> hotfile.upload('README.rst', 'login', 'password')
+    'http://hotfile.com/dl/193968487/73da5c1/README.rst.html'
+    >>> hotfile.getUrl('https://hotfile.com/dl/193966926/685bd36/chrome_frame_helper.dll.html', 'login', 'password')
+    'http://s749.hotfile.com/get/f4ac4f6ae12e42973bca22b969c3b99915f9383b/51196253/1/4a70d63eb35925fa/b8fb34e/496034/chrome_frame_helper.dll'
+    # TODO: getFile example.
+    ...
+
+
+CLI examples
 ------------
+.. code-block:: bash
 
->0		premium expire date timestamp
-0		no premium (free account)
--1		blocked (can be unblocked)
--2		wrong id or password/permanently blocked
--101	ip blocked
--999	new status/unknown error
+    >>> gdown status hotfile -u login -p password
+    Premium expire on: 2014-05-28 11:16:33-05:00
+    >>> gdown up hotfile README.rst -u login -p password
+    http://hotfile.com/dl/193968597/f3ca3eb/README.rst.html
+    >>> gdown dl https://hotfile.com/dl/193966926/685bd36/chrome_frame_helper.dll.html -u login -p password
+    done.
+    # TODO: more verbose download (show progress etc.)
+    ...
 
-Contributing
-------------
 
-1. Fork it.
-2. Create a branch (git checkout -b my_markup)
-3. Commit your changes (git commit -am "Added Snarkdown")
-4. Push to the branch (git push origin my_markup)
-5. Create an Issue with a link to your branch
-6. Enjoy a refreshing Diet Coke and wait
+Plugins status
+--------------
+
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|   Module    |     Website     |  getUrl   |  getFile  |  upload   |expireDate |
++=============+=================+===========+===========+===========+===========+
+|bitshare     |bitshare.com     |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|chomikuj     |chomikuj.pl      |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|crocko       |crocko.com       |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|depositfiles |depositfiles.com |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|extabit      |extabit.com      |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|filefactory  |filefactory.com  |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|freakshare   |freakshare.com   |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|hellshare    |hellshare.com    |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|hotfile      |hotfile.com      |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|imgur        |imgur.com        |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|letitbit     |letitbit.net     |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|mediafire    |mediafire.com    |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|megashares   |megashares.com   |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|netload      |netload.in       |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|pornhub      |pornhub.com      |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|rapidshare   |rapidshare.com   |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|rapidgator   |rapidgator.com   |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|redtube      |redtube.com      |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|ryushare     |ryushare.com     |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|shareonline  |share-online.biz |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|turbobit     |turbobit.net     |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|uploaded     |uploaded.net     |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|uploadstation|uploadstation.com|-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|videobam     |videobam.com     |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|xhamster     |xhamster.com     |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|xvideos      |xvideos.com      |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|youjizz      |youjizz.com      |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|youporn      |youporn.com      |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+|youtube      |youtube.com      |-          |-          |-          |-          |
++-------------+-----------------+-----------+-----------+-----------+-----------+
+
+
+License
+-------
+
+GNU GPLv3
