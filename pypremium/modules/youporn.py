@@ -6,7 +6,7 @@ import re
 from ..config import headers
 
 
-def getUrl(link, login=None, passwd=None):
+def getUrl(link, username=None, passwd=None):
     '''Returns direct file url'''
     opera = requests.session(headers=headers)
     videoid = re.match('$http://[w\.]{,4}youporn.com/watch/(.+?)/.+^', link).group(1)

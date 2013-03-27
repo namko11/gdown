@@ -9,7 +9,7 @@ from dateutil import parser
 from ..config import headers
 
 
-def status(login, passwd):
+def status(username, passwd):
     """Returns account premium status:
     -999    unknown error
     -2      invalid password
@@ -18,7 +18,7 @@ def status(login, passwd):
     >0      premium date end timestamp
     """
     r = requests.session(headers=headers)
-    data = {'act': 'login', 'login': login, 'password': passwd}
+    data = {'act': 'login', 'login': username, 'password': passwd}
     rc = r.post('http://letitbit.net/index.php?lang=en', data).content
     #Only for registered users
     if 'Authorization data is invalid!' in rc or 'Login is indicated in wrong format!' in rc:
@@ -38,11 +38,11 @@ def status(login, passwd):
     return -999
 
 
-def getUrl(link, login, passwd):
+def getUrl(link, username, passwd):
     """Returns direct file url."""
     link = re.search('http://[w\.]{,4}letitbit.net/download/([0-9]+)/(.+)/(.+)\.html', link)  # own | uid | name
     r = requests.session(headers=headers)
-    values = {'act': 'login', 'login': login, 'password': passwd}
+    values = {'act': 'login', 'login': username, 'password': passwd}
     rc = r.post('http://letitbit.net/download.php?own=%s&uid=%s&name=%s&page=1' % (link.group(1), link.group(2), link.group(3)), values).content  # login && get download page
     link = re.search('src="(http://.*letitbit.net/sms/check2_iframe.php\?ac_syml_uid.+)"', rc).group(1)
     rc = r.get(link).content  # get download iframe

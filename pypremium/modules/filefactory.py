@@ -7,10 +7,10 @@ import re
 from ..config import headers
 
 
-def upload(login, passwd, filename):
+def upload(username, passwd, filename):
     '''Returns uploaded file url'''
     opera = requests.session(headers=headers)
-    opera.post('http://www.filefactory.com/member/login.php', {'email': login, 'password': passwd})  # login to get ff_membership cookie
+    opera.post('http://www.filefactory.com/member/login.php', {'email': username, 'password': passwd})  # login to get ff_membership cookie
     #host = opera.get('http://www.filefactory.com/servers.php?single=1').content  # get best server to upload
     host = 'http://upload.filefactory.com/upload.php'  # always returning the same url (?)
     viewhash = re.search('<viewhash>(.+)</viewhash>', opera.get('http://www.filefactory.com/upload/upload_flash_begin.php?files=1').content).group(1)  # get viewhash
@@ -18,7 +18,7 @@ def upload(login, passwd, filename):
     return 'http://www.filefactory.com/file/%s/n/%s' % (viewhash, filename)
 
 
-def status(login, passwd):
+def status(username, passwd):
     '''Returns account premium status:
     -999    unknown error
     -2      invalid password
@@ -26,7 +26,7 @@ def status(login, passwd):
     0       free account
     >0      premium date end timestamp'''
     opera = requests.session(headers=headers)
-    content = opera.post('http://www.filefactory.com/member/login.php', {'redirect': '/', 'email': login, 'password': passwd, 'socialID': '', 'socialType': 'facebook'}).content
+    content = opera.post('http://www.filefactory.com/member/login.php', {'redirect': '/', 'email': username, 'password': passwd, 'socialID': '', 'socialType': 'facebook'}).content
     if '<p class="greenText">Free member</p>' in content:
         return 0
     elif 'The account you are trying to use has been deleted.' in content:

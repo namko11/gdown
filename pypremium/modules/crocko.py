@@ -5,16 +5,16 @@ import re
 from ..config import headers
 
 
-def getApikey(login, passwd):
+def getApikey(username, passwd):
     opera = requests.session(headers=headers)
-    content = re.search('<content type="text">(.+)</content>', opera.post('http://api.crocko.com/apikeys', {'login': login, 'password': passwd}).content).group(1)
+    content = re.search('<content type="text">(.+)</content>', opera.post('http://api.crocko.com/apikeys', {'login': username, 'password': passwd}).content).group(1)
     if content == 'Invalid login or password':
         return False
     else:
         return content
 
 
-def status(login, passwd):
+def status(username, passwd):
     '''Returns account premium status:
     -999    unknown error
     -2      invalid password
@@ -22,9 +22,9 @@ def status(login, passwd):
     0       free account
     >0      premium date end timestamp'''
     # get apikey
-    apikey = getApikey(login, passwd)
+    apikey = getApikey(username, passwd)
     if not apikey:
-        return -2  # invalid login or password (?)
+        return -2  # invalid username or password (?)
     opera = requests.session(headers=headers)
     content = opera.get('http://api.crocko.com/account', headers={'Authorization': apikey}).content
     premium_end = re.search('<ed:premium_end>(.*?)</ed:premium_end>', content).group(1)
@@ -34,10 +34,10 @@ def status(login, passwd):
         return premium_end  # premium
 
 
-def upload(login, passwd, filename):
+def upload(username, passwd, filename):
     '''Returns uploaded file url'''
     # get apikey
-    apikey = getApikey(login, passwd)
+    apikey = getApikey(username, passwd)
     opera = requests.session(headers=headers)
     content = opera.post('http://api.crocko.com/files', headers={'Authorization': apikey}, files={'file': open(filename, 'rb')}).content  # upload
     return re.search('<link title="download_link" href="(.+)"', content).group(1)

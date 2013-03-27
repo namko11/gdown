@@ -8,7 +8,7 @@ import re
 from ..config import headers
 
 
-def status(login, passwd):
+def status(username, passwd):
     '''Returns account premium status:
     -999    unknown error
     -2      invalid password
@@ -16,7 +16,7 @@ def status(login, passwd):
     0       free account
     >0      premium date end timestamp'''
     opera = requests.session(headers=headers, config={'max_retries': 2})
-    content = opera.post('https://rapidgator.net/auth/login', {'LoginForm[email]': login, 'LoginForm[password]': passwd, 'LoginForm[rememberMe]': '1'}).content
+    content = opera.post('https://rapidgator.net/auth/login', {'LoginForm[email]': username, 'LoginForm[password]': passwd, 'LoginForm[rememberMe]': '1'}).content
     if 'Error e-mail or password.' in content:
         return -2
     elif 'The code from a picture does not coincide' in content:

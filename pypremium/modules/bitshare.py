@@ -10,7 +10,7 @@ from hashlib import md5
 from ..config import headers
 
 
-def status(login, passwd):
+def status(username, passwd):
     '''Returns account premium status:
     -999    unknown error
     -2      invalid password
@@ -19,7 +19,7 @@ def status(login, passwd):
     >0      premium date end timestamp'''
     opera = requests.session(headers=headers)
      # api version (do not return expire date)
-    content = opera.post('http://bitshare.com/api/openapi/login.php', {'user': login, 'password': md5(passwd).hexdigest()}).content  # get hashkey (login)
+    content = opera.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).content  # get hashkey (login)
     if content == 'ERROR:Username is not matching to the provided password!':
         return -2
     elif content == 'ERROR:Due to an IP-Block because of security reasons you are not allowed to send more than 10 login requests per 10 minutes!':
@@ -33,15 +33,15 @@ def status(login, passwd):
     content = opera.post('http://bitshare.com/api/openapi/accountdetails.php', {'hashkey': content[8:]}).content
     content = re.search('SUCCESS:([0-9]+)#[0-9]+#[0-9]+#[0-9]+#.+', content).group(1)  # 0=noPremium | 1=premium
     if content == '1':
-        return status_manual(login, passwd)     # check expire date
+        return status_manual(username, passwd)     # check expire date
     elif content == '0':
         return 0
 
 
-def status_manual(login, passwd):
+def status_manual(username, passwd):
     opera = requests.session(headers=headers)
     opera.get('http://bitshare.com/?language=EN')   # change language (regex)
-    values = {'user': login, 'password': passwd, 'rememberlogin': '1', 'submit': 'Login'}
+    values = {'user': username, 'password': passwd, 'rememberlogin': '1', 'submit': 'Login'}
     content = opera.post('http://bitshare.com/login.html', values).content
     if '(<b>Premium</b>)' in content:
         content = opera.get('http://bitshare.com/myaccount.html').content
@@ -58,20 +58,20 @@ def status_manual(login, passwd):
         return -999
 
 
-def getUrl(link, login, passwd):
+def getUrl(link, username, passwd):
     '''Returns direct file url
     IP validator is NOT present'''
     opera = requests.session(headers=headers)
-    values = {'user': login, 'password': passwd, 'rememberlogin': '1', 'submit': 'Login'}
+    values = {'user': username, 'password': passwd, 'rememberlogin': '1', 'submit': 'Login'}
     opera.post('http://bitshare.com/login.html', values)
     return opera.get(link).url
 
 
-def upload(login, passwd, filename):
+def upload(username, passwd, filename):
     '''Returns uploaded file url'''
     file_size = int(os.path.getsize(filename))  # get file size
     opera = requests.session(headers=headers)
-    hashkey = opera.post('http://bitshare.com/api/openapi/login.php', {'user': login, 'password': md5(passwd).hexdigest()}).content[8:]  # get hashkey (login)
+    hashkey = opera.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).content[8:]  # get hashkey (login)
     host = opera.post('http://bitshare.com/api/openapi/upload.php', {'action': 'getFileserver'}).content[8:]  # get host
     content = ''
     while 'SUCCESS' not in content:

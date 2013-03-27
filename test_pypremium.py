@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-'''tests for pypremium'''
+"""Tests for pypremium."""
 
 import unittest
 
@@ -24,7 +24,7 @@ class PypremiumTestCase(unittest.TestCase):
         pypremium.modules
 
     def testStatus(self):
-        '''Tests status function on free account'''
+        """Tests status function on free account."""
         for module in modules():
             if hasattr(module, 'status'):
                 print module.__name__

@@ -8,7 +8,7 @@ import re
 from ..config import headers
 
 
-def status(login, passwd):
+def status(username, passwd):
     '''Returns account premium status:
     -999    unknown error
     -2      invalid password
@@ -19,7 +19,7 @@ def status(login, passwd):
     opera.get('http://www.hellshare.com')
     opera.get('http://www.hellshare.com/?do=login-showLoginWindow')
     #   http://www.hellshare.com/members-auth/login
-    values = {'login': 'Log in as registered user', 'username': login, 'password': passwd, 'perm_login': 'on'}
+    values = {'login': 'Log in as registered user', 'username': username, 'password': passwd, 'perm_login': 'on'}
     content = opera.post('http://www.hellshare.com/?do=login-loginBoxForm-submit', values).content
     if 'Wrong user name or wrong password' in content:
         return -2

@@ -8,22 +8,22 @@ import re
 from ..config import headers
 
 
-def getUrl(link, login, passwd):
+def getUrl(link, username, passwd):
     '''Returns direct file url'''
     opera = requests.session(headers=headers)
-    values = {'user[login]': login, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
+    values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
     opera.post('http://turbobit.net/user/login', values)
     content = opera.get(link).content
     link = re.search("<h1><a href='(.+)'>", content).group(1)
     return opera.get(link).url  # return connection
 
 
-def upload(login, passwd, filename):
+def upload(username, passwd, filename):
     '''Returns uploaded file url'''
     #file_size = os.path.getsize(filename)  # get file size
     opera = requests.session(headers=headers)
-    values = {'user[login]': login, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
-    opera.post('http://turbobit.net/user/login', values).content                # login
+    values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
+    opera.post('http://turbobit.net/user/login', values).content  # login
     content = opera.get('http://turbobit.net/').content
     content = re.search('urlSite=(http://s[0-9]+.turbobit.ru/uploadfile)&userId=(.+)&', content)
     host = content.group(1)
@@ -33,7 +33,7 @@ def upload(login, passwd, filename):
     return 'http://turbobit.net/%s.html' % (file_id)
 
 
-def status(login, passwd):
+def status(username, passwd):
     '''Returns account premium status:
     -999    unknown error
     -2      invalid password
@@ -41,8 +41,8 @@ def status(login, passwd):
     0       free account
     >0      premium date end timestamp'''
     opera = requests.session(headers=headers)
-    values = {'user[login]': login, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
-    content = opera.post('http://turbobit.net/user/login', values).content              # login
+    values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
+    content = opera.post('http://turbobit.net/user/login', values).content  # login
     if 'Incorrect login or password' in content or 'E-Mail address appears to be invalid. Please try again' in content:
         return -2
     elif 'Limit of login attempts exeeded.' in content:

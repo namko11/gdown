@@ -8,7 +8,7 @@ import re
 from ..config import headers
 
 
-def status(login, passwd):
+def status(username, passwd):
     '''Returns account premium status:
     -999    unknown error
     -2      invalid password
@@ -16,7 +16,7 @@ def status(login, passwd):
     0       free account
     >0      premium date end timestamp'''
     opera = requests.session(headers=headers)
-    content = opera.post('http://ryushare.com', {'op': 'login', 'redirect': 'http://ryushare.com/my-account.python', 'login': login, 'password': passwd, 'loginFormSubmit': 'Login'}).content
+    content = opera.post('http://ryushare.com', {'op': 'login', 'redirect': 'http://ryushare.com/my-account.python', 'login': username, 'password': passwd, 'loginFormSubmit': 'Login'}).content
     if 'Your account was banned by administrator.' in content:
         return -1
     elif 'Incorrect Login or Password' in content:

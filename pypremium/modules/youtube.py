@@ -8,7 +8,7 @@ from urlparse import parse_qs
 from ..config import headers
 
 
-def getUrl(link, login=None, passwd=None):
+def getUrl(link, username=None, passwd=None):
     '''Returns direct file url'''
     opera = requests.session(headers=headers)
     content = opera.get(link).content

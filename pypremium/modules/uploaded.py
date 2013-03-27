@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import requests
 import time
@@ -7,15 +7,15 @@ import re
 from ..config import headers
 
 
-def getUrl(link, login, passwd):    # not checked
+def getUrl(link, username, passwd):  # not checked
     '''Returns direct file url'''
     opera = requests.session(headers=headers)
-    values = {'id': login, 'pw': passwd, 'loginFormSubmit': 'Login'}
+    values = {'id': username, 'pw': passwd, 'loginFormSubmit': 'Login'}
     opera.post('http://www.uploaded.net/io/login', values)
     return opera.get(link).url  # return connection
 
 
-def status(login, passwd):
+def status(username, passwd):
     '''Returns account premium status:
     -999    unknown error
     -2      invalid password
@@ -23,7 +23,7 @@ def status(login, passwd):
     0       free account
     >0      premium date end timestamp'''
     opera = requests.session(headers=headers, config={'max_retries': 2})
-    values = {'id': login, 'pw': passwd}
+    values = {'id': username, 'pw': passwd}
     content = opera.post('http://uploaded.net/io/login', values).content
     if 'User and password do not match!' in content or 'Benutzer wurde gelöscht' in content or 'Account has been deleted' in content:  # wrong password / acc deleted
         return -2

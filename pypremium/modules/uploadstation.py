@@ -6,18 +6,18 @@ import re
 from ..config import headers
 
 
-def getUrl(link, login, passwd):
+def getUrl(link, username, passwd):
     '''Returns direct file url'''
     opera = requests.session(headers=headers)
-    values = {'loginUserName': login, 'loginUserPassword': passwd, 'loginFormSubmit': 'Login', 'autoLogin': 'on'}
+    values = {'loginUserName': username, 'loginUserPassword': passwd, 'loginFormSubmit': 'Login', 'autoLogin': 'on'}
     opera.post('http://www.uploadstation.com/login.php', values)
     return opera.get(link).url  # return connection
 
 
-def upload(login, passwd, filename):
+def upload(username, passwd, filename):
     '''Returns uploaded file url'''
     opera = requests.session(headers=headers)
-    values = {'loginUserName': login, 'loginUserPassword': passwd, 'loginFormSubmit': 'Login', 'autoLogin': 'on'}
+    values = {'loginUserName': username, 'loginUserPassword': passwd, 'loginFormSubmit': 'Login', 'autoLogin': 'on'}
     opera.post('http://uploadstation.com/login.php', values)
     content = opera.get('http://uploadstation.com/upload.php').content
     host = re.search('action="(http://upload.uploadstation.com/upload/[0-9]+/[0-9]+/)"', content).group(1)
