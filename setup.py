@@ -8,6 +8,7 @@ except ImportError:
 
 packages = [
     'gdown',
+    'gdown.modules',
 ]
 
 requires = [
