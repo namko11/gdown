@@ -4,7 +4,9 @@ import requests
 import datetime
 import time
 import re
+
 from ..config import headers
+from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
 
 
 def upload(username, passwd, filename):
@@ -30,14 +32,13 @@ def status(username, passwd):
     if '<p class="greenText">Free member</p>' in content:
         return 0
     elif 'The account you are trying to use has been deleted.' in content:
-        return -1
+        raise AccountBlocked
     elif 'The email or password you have entered is incorrect' in content:
-        return -2
+        raise AccountRemoved
     elif '<span class="greenText">Premium until <time datetime=' in content:
         return time.mktime(datetime.datetime.strptime(re.search('<span class="greenText">Premium until <time datetime="([0-9]{4}\-[0-9]{2}\-[0-9]{2})">', content).group(1), '%Y-%m-%d').timetuple())
     elif "Congratulations! You're a FileFactory Lifetime member. We value your loyalty and support." in content:
         return 32503680000
     else:
-        open('log.log', 'w').write(content)
-        new_status
-        return -999
+        open('gdown.log', 'w').write(content)
+        raise ModuleError('Unknown error, full log in gdown.log')

@@ -6,6 +6,7 @@ import time
 import re
 
 from ..config import headers
+from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
 
 
 def getUrl(link, username, passwd):
@@ -34,27 +35,22 @@ def upload(username, passwd, filename):
 
 
 def status(username, passwd):
-    '''Returns account premium status:
-    -999    unknown error
-    -2      invalid password
-    -1      account temporary blocked
-    0       free account
-    >0      premium date end timestamp'''
+    """Returns account premium status."""
     opera = requests.session(headers=headers)
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
     content = opera.post('http://turbobit.net/user/login', values).content  # login
     if 'Incorrect login or password' in content or 'E-Mail address appears to be invalid. Please try again' in content:
-        return -2
+        raise AccountRemoved
     elif 'Limit of login attempts exeeded.' in content:
+        # TODO: use deathbycaptcha
         print 'captcha'
         captcha
         return -999
     try:
         content = re.search('<u>Turbo Access</u> [to ]{,3}(.*?)\.?					</div>', content).group(1)
     except:
-        open('log.log', 'w').write(content)
-        new_status
-        return -999
+        open('gdown.log', 'w').write(content)
+        raise ModuleError('Unknown error, full log in gdown.log')
     if content == 'denied':
         return 0
     else:

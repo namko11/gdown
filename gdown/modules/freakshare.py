@@ -2,6 +2,7 @@
 
 import requests
 import os
+
 from ..config import headers
 
 
@@ -15,7 +16,7 @@ def status(username, passwd):
     opera = requests.session(headers=headers)
     content = opera.get('http://freakshare.com/login.html', {'user': username, 'pass': passwd, 'submit': 'Login'}).content
     if '<td><b>Member (premium)</b></td>' in content:
-        return wazne
+        return True  # TODO: Finish it!
     elif '<td><b>Member (free)</b></td>' in content:
         return 0
     # NOT FINISHED!

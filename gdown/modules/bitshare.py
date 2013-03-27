@@ -8,6 +8,7 @@ import os
 from hashlib import md5
 
 from ..config import headers
+from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
 
 
 def status(username, passwd):
@@ -21,15 +22,12 @@ def status(username, passwd):
      # api version (do not return expire date)
     content = opera.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).content  # get hashkey (login)
     if content == 'ERROR:Username is not matching to the provided password!':
-        return -2
+        raise AccountRemoved
     elif content == 'ERROR:Due to an IP-Block because of security reasons you are not allowed to send more than 10 login requests per 10 minutes!':
-        print 'ip bloked'
-        ip_blocked
-        return -101
+        raise IpBlocked
     elif 'ERROR' in content:
-        open('log.log', 'w').write(content)
-        new_status
-        return -999
+        open('gdown.log', 'w').write(content)
+        raise ModuleError('Unknown error, full log in gdown.log')
     content = opera.post('http://bitshare.com/api/openapi/accountdetails.php', {'hashkey': content[8:]}).content
     content = re.search('SUCCESS:([0-9]+)#[0-9]+#[0-9]+#[0-9]+#.+', content).group(1)  # 0=noPremium | 1=premium
     if content == '1':
@@ -53,9 +51,8 @@ def status_manual(username, passwd):
     #elif 'Wrong Username or Password!' in content:
     #   return -2
     else:
-        open('log.log', 'w').write(content)
-        new_status
-        return -999
+        open('gdown.log', 'w').write(content)
+        raise ModuleError('Unknown error, full log in gdown.log')
 
 
 def getUrl(link, username, passwd):

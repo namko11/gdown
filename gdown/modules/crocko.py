@@ -3,6 +3,7 @@ import requests
 import re
 
 from ..config import headers
+from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
 
 
 def getApikey(username, passwd):
@@ -24,7 +25,7 @@ def status(username, passwd):
     # get apikey
     apikey = getApikey(username, passwd)
     if not apikey:
-        return -2  # invalid username or password (?)
+        raise AccountRemoved  # invalid username or password (?)
     opera = requests.session(headers=headers)
     content = opera.get('http://api.crocko.com/account', headers={'Authorization': apikey}).content
     premium_end = re.search('<ed:premium_end>(.*?)</ed:premium_end>', content).group(1)

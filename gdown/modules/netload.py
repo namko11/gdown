@@ -3,7 +3,9 @@
 import requests
 import time
 import re
+
 from ..config import headers
+from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
 
 
 def getUrl(link, username, passwd):
@@ -27,13 +29,11 @@ def status(username, passwd):
     opera.post('http://netload.in/index.php', values)
     content = opera.get('http://netload.in/index.php?id=15').content
     if 'This account was locked' in content or'Sorry, please activate first your account.' in content:  # account not activated
-        return -1
+        raise AccountBlocked
     elif 'not found in our records!' in content or 'Invalid User ID or password!' in content:
-        return -2
+        raise AccountRemoved
     elif 'Please wait a moment before tryingto log in again!' in content:   # ip blocked
-        print 'ip blocked'
-        ip_blocked
-        return -101
+        raise IpBlocked
     content = opera.get('http://netload.in/index.php?id=2').content
     if 'No Bonus' in content or 'Kein Premium' in content:
         return 0

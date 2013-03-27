@@ -5,6 +5,7 @@ import time
 import re
 
 from ..config import headers
+from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
 
 
 def getUrl(link, username, passwd):  # not checked
@@ -25,10 +26,10 @@ def status(username, passwd):
     opera = requests.session(headers=headers, config={'max_retries': 2})
     values = {'id': username, 'pw': passwd}
     content = opera.post('http://uploaded.net/io/login', values).content
-    if 'User and password do not match!' in content or 'Benutzer wurde gelöscht' in content or 'Account has been deleted' in content:  # wrong password / acc deleted
-        return -2
-    elif 'Account locked. Please contact Support.' in content:
-        return -1
+    if 'Account locked. Please contact Support.' in content:
+        raise AccountBlocked
+    elif 'User and password do not match!' in content or 'Benutzer wurde gelöscht' in content or 'Account has been deleted' in content:  # wrong password / acc deleted
+        raise AccountRemoved
     content = opera.get('http://uploaded.net').content
     lang = re.search('<meta name="language" http-equiv="content-language" content="(.+)" />', content).group(1)
     if lang != 'en':

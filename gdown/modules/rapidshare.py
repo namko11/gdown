@@ -4,6 +4,7 @@ import requests
 import re
 
 from ..config import headers
+from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
 
 
 def getUrl(link, username, passwd):
@@ -33,17 +34,14 @@ def status(username, passwd):
     opera = requests.session(headers=headers)
     content = opera.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails&login=%s&password=%s&withpublicid=1' % (username, passwd)).content
     if 'Login failed. Account locked.' in content:
-        return -1
+        raise AccountBlocked
     elif 'Login failed. Password incorrect or account not found.' in content or 'Login failed. Login data invalid.' in content:
-        return -2
+        raise AccountRemoved
     elif 'IP blocked' in content:   # ip blocked (too many wrong passwords)
-        print 'ip bloked'
-        ip_blocked
-        return -101
+        raise IpBlocked
     elif 'Login failed' in content:
-        print content
-        new_status
-        return -999
+        open('gdown.log', 'w').write(content)
+        raise ModuleError('Unknown error, full log in gdown.log')
     elif 'billeduntil=' in content:
         return int(re.search('billeduntil=(.+)\n', content).group(1))
 

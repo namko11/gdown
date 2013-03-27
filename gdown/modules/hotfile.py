@@ -7,6 +7,7 @@ import re
 import os
 
 from ..config import headers
+from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
 
 
 def getUrl(link, username, passwd):
@@ -31,18 +32,14 @@ def status(username, passwd):
     elif 'is_premium=0' in content:  # free
         return 0
     elif 'user account is suspended' in content:  # account suspended (permanent?)
-        return -1
+        raise AccountBlocked
     elif 'invalid username or password' in content:  # invalid username/passwd
-        return -2
+        raise AccountRemoved
     elif 'too many failed attemtps' in content:  # ip blocked
-        print 'ip blocked'
-        ip_blocked
-        return -101
+        raise IpBlocked
     else:
-        open('log.log', 'w').write(content)
-        print content
-        new_status
-        return -999
+        open('gdown.log', 'w').write(content)
+        raise ModuleError('Unknown error, full log in gdown.log')
 
 
 def upload(username, passwd, filename):

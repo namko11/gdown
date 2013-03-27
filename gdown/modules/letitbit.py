@@ -7,6 +7,7 @@ import time
 from dateutil import parser
 
 from ..config import headers
+from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
 
 
 def status(username, passwd):
@@ -21,10 +22,10 @@ def status(username, passwd):
     data = {'act': 'login', 'login': username, 'password': passwd}
     rc = r.post('http://letitbit.net/index.php?lang=en', data).content
     #Only for registered users
-    if 'Authorization data is invalid!' in rc or 'Login is indicated in wrong format!' in rc:
-        return -2
-    elif 'Account has been blocked. Please contact' in rc:
-        return -1
+    if 'Account has been blocked. Please contact' in rc:
+        raise AccountBlocked
+    elif 'Authorization data is invalid!' in rc or 'Login is indicated in wrong format!' in rc:
+        raise AccountRemoved
 
     data = {'act': 'get_attached_passwords'}
     rc = r.post('http://letitbit.net/ajax/get_attached_passwords.php', data).content
@@ -33,9 +34,8 @@ def status(username, passwd):
     elif '<th>Premium account</th>' in rc:
         data = re.search('<td>([0-9]{4}\-[0-9]{2}\-[0-9]{2})</td>', rc).group(1)
         return time.mktime(parser.parse(data).timetuple())
-    open('log.log', 'w').write(rc)  # DEBUG
-    new_status
-    return -999
+    open('gdown.log', 'w').write(rc)
+    raise ModuleError('Unknown error, full log in gdown.log')
 
 
 def getUrl(link, username, passwd):

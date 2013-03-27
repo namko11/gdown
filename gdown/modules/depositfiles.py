@@ -10,6 +10,7 @@ from simplejson import JSONDecoder
 from dateutil import parser
 
 from ..config import headers, deathbycaptcha_username, deathbycaptcha_password
+from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
 from ..deathbycaptcha import SocketClient as deathbycaptcha
 
 
@@ -51,13 +52,7 @@ def getUrl(link, username, passwd):
 
 
 def status(username, passwd, captcha=False):
-    """Returns account premium status:
-    -999    unknown error
-    -2      invalid password
-    -1      account temporary blocked
-    0       free account
-    >0      premium date end timestamp
-    """
+    """Returns account premium status."""
     r = requests.session(headers=headers)
     if captcha:
         recaptcha_challenge, recaptcha_response = decaptcha(recaptcha_public_key)
@@ -84,8 +79,7 @@ def status(username, passwd, captcha=False):
             decaptcha_wrong()  # add captcha_id
             return status(username, passwd, captcha=True)
         elif rc['error'] == 'LoginInvalid':
-            return -2
+            raise AccountRemoved
     print rc
-    #open('log.log', 'w').write(rc)  # encode json dict->string
-    new_status
-    return -999
+    open('gdown.log', 'w').write(content)
+    raise ModuleError('Unknown error, full log in gdown.log')
