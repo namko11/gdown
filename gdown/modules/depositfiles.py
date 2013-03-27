@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import requests
-#import datetime
-import time
 import re
 from random import random
 from StringIO import StringIO
 from simplejson import JSONDecoder
+from datetime import datetime
 from dateutil import parser
 
 from ..config import headers, deathbycaptcha_username, deathbycaptcha_password
@@ -67,11 +66,11 @@ def expireDate(username, passwd, captcha=False):
 
     if rc['status'] == 'OK':
         if rc['data']['mode'] == 'free':
-            return 0
+            return datetime.min
         elif rc['data']['mode'] == 'gold':
             rc = r.get('http://dfiles.eu/gold/').content
             c = re.search('<div class="access">.+ <b>([0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})</b></div>', rc)
-            return time.mktime(parser.parse(c.group(1)).timetuple())
+            return parser.parse(c.group(1))
     elif rc['status'] == 'Error':
         if rc['error'] == 'CaptchaRequired':
             return expireDate(username, passwd, captcha=True)

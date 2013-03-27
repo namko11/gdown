@@ -3,7 +3,7 @@
 
 import requests
 import re
-import time
+from datetime import datetime
 from dateutil import parser
 
 from ..config import headers
@@ -24,10 +24,10 @@ def expireDate(username, passwd):
     data = {'act': 'get_attached_passwords'}
     rc = r.post('http://letitbit.net/ajax/get_attached_passwords.php', data).content
     if 'There are no attached premium accounts found' in rc:
-        return 0
+        return datetime.min
     elif '<th>Premium account</th>' in rc:
         data = re.search('<td>([0-9]{4}\-[0-9]{2}\-[0-9]{2})</td>', rc).group(1)
-        return time.mktime(parser.parse(data).timetuple())
+        return parser.parse(data)
     open('gdown.log', 'w').write(rc)
     raise ModuleError('Unknown error, full log in gdown.log')
 

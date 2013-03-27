@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import datetime
-import time
 import re
 import os
 from hashlib import md5
+from datetime import datetime
+from dateutil import parser
 
 from ..config import headers
 from ..exceptions import ModuleError, IpBlocked, AccountRemoved
@@ -28,7 +28,7 @@ def expireDate(username, passwd):
     if content == '1':
         return status_manual(username, passwd)     # check expire date
     elif content == '0':
-        return 0
+        return datetime.min
 
 
 def status_manual(username, passwd):
@@ -39,8 +39,7 @@ def status_manual(username, passwd):
     if '(<b>Premium</b>)' in content:
         content = opera.get('http://bitshare.com/myaccount.html').content
         content = re.search('Valid until: ([0-9]+\-[0-9]+\-[0-9]+)', content).group(1)
-        content = time.mktime(datetime.datetime.strptime(content, '%Y-%m-%d').timetuple())
-        return content
+        return parser.parse(content)
     #elif '(<b><a href="http://bitshare.com/myupgrade.html">Free</a></b>)' in content:  # no need to check this
     #   return 0
     #elif 'Wrong Username or Password!' in content:

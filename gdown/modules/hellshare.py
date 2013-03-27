@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import datetime
-import time
 import re
+from datetime import datetime
+from dateutil import parser
 
 from ..config import headers
 from ..exceptions import ModuleError, AccountRemoved
@@ -22,10 +22,9 @@ def expireDate(username, passwd):
     content = opera.get('http://www.hellshare.com/members/').content
     if 'Active until: ' in content:
         expire_date = re.search('Active until: ([0-9]+\.[0-9]+\.[0-9]+)<br />', content).group(1)
-        expire_date = time.mktime(datetime.datetime.strptime(expire_date, '%d.%m.%Y').timetuple())
-        return expire_date
+        return parser.parse(expire_date)
     if 'Inactive' in content:
-        return 0
+        return datetime.min
     else:
         open('gdown.log', 'w').write(content)
         raise ModuleError('Unknown error, full log in gdown.log')

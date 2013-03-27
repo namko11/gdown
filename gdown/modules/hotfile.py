@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import datetime
-import time
 import re
 import os
+from datetime import datetime
+from dateutil import parser
 
 from ..config import headers
 from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
@@ -23,9 +23,9 @@ def expireDate(username, passwd):
     opera = requests.session(headers=headers)
     content = opera.get('http://api.hotfile.com/?action=getuserinfo&username=%s&password=%s' % (username, passwd)).content
     if 'is_premium=1' in content:   # premium
-        return time.mktime(datetime.datetime.strptime(re.search('premium_until=(.+?)&', content).group(1)[:-6], '%Y-%m-%dT%H:%M:%S').timetuple())
+        return parser.parse(re.search('premium_until=(.+?)&', content).group(1))
     elif 'is_premium=0' in content:  # free
-        return 0
+        return datetime.min
     elif 'user account is suspended' in content:  # account suspended (permanent?)
         raise AccountBlocked
     elif 'invalid username or password' in content:  # invalid username/passwd

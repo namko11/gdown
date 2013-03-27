@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import datetime
-import time
 import re
+from datetime import datetime
+from dateutil import parser
 
 from ..config import headers
 from ..exceptions import ModuleError, AccountBlocked, AccountRemoved
@@ -18,9 +18,9 @@ def expireDate(username, passwd):
     elif 'Error e-mail or password.' in content:
         raise AccountRemoved
     elif 'Account:&nbsp;<a href="/article/premium">Free</a>' in content:
-        return 0
+        return datetime.min
     elif 'Premium till' in content:
-        return time.mktime(datetime.datetime.strptime(re.search('Premium till ([0-9]{4}\-[0-9]{2}\-[0-9]{2})', content).group(1), '%Y-%m-%d').timetuple())
+        return parser.parse(re.search('Premium till ([0-9]{4}\-[0-9]{2}\-[0-9]{2})', content).group(1))
     else:
         open('gdown.log', 'w').write(content)
         raise ModuleError('Unknown error, full log in gdown.log')

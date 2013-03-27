@@ -2,6 +2,7 @@
 
 import requests
 import os
+from datetime import datetime
 
 from ..config import headers
 
@@ -13,7 +14,7 @@ def expireDate(username, passwd):
     if '<td><b>Member (premium)</b></td>' in content:
         return True  # TODO: Finish it!
     elif '<td><b>Member (free)</b></td>' in content:
-        return 0
+        return datetime.min
     # NOT FINISHED!
 
 

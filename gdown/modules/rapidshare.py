@@ -2,6 +2,7 @@
 
 import requests
 import re
+from datetime import datetime
 
 from ..config import headers
 from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
@@ -38,7 +39,8 @@ def expireDate(username, passwd):
         open('gdown.log', 'w').write(content)
         raise ModuleError('Unknown error, full log in gdown.log')
     elif 'billeduntil=' in content:
-        return int(re.search('billeduntil=(.+)\n', content).group(1))
+        # TODO: catch dates < now
+        return datetime.fromtimestamp(re.search('billeduntil=(.+)\n', content).group(1))
 
 
 def upload(username, passwd, filename):

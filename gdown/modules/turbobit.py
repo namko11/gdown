@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import datetime
-import time
 import re
+from datetime import datetime
+from dateutil import parser
 
 from ..config import headers
 from ..exceptions import ModuleError, AccountRemoved
@@ -52,6 +52,6 @@ def expireDate(username, passwd):
         open('gdown.log', 'w').write(content)
         raise ModuleError('Unknown error, full log in gdown.log')
     if content == 'denied':
-        return 0
+        return datetime.min
     else:
-        return time.mktime(datetime.datetime.strptime(content, '%d.%m.%Y').timetuple())
+        return parser.parse(content)

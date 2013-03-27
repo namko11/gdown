@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import time
 import re
+from datetime import datetime, timedelta
 
 from ..config import headers
 from ..exceptions import IpBlocked, AccountBlocked, AccountRemoved
@@ -31,13 +31,13 @@ def expireDate(username, passwd):
         raise IpBlocked
     content = opera.get('http://netload.in/index.php?id=2').content
     if 'No Bonus' in content or 'Kein Premium' in content:
-        return 0
+        return datetime.min
     else:
         content = re.search('<div style="float: left; width: 150px; color: #FFFFFF;"><span style="color: green">([0-9]*?)[ Tage,]{,7}([0-9]+) Stunden</span></div>', content)
         if content.group(1):
-            return time.time() + int(content.group(1)) * 24 * 60 * 60 + int(content.group(2)) * 60 * 60
+            return datetime.utcnow() + timedelta(days=content.group(1), hours=content.group(2))
         else:
-            return time.time() + int(content.group(2)) * 60 * 60
+            return datetime.utcnow() + timedelta(hours=content.group(2))
 
 
 def upload(username, passwd, filename):

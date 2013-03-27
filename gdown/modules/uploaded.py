@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import time
 import re
+from datetime import datetime, timedelta
 
 from ..config import headers
 from ..exceptions import AccountBlocked, AccountRemoved
@@ -32,32 +32,24 @@ def expireDate(username, passwd):
         opera.get('http://uploaded.net/language/%s' % (lang))  # restore old language
     if re.search('<em>(.+)</em>', content).group(1) == 'Premium':
         if '<th>unlimited</th>          </tr>' in content:  # lifetime premium
-            return 32503680000
+            return datetime.max
         content = re.search('<th>([0-9]+.+)</th>[ 	]+</tr>', content).group(1)
-        # 2 weeks 6 days and 4 hours
-        # 4 weeks 0 days and 8 hours
-        # 36 weeks 6 days and 5 hours
-        # 12 Stunden 58 Minuten und 4 Sekunden
-        # 1 Woche 0 Tage und 19 Stunden
-        # 6 Wochen 2 Tage und 19 Stunden
-        # 7 Wochen 6 Tage und 0 Stunden
-        # 5 semaines 2 jours et 21 heures
         seconds = re.search('([0-9]+) second', content)
         minutes = re.search('([0-9]+) M|minute', content)
         hours = re.search('([0-9]+) hour', content)
         days = re.search('([0-9]+) day', content)
         weeks = re.search('([0-9]+) [wW]{1}eek', content)
-        i = time.time()
+        expire_date = datetime.utcnow()
         if seconds:
-            i += int(seconds.group(1))
+            expire_date += timedelta(seconds=seconds.group(1))
         if minutes:
-            i += int(minutes.group(1)) * 60
+            expire_date += timedelta(minutes=minutes.group(1))
         if hours:
-            i += int(hours.group(1)) * 60 * 60
+            expire_date += timedelta(hours=hours.group(1))
         if days:
-            i += int(days.group(1)) * 60 * 60 * 24
+            expire_date += timedelta(days=days.group(1))
         if weeks:
-            i += int(weeks.group(1)) * 7 * 24 * 60 * 60
-        return i
+            expire_date += timedelta(weeks=weeks.group(1))
+        return expire_date
     else:
-        return 0
+        return datetime.min

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import datetime
-import time
 import re
+from datetime import datetime
+from dateutil import parser
 
 from ..config import headers
 from ..exceptions import ModuleError, AccountBlocked, AccountRemoved
@@ -25,15 +25,15 @@ def expireDate(username, passwd):
     opera = requests.session(headers=headers)
     content = opera.post('http://www.filefactory.com/member/login.php', {'redirect': '/', 'email': username, 'password': passwd, 'socialID': '', 'socialType': 'facebook'}).content
     if '<p class="greenText">Free member</p>' in content:
-        return 0
+        return datetime.min
     elif 'The account you are trying to use has been deleted.' in content:
         raise AccountBlocked
     elif 'The email or password you have entered is incorrect' in content:
         raise AccountRemoved
     elif '<span class="greenText">Premium until <time datetime=' in content:
-        return time.mktime(datetime.datetime.strptime(re.search('<span class="greenText">Premium until <time datetime="([0-9]{4}\-[0-9]{2}\-[0-9]{2})">', content).group(1), '%Y-%m-%d').timetuple())
+        return parser.parse(re.search('<span class="greenText">Premium until <time datetime="([0-9]{4}\-[0-9]{2}\-[0-9]{2})">', content).group(1))
     elif "Congratulations! You're a FileFactory Lifetime member. We value your loyalty and support." in content:
-        return 32503680000
+        return datetime.max
     else:
         open('gdown.log', 'w').write(content)
         raise ModuleError('Unknown error, full log in gdown.log')

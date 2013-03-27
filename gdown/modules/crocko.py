@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import requests
 import re
+from datetime import datetime
 
 from ..config import headers
 from ..exceptions import AccountRemoved
@@ -25,9 +26,9 @@ def expireDate(username, passwd):
     content = opera.get('http://api.crocko.com/account', headers={'Authorization': apikey}).content
     premium_end = re.search('<ed:premium_end>(.*?)</ed:premium_end>', content).group(1)
     if not premium_end:
-        return 0  # free
+        return datetime.min  # free
     else:
-        return premium_end  # premium
+        return datetime.fromtimestamp(premium_end)  # premium
 
 
 def upload(username, passwd, filename):
