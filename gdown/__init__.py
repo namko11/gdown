@@ -1,4 +1,4 @@
-__title__ = 'pypremium'
+__title__ = 'gdown'
 __version__ = '0.0.1'
 __author__ = 'oczkers'
 __license__ = 'GNU GPL v3'

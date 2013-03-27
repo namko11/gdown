@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import pypremium
+import gdown
 
 try:
     from setuptools import setup
@@ -11,8 +11,8 @@ requires = [
 ]
 
 setup(
-    name=pypremium.__title__,
-    version=pypremium.__version__,
+    name=gdown.__title__,
+    version=gdown.__version__,
     #description='',
     long_description=open('README.rst').read(),
     author='oczkers',

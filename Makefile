@@ -7,6 +7,6 @@ test-deps:
 	pip install -r requirements.txt
 
 six:
-	python test_pypremium.py
+	python test_gdown.py
 
 deps: requests
