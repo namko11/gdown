@@ -9,8 +9,8 @@ from ..config import headers
 from ..exceptions import ModuleError, AccountRemoved
 
 
-def status(username, passwd):
-    """Returns account premium status."""
+def expireDate(username, passwd):
+    """Returns account premium expire date."""
     opera = requests.session(headers=headers)
     opera.get('http://www.hellshare.com')
     opera.get('http://www.hellshare.com/?do=login-showLoginWindow')

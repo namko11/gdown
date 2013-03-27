@@ -18,8 +18,8 @@ def getUrl(link, username, passwd):
     return opera.get(link).url  # return connection
 
 
-def status(username, passwd):
-    """Returns account premium status."""
+def expireDate(username, passwd):
+    """Returns account premium expire date."""
     opera = requests.session(headers=headers)
     content = opera.get('http://api.hotfile.com/?action=getuserinfo&username=%s&password=%s' % (username, passwd)).content
     if 'is_premium=1' in content:   # premium

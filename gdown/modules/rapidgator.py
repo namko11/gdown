@@ -9,8 +9,8 @@ from ..config import headers
 from ..exceptions import ModuleError, AccountBlocked, AccountRemoved
 
 
-def status(username, passwd):
-    """Returns account premium status."""
+def expireDate(username, passwd):
+    """Returns account premium expire date."""
     opera = requests.session(headers=headers, config={'max_retries': 2})
     content = opera.post('https://rapidgator.net/auth/login', {'LoginForm[email]': username, 'LoginForm[password]': passwd, 'LoginForm[rememberMe]': '1'}).content
     if 'The code from a picture does not coincide' in content:

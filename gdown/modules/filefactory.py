@@ -20,8 +20,8 @@ def upload(username, passwd, filename):
     return 'http://www.filefactory.com/file/%s/n/%s' % (viewhash, filename)
 
 
-def status(username, passwd):
-    """Returns account premium status."""
+def expireDate(username, passwd):
+    """Returns account premium expire date."""
     opera = requests.session(headers=headers)
     content = opera.post('http://www.filefactory.com/member/login.php', {'redirect': '/', 'email': username, 'password': passwd, 'socialID': '', 'socialType': 'facebook'}).content
     if '<p class="greenText">Free member</p>' in content:

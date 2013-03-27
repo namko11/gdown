@@ -9,8 +9,8 @@ from ..config import headers
 from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
 
 
-def status(username, passwd):
-    """Returns account premium status."""
+def expireDate(username, passwd):
+    """Returns account premium expire date."""
     opera = requests.session(headers=headers)
     content = opera.post('http://ryushare.com', {'op': 'login', 'redirect': 'http://ryushare.com/my-account.python', 'login': username, 'password': passwd, 'loginFormSubmit': 'Login'}).content
     if 'Your account was banned by administrator.' in content:

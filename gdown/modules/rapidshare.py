@@ -19,8 +19,8 @@ def getUrl(link, username, passwd):
     return opera.get('https://%s/cgi-bin/rsapi.cgi?sub=download&fileid=%s&filename=%s&try=0&login=%s&password=%s' % (server, fileid, filename, username, passwd)).url   # return connection
 
 
-def status(username, passwd):
-    """Returns account premium status"""
+def expireDate(username, passwd):
+    """Returns account premium expire date."""
     ''' List of errors:
     ERROR: Login failed. Password incorrect or account not found. (221a75e5)
     ERROR: Login failed. Account locked. Please contact us if you have questions. (b45c2518)

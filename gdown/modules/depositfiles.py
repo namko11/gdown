@@ -51,8 +51,8 @@ def getUrl(link, username, passwd):
     return r.get(link).url
 
 
-def status(username, passwd, captcha=False):
-    """Returns account premium status."""
+def expireDate(username, passwd, captcha=False):
+    """Returns account premium expire date."""
     r = requests.session(headers=headers)
     if captcha:
         recaptcha_challenge, recaptcha_response = decaptcha(recaptcha_public_key)
@@ -74,10 +74,10 @@ def status(username, passwd, captcha=False):
             return time.mktime(parser.parse(c.group(1)).timetuple())
     elif rc['status'] == 'Error':
         if rc['error'] == 'CaptchaRequired':
-            return status(username, passwd, captcha=True)
+            return expireDate(username, passwd, captcha=True)
         elif rc['error'] == 'CaptchaInvalid':
             decaptcha_wrong()  # add captcha_id
-            return status(username, passwd, captcha=True)
+            return expireDate(username, passwd, captcha=True)
         elif rc['error'] == 'LoginInvalid':
             raise AccountRemoved
     open('gdown.log', 'w').write(rc)

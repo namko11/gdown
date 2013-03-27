@@ -11,8 +11,8 @@ from ..config import headers
 from ..exceptions import ModuleError, IpBlocked, AccountRemoved
 
 
-def status(username, passwd):
-    """Returns account premium status."""
+def expireDate(username, passwd):
+    """Returns account premium expire date."""
     opera = requests.session(headers=headers)
      # api version (do not return expire date)
     content = opera.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).content  # get hashkey (login)

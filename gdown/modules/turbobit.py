@@ -34,8 +34,8 @@ def upload(username, passwd, filename):
     return 'http://turbobit.net/%s.html' % (file_id)
 
 
-def status(username, passwd):
-    """Returns account premium status."""
+def expireDate(username, passwd):
+    """Returns account premium expire date."""
     opera = requests.session(headers=headers)
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
     content = opera.post('http://turbobit.net/user/login', values).content  # login

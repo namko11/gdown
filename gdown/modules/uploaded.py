@@ -16,8 +16,8 @@ def getUrl(link, username, passwd):  # not checked
     return opera.get(link).url  # return connection
 
 
-def status(username, passwd):
-    """Returns account premium status."""
+def expireDate(username, passwd):
+    """Returns account premium expire date."""
     opera = requests.session(headers=headers, config={'max_retries': 2})
     values = {'id': username, 'pw': passwd}
     content = opera.post('http://uploaded.net/io/login', values).content

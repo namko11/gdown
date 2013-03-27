@@ -15,8 +15,8 @@ def getApikey(username, passwd):
         return content
 
 
-def status(username, passwd):
-    """Returns account premium status."""
+def expireDate(username, passwd):
+    """Returns account premium expire date."""
     # get apikey
     apikey = getApikey(username, passwd)
     if not apikey:

@@ -10,8 +10,8 @@ from ..config import headers
 from ..exceptions import ModuleError, AccountBlocked, AccountRemoved
 
 
-def status(username, passwd):
-    """Returns account premium status."""
+def expireDate(username, passwd):
+    """Returns account premium expire date."""
     r = requests.session(headers=headers)
     data = {'act': 'login', 'login': username, 'password': passwd}
     rc = r.post('http://letitbit.net/index.php?lang=en', data).content

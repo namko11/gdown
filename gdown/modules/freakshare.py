@@ -6,8 +6,8 @@ import os
 from ..config import headers
 
 
-def status(username, passwd):
-    """Returns account premium status."""
+def expireDate(username, passwd):
+    """Returns account premium expire date."""
     opera = requests.session(headers=headers)
     content = opera.get('http://freakshare.com/login.html', {'user': username, 'pass': passwd, 'submit': 'Login'}).content
     if '<td><b>Member (premium)</b></td>' in content:

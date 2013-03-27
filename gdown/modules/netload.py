@@ -17,8 +17,8 @@ def getUrl(link, username, passwd):
     return opera.get(link).url  # return connection
 
 
-def status(username, passwd):
-    """Returns account premium status."""
+def expireDate(username, passwd):
+    """Returns account premium expire date."""
     opera = requests.session(headers=headers)
     values = {'txtuser': username, 'txtpass': passwd, 'txtcheck': 'login', 'txtlogin': 'Login'}
     opera.post('http://netload.in/index.php', values)
