@@ -13,11 +13,11 @@ Usage
 .. code-block:: pycon
 
     >>> import gdown
-    >>> gdown.expireDate('hotfile', 'login', 'password')
+    >>> gdown.hotfile.expireDate('login', 'password')
     datetime.datetime(2014, 5, 28, 11, 16, 33, tzinfo=tzoffset(None, -18000))
-    >>> gdown.upload('hotfile', 'README.rst', 'login', 'password')
+    >>> gdown.hotfile.upload('README.rst', 'login', 'password')
     'http://hotfile.com/dl/193968487/73da5c1/README.rst.html'
-    >>> gdown.getUrl('https://hotfile.com/dl/193966926/685bd36/chrome_frame_helper.dll.html', 'login', 'password')
+    >>> gdown.hotfile.getUrl('https://hotfile.com/dl/193966926/685bd36/chrome_frame_helper.dll.html', 'login', 'password')
     'http://s749.hotfile.com/get/f4ac4f6ae12e42973bca22b969c3b99915f9383b/51196253/1/4a70d63eb35925fa/b8fb34e/496034/chrome_frame_helper.dll'
     # TODO: getFile example.
     ...
