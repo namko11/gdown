@@ -10,32 +10,34 @@ import gdown
 
 class GdownTestCase(unittest.TestCase):
 
-    _multiprocess_can_split_ = True
+    #_multiprocess_can_split_ = True
 
     def setUp(self):
-        """Create simple data set with headers."""
-        pass
+        """Setup."""
+        self.modules = gdown.modules.__all__
 
     def tearDown(self):
         """Teardown."""
         pass
 
-    def test_entry_points(self):
-        gdown.modules
+    # def testEntryPoints(self):
+    #     gdown.getUrl
+    #     gdown.getFile
+    #     gdown.upload
+    #     gdown.expireDate
 
-    def testStatus(self):
-        """Tests status function on free account."""
-        for module in modules():
-            if hasattr(module, 'status'):
-                print module.__name__
-                self.assertEqual(module.status('gdown', 'gdown'), 0)
+    # def testInvalidHost(self):
+    #     self.assertRaises(gdown.GdownError, gdown.core.getModule, 'sadasdasd')
 
+    # def testInvalidAccount(self):
+    #     for module in self.modules:
+    #         self.assertRaises(gdown.exceptions.AccountError, gdown.expireDate, module, 'tadsasddsaasd', 'asdsadsads')
 
-def modules():
-    modules_list = []
-    for module_name in gdown.modules.__all__:
-        modules_list.append(getattr(gdown, module_name))
-    return modules_list
+    # def testInvalidUrl(self):
+    #     for module in self.modules:
+    #         url = 'http://%s/testasdasdas' % (module)
+    #         self.assertRaises(gdown.ModuleError, gdown.getUrl, url, 'login', 'password')
+
 
 if __name__ == '__main__':
     unittest.main()
