@@ -35,9 +35,9 @@ def expireDate(username, passwd):
     else:
         content = re.search('<div style="float: left; width: 150px; color: #FFFFFF;"><span style="color: green">([0-9]*?)[ Tage,]{,7}([0-9]+) Stunden</span></div>', content)
         if content.group(1):
-            return datetime.utcnow() + timedelta(days=content.group(1), hours=content.group(2))
+            return datetime.utcnow() + timedelta(days=int(content.group(1)), hours=int(content.group(2)))
         else:
-            return datetime.utcnow() + timedelta(hours=content.group(2))
+            return datetime.utcnow() + timedelta(hours=int(content.group(2)))
 
 
 def upload(username, passwd, filename):

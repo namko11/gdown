@@ -41,15 +41,15 @@ def expireDate(username, passwd):
         weeks = re.search('([0-9]+) [wW]{1}eek', content)
         expire_date = datetime.utcnow()
         if seconds:
-            expire_date += timedelta(seconds=seconds.group(1))
+            expire_date += timedelta(seconds=int(seconds.group(1)))
         if minutes:
-            expire_date += timedelta(minutes=minutes.group(1))
+            expire_date += timedelta(minutes=int(minutes.group(1)))
         if hours:
-            expire_date += timedelta(hours=hours.group(1))
+            expire_date += timedelta(hours=int(hours.group(1)))
         if days:
-            expire_date += timedelta(days=days.group(1))
+            expire_date += timedelta(days=int(days.group(1)))
         if weeks:
-            expire_date += timedelta(weeks=weeks.group(1))
+            expire_date += timedelta(weeks=int(weeks.group(1)))
         return expire_date
     else:
         return datetime.min
