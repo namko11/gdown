@@ -6,11 +6,11 @@ import time
 import re
 
 from ..config import headers
-from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
+from ..exceptions import ModuleError, AccountRemoved
 
 
 def getUrl(link, username, passwd):
-    '''Returns direct file url'''
+    """Returns direct file url."""
     opera = requests.session(headers=headers)
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
     opera.post('http://turbobit.net/user/login', values)
@@ -20,7 +20,7 @@ def getUrl(link, username, passwd):
 
 
 def upload(username, passwd, filename):
-    '''Returns uploaded file url'''
+    """Returns uploaded file url."""
     #file_size = os.path.getsize(filename)  # get file size
     opera = requests.session(headers=headers)
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}

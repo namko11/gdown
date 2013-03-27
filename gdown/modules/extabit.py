@@ -5,7 +5,7 @@ from ..config import headers
 
 
 def upload(username, passwd, filename):
-    '''Returns uploaded file url'''
+    """Returns uploaded file url."""
     #file_size = os.path.getsize(filename)  # get file size
     opera = requests.session(headers=headers)
 

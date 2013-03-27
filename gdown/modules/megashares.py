@@ -7,10 +7,11 @@ from ..config import headers
 
 
 def getUrl(link, username, passwd):
-    '''Returns direct file url
-    IP validator is present (?)'''
+    """Returns direct file url.
+    IP validator is present (?).
+    """
     fileid = re.match('http://d01.megashares.com/dl/(.+)/.+', link).group(1)
-    link = 'http://d01.megashares.com/index.php?d01='+fileid
+    link = 'http://d01.megashares.com/index.php?d01=%s' % (fileid)
     opera = requests.session(headers=headers)
     values = {'mymslogin_name': username, 'mymspassword': passwd, 'httpref': link, 'myms_login': 'Login'}
     content = opera.post('http://d01.megashares.com/myms_login.php', values).content

@@ -7,17 +7,11 @@ import time
 from dateutil import parser
 
 from ..config import headers
-from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
+from ..exceptions import ModuleError, AccountBlocked, AccountRemoved
 
 
 def status(username, passwd):
-    """Returns account premium status:
-    -999    unknown error
-    -2      invalid password
-    -1      account temporary blocked
-    0       free account
-    >0      premium date end timestamp
-    """
+    """Returns account premium status."""
     r = requests.session(headers=headers)
     data = {'act': 'login', 'login': username, 'password': passwd}
     rc = r.post('http://letitbit.net/index.php?lang=en', data).content

@@ -5,11 +5,11 @@ import time
 import re
 
 from ..config import headers
-from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
+from ..exceptions import AccountBlocked, AccountRemoved
 
 
 def getUrl(link, username, passwd):  # not checked
-    '''Returns direct file url'''
+    """Returns direct file url."""
     opera = requests.session(headers=headers)
     values = {'id': username, 'pw': passwd, 'loginFormSubmit': 'Login'}
     opera.post('http://www.uploaded.net/io/login', values)
@@ -17,12 +17,7 @@ def getUrl(link, username, passwd):  # not checked
 
 
 def status(username, passwd):
-    '''Returns account premium status:
-    -999    unknown error
-    -2      invalid password
-    -1      account temporary blocked
-    0       free account
-    >0      premium date end timestamp'''
+    """Returns account premium status."""
     opera = requests.session(headers=headers, config={'max_retries': 2})
     values = {'id': username, 'pw': passwd}
     content = opera.post('http://uploaded.net/io/login', values).content

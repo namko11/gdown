@@ -6,16 +6,11 @@ import time
 import re
 
 from ..config import headers
-from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
+from ..exceptions import ModuleError, AccountRemoved
 
 
 def status(username, passwd):
-    '''Returns account premium status:
-    -999    unknown error
-    -2      invalid password
-    -1      account temporary blocked
-    0       free account
-    >0      premium date end timestamp'''
+    """Returns account premium status."""
     opera = requests.session(headers=headers)
     opera.get('http://www.hellshare.com')
     opera.get('http://www.hellshare.com/?do=login-showLoginWindow')

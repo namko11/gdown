@@ -10,7 +10,7 @@ from simplejson import JSONDecoder
 from dateutil import parser
 
 from ..config import headers, deathbycaptcha_username, deathbycaptcha_password
-from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
+from ..exceptions import ModuleError, AccountRemoved
 from ..deathbycaptcha import SocketClient as deathbycaptcha
 
 
@@ -80,6 +80,5 @@ def status(username, passwd, captcha=False):
             return status(username, passwd, captcha=True)
         elif rc['error'] == 'LoginInvalid':
             raise AccountRemoved
-    print rc
-    open('gdown.log', 'w').write(content)
+    open('gdown.log', 'w').write(rc)
     raise ModuleError('Unknown error, full log in gdown.log')

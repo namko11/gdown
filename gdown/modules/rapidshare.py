@@ -8,25 +8,20 @@ from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
 
 
 def getUrl(link, username, passwd):
-    '''Returns direct file url
-    IP validator is NOT present'''
+    """Returns direct file url.
+    IP validator is NOT present."""
     opera = requests.session(headers=headers)
     content = re.match('^https?://[w\.]{,4}rapidshare.com/files/([0-9]+)/(.+)$', link)
     fileid = content.group(1)
     filename = content.group(2)
     content = opera.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=download&fileid=%s&filename=%s&try=1&login=%s&password=%s' % (fileid, filename, username, passwd)).content
     server = re.match('DL:(.+?),', content).group(1)
-    return opera.get('https://'+server+'/cgi-bin/rsapi.cgi?sub=download&fileid=%s&filename=%s&try=0&login=%s&password=%s' % (fileid, filename, username, passwd)).url   # return connection
+    return opera.get('https://%s/cgi-bin/rsapi.cgi?sub=download&fileid=%s&filename=%s&try=0&login=%s&password=%s' % (server, fileid, filename, username, passwd)).url   # return connection
 
 
 def status(username, passwd):
-    '''Returns account premium status:
-    -999    unknown error
-    -2      invalid password
-    -1      account temporary blocked
-    0       free account
-    >0      premium date end timestamp'''
-    ''' errors:
+    """Returns account premium status"""
+    ''' List of errors:
     ERROR: Login failed. Password incorrect or account not found. (221a75e5)
     ERROR: Login failed. Account locked. Please contact us if you have questions. (b45c2518)
     ERROR: Login failed. Login data invalid. (0320f9f0)
@@ -47,7 +42,7 @@ def status(username, passwd):
 
 
 def upload(username, passwd, filename):
-    '''Returns uploaded file url'''
+    """Returns uploaded file url."""
     opera = requests.session(headers=headers)
     server_id = opera.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=nextuploadserver').content
     content = opera.post('https://rs%s.rapidshare.com/cgi-bin/rsapi.cgi?sub=upload' % (server_id), {'login': username, 'password': passwd}, files={'filecontent': open(filename, 'rb')}).content

@@ -5,12 +5,12 @@ import time
 import re
 
 from ..config import headers
-from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
+from ..exceptions import IpBlocked, AccountBlocked, AccountRemoved
 
 
 def getUrl(link, username, passwd):
-    '''Returns direct file url
-    IP validator is present'''
+    """Returns direct file url.
+    IP validator is present."""
     opera = requests.session(headers=headers)
     values = {'txtuser': username, 'txtpass': passwd, 'txtcheck': 'login', 'txtlogin': ''}
     opera.post('http://netload.in/index.php', values)
@@ -18,12 +18,7 @@ def getUrl(link, username, passwd):
 
 
 def status(username, passwd):
-    '''Returns account premium status:
-    -999    unknown error
-    -2      invalid password
-    -1      account temporary blocked
-    0       free account
-    >0      premium date end timestamp'''
+    """Returns account premium status."""
     opera = requests.session(headers=headers)
     values = {'txtuser': username, 'txtpass': passwd, 'txtcheck': 'login', 'txtlogin': 'Login'}
     opera.post('http://netload.in/index.php', values)
@@ -40,14 +35,13 @@ def status(username, passwd):
     else:
         content = re.search('<div style="float: left; width: 150px; color: #FFFFFF;"><span style="color: green">([0-9]*?)[ Tage,]{,7}([0-9]+) Stunden</span></div>', content)
         if content.group(1):
-            content = time.time()+int(content.group(1))*24*60*60+int(content.group(2))*60*60
+            return time.time() + int(content.group(1)) * 24 * 60 * 60 + int(content.group(2)) * 60 * 60
         else:
-            content = time.time()+int(content.group(2))*60*60
-        return content
+            return time.time() + int(content.group(2)) * 60 * 60
 
 
 def upload(username, passwd, filename):
-    '''Returns uploaded file url'''
+    """Returns uploaded file url."""
     opera = requests.session(headers=headers)
     host = opera.get('http://api.netload.in/getserver.php').content
     content = opera.post(host, {'user_id': username, 'user_password': passwd, 'modus': 'file_upload'}, files={'file': open(filename, 'rb')}).content

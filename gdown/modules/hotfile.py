@@ -11,20 +11,15 @@ from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
 
 
 def getUrl(link, username, passwd):
-    '''Returns direct file url
-    IP validator is present'''
+    """Returns direct file url.
+    IP validator is present."""
     opera = requests.session(headers=headers)
     link = opera.get('http://api.hotfile.com/?action=getdirectdownloadlink&username=%s&password=%s&link=%s' % (username, passwd, link)).content
     return opera.get(link).url  # return connection
 
 
 def status(username, passwd):
-    '''Returns account premium status:
-    -999    unknown error
-    -2      invalid password
-    -1      account temporary blocked
-    0       free account
-    >0      premium date end timestamp'''
+    """Returns account premium status."""
     opera = requests.session(headers=headers)
     content = opera.get('http://api.hotfile.com/?action=getuserinfo&username=%s&password=%s' % (username, passwd)).content
     if 'is_premium=1' in content:   # premium
@@ -43,7 +38,7 @@ def status(username, passwd):
 
 
 def upload(username, passwd, filename):
-    '''Returns uploaded file url'''
+    """Returns uploaded file url."""
     file_size = os.path.getsize(filename)   # get file size
     opera = requests.session(headers=headers)
     host = opera.get('http://api.hotfile.com/?action=getuploadserver').content[:-1]  # get server to upload

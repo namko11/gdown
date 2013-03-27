@@ -6,11 +6,11 @@ import time
 import re
 
 from ..config import headers
-from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
+from ..exceptions import ModuleError, AccountBlocked, AccountRemoved
 
 
 def upload(username, passwd, filename):
-    '''Returns uploaded file url'''
+    """Returns uploaded file url."""
     opera = requests.session(headers=headers)
     opera.post('http://www.filefactory.com/member/login.php', {'email': username, 'password': passwd})  # login to get ff_membership cookie
     #host = opera.get('http://www.filefactory.com/servers.php?single=1').content  # get best server to upload
@@ -21,12 +21,7 @@ def upload(username, passwd, filename):
 
 
 def status(username, passwd):
-    '''Returns account premium status:
-    -999    unknown error
-    -2      invalid password
-    -1      account temporary blocked
-    0       free account
-    >0      premium date end timestamp'''
+    """Returns account premium status."""
     opera = requests.session(headers=headers)
     content = opera.post('http://www.filefactory.com/member/login.php', {'redirect': '/', 'email': username, 'password': passwd, 'socialID': '', 'socialType': 'facebook'}).content
     if '<p class="greenText">Free member</p>' in content:

@@ -6,6 +6,10 @@ try:
 except ImportError:
     from distutils.core import setup
 
+packages = [
+    'gdown',
+]
+
 requires = [
     'requests<1.0',
 ]
@@ -15,8 +19,12 @@ setup(
     version=gdown.__version__,
     #description='',
     long_description=open('README.rst').read(),
-    author='oczkers',
-    author_email='oczkers@gmail.com',
+    author='Piotr Staroszczyk',
+    author_email='piotr.staroszczyk@get24.org',
+    packages=packages,
+    package_data={'': ['LICENSE']},
+    package_dir={'gdown': 'gdown'},
+    include_package_data=True,
     install_requires=requires,
     license=open('LICENSE').read(),
     classifiers=(

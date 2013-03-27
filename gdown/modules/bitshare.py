@@ -8,16 +8,11 @@ import os
 from hashlib import md5
 
 from ..config import headers
-from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
+from ..exceptions import ModuleError, IpBlocked, AccountRemoved
 
 
 def status(username, passwd):
-    '''Returns account premium status:
-    -999    unknown error
-    -2      invalid password
-    -1      account temporary blocked
-    0       free account
-    >0      premium date end timestamp'''
+    """Returns account premium status."""
     opera = requests.session(headers=headers)
      # api version (do not return expire date)
     content = opera.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).content  # get hashkey (login)
@@ -56,8 +51,8 @@ def status_manual(username, passwd):
 
 
 def getUrl(link, username, passwd):
-    '''Returns direct file url
-    IP validator is NOT present'''
+    """Returns direct file url.
+    IP validator is NOT present."""
     opera = requests.session(headers=headers)
     values = {'user': username, 'password': passwd, 'rememberlogin': '1', 'submit': 'Login'}
     opera.post('http://bitshare.com/login.html', values)
@@ -65,7 +60,7 @@ def getUrl(link, username, passwd):
 
 
 def upload(username, passwd, filename):
-    '''Returns uploaded file url'''
+    """Returns uploaded file url."""
     file_size = int(os.path.getsize(filename))  # get file size
     opera = requests.session(headers=headers)
     hashkey = opera.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).content[8:]  # get hashkey (login)

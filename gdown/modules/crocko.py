@@ -3,7 +3,7 @@ import requests
 import re
 
 from ..config import headers
-from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
+from ..exceptions import AccountRemoved
 
 
 def getApikey(username, passwd):
@@ -16,12 +16,7 @@ def getApikey(username, passwd):
 
 
 def status(username, passwd):
-    '''Returns account premium status:
-    -999    unknown error
-    -2      invalid password
-    -1      account temporary blocked
-    0       free account
-    >0      premium date end timestamp'''
+    """Returns account premium status."""
     # get apikey
     apikey = getApikey(username, passwd)
     if not apikey:
@@ -36,7 +31,7 @@ def status(username, passwd):
 
 
 def upload(username, passwd, filename):
-    '''Returns uploaded file url'''
+    """Returns uploaded file url."""
     # get apikey
     apikey = getApikey(username, passwd)
     opera = requests.session(headers=headers)
