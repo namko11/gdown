@@ -10,7 +10,8 @@ from ..config import headers
 
 def getUrl(link, username=None, passwd=None):
     """Returns direct file url."""
-    opera = requests.session(headers=headers)
+    opera = requests.Session()
+    opera.headers = headers
     content = opera.get(link).content
     content = unquote(re.search('url_encoded_fmt_stream_map=(.+?)&', content).group(1)).split()
     links = []

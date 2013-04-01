@@ -11,7 +11,8 @@ from ..exceptions import ModuleError, AccountBlocked, AccountRemoved
 
 def upload(username, passwd, filename):
     """Returns uploaded file url."""
-    opera = requests.session(headers=headers)
+    opera = requests.Session()
+    opera.headers = headers
     opera.post('http://www.filefactory.com/member/login.php', {'email': username, 'password': passwd})  # login to get ff_membership cookie
     #host = opera.get('http://www.filefactory.com/servers.php?single=1').content  # get best server to upload
     host = 'http://upload.filefactory.com/upload.php'  # always returning the same url (?)
@@ -22,7 +23,8 @@ def upload(username, passwd, filename):
 
 def expireDate(username, passwd):
     """Returns account premium expire date."""
-    opera = requests.session(headers=headers)
+    opera = requests.Session()
+    opera.headers = headers
     content = opera.post('http://www.filefactory.com/member/login.php', {'redirect': '/', 'email': username, 'password': passwd, 'socialID': '', 'socialType': 'facebook'}).content
     if '<p class="greenText">Free member</p>' in content:
         return datetime.min

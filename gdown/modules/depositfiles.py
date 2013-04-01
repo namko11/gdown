@@ -19,7 +19,8 @@ recaptcha_public_key = '6LdRTL8SAAAAAE9UOdWZ4d0Ky-aeA7XfSqyWDM2m'
 def decaptcha(public_key):
     """Generates captcha & resolves using deathbycaptcha.
     Returns (recaptcha_challenge_field, recaptcha_response_field)."""
-    r = requests.session(headers=headers)
+    r = requests.Session()
+    r.headers = headers
     rc = r.get('http://www.google.com/recaptcha/api/challenge?k=%s&ajax=1&cachestop=%s' % (recaptcha_public_key, random())).content
     recaptcha_challenge = re.search("challenge : '(.+)',", rc).group(1)
     captcha_img = StringIO(r.get('http://www.google.com/recaptcha/api/image?c=%s' % (recaptcha_challenge)).content)
@@ -42,7 +43,8 @@ def getUrl(link, username, passwd):
     """Returns direct file url
     IP validator is present
     """
-    r = requests.session(headers=headers)
+    r = requests.Session()
+    r.headers = headers
     values = {'login': username, 'password': passwd, 'go': '1', 'submit': 'enter'}
     r.post('http://depositfiles.com/en/login.php', values)  # login
     rc = r.get(link).content   # get download page
@@ -52,7 +54,8 @@ def getUrl(link, username, passwd):
 
 def expireDate(username, passwd, captcha=False):
     """Returns account premium expire date."""
-    r = requests.session(headers=headers)
+    r = requests.Session()
+    r.headers = headers
     if captcha:
         recaptcha_challenge, recaptcha_response = decaptcha(recaptcha_public_key)
     else:

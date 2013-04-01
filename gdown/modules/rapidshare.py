@@ -11,7 +11,8 @@ from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
 def getUrl(link, username, passwd):
     """Returns direct file url.
     IP validator is NOT present."""
-    opera = requests.session(headers=headers)
+    opera = requests.Session()
+    opera.headers = headers
     content = re.match('^https?://[w\.]{,4}rapidshare.com/files/([0-9]+)/(.+)$', link)
     fileid = content.group(1)
     filename = content.group(2)
@@ -27,7 +28,8 @@ def expireDate(username, passwd):
     ERROR: Login failed. Account locked. Please contact us if you have questions. (b45c2518)
     ERROR: Login failed. Login data invalid. (0320f9f0)
     '''
-    opera = requests.session(headers=headers)
+    opera = requests.Session()
+    opera.headers = headers
     content = opera.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails&login=%s&password=%s&withpublicid=1' % (username, passwd)).content
     if 'Login failed. Account locked.' in content:
         raise AccountBlocked
@@ -45,7 +47,8 @@ def expireDate(username, passwd):
 
 def upload(username, passwd, filename):
     """Returns uploaded file url."""
-    opera = requests.session(headers=headers)
+    opera = requests.Session()
+    opera.headers = headers
     server_id = opera.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=nextuploadserver').content
     content = opera.post('https://rs%s.rapidshare.com/cgi-bin/rsapi.cgi?sub=upload' % (server_id), {'login': username, 'password': passwd}, files={'filecontent': open(filename, 'rb')}).content
     file_id = re.search('([0-9]+),[0-9]+,.+', content).group(1)
