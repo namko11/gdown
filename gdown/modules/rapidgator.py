@@ -2,6 +2,7 @@
 
 import requests
 import re
+from time import sleep
 from datetime import datetime
 from dateutil import parser
 
@@ -21,6 +22,9 @@ def expireDate(username, passwd):
         return datetime.min
     elif 'Premium till' in content:
         return parser.parse(re.search('Premium till ([0-9]{4}\-[0-9]{2}\-[0-9]{2})', content).group(1))
+    elif '503 Service Temporarily Unavailable' in content:
+        sleep(3)
+        return expireDate(username, passwd)
     else:
         open('gdown.log', 'w').write(content)
         raise ModuleError('Unknown error, full log in gdown.log')
