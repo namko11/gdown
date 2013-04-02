@@ -11,8 +11,7 @@ from ..exceptions import ModuleError, AccountRemoved
 
 def expireDate(username, passwd):
     """Returns account premium expire date."""
-    opera = requests.Session()
-    opera.headers = headers
+    opera = requests.session(headers=headers)
     opera.get('http://www.hellshare.com')
     opera.get('http://www.hellshare.com/?do=login-showLoginWindow')
     #   http://www.hellshare.com/members-auth/login

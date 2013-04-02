@@ -10,8 +10,7 @@ from ..exceptions import AccountBlocked, AccountRemoved
 
 def getUrl(link, username, passwd):  # not checked
     """Returns direct file url."""
-    opera = requests.Session()
-    opera.headers = headers
+    opera = requests.session(headers=headers)
     values = {'id': username, 'pw': passwd, 'loginFormSubmit': 'Login'}
     opera.post('http://www.uploaded.net/io/login', values)
     return opera.get(link).url  # return connection
@@ -19,8 +18,7 @@ def getUrl(link, username, passwd):  # not checked
 
 def expireDate(username, passwd):
     """Returns account premium expire date."""
-    opera = requests.Session()
-    opera.headers = headers
+    opera = requests.session(headers=headers, config={'max_retries': 2})
     values = {'id': username, 'pw': passwd}
     content = opera.post('http://uploaded.net/io/login', values).content
     if 'Account locked. Please contact Support.' in content:

@@ -8,8 +8,7 @@ from ..config import headers
 
 def getUrl(link, username, passwd):
     """Returns direct file url."""
-    opera = requests.Session()
-    opera.headers = headers
+    opera = requests.session(headers=headers)
     values = {'loginUserName': username, 'loginUserPassword': passwd, 'loginFormSubmit': 'Login', 'autoLogin': 'on'}
     opera.post('http://www.uploadstation.com/login.php', values)
     return opera.get(link).url  # return connection
@@ -17,8 +16,7 @@ def getUrl(link, username, passwd):
 
 def upload(username, passwd, filename):
     """Returns uploaded file url."""
-    opera = requests.Session()
-    opera.headers = headers
+    opera = requests.session(headers=headers)
     values = {'loginUserName': username, 'loginUserPassword': passwd, 'loginFormSubmit': 'Login', 'autoLogin': 'on'}
     opera.post('http://uploadstation.com/login.php', values)
     content = opera.get('http://uploadstation.com/upload.php').content

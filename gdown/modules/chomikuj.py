@@ -8,8 +8,7 @@ from ..config import headers
 
 def getUrl(link, username, passwd):
     """Returns direct file url."""
-    opera = requests.Session()
-    opera.headers = headers
+    opera = requests.session(headers=headers)
     # get token
     content = opera.get('http://chomikuj.pl').content
     token = re.search('name="__RequestVerificationToken" type="hidden" value="(.*?)"', content).group(1)
