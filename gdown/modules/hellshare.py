@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import re
-from datetime import datetime
 from dateutil import parser
 
-from ..core import browser
-from ..exceptions import ModuleError, AccountRemoved
+from ..core import browser, acc_info
+from ..exceptions import ModuleError
 
 
-def expireDate(username, passwd):
-    """Returns account premium expire date."""
+def accInfo(username, passwd):
+    """Returns account info."""
     opera = browser()
     opera.get('http://www.hellshare.com')
     opera.get('http://www.hellshare.com/?do=login-showLoginWindow')
@@ -17,13 +16,17 @@ def expireDate(username, passwd):
     values = {'login': 'Log in as registered user', 'username': username, 'password': passwd, 'perm_login': 'on'}
     content = opera.post('http://www.hellshare.com/?do=login-loginBoxForm-submit', values).content
     if 'Wrong user name or wrong password' in content:
-        raise AccountRemoved
+        acc_info['status'] = 'deleted'
+        return acc_info
     content = opera.get('http://www.hellshare.com/members/').content
     if 'Active until: ' in content:
         expire_date = re.search('Active until: ([0-9]+\.[0-9]+\.[0-9]+)<br />', content).group(1)
-        return parser.parse(expire_date)
+        acc_info['status'] = 'premium'
+        acc_info['expire_date'] = parser.parse(expire_date)
+        return acc_info
     if 'Inactive' in content:
-        return datetime.min
+        acc_info['status'] = 'free'
+        return acc_info
     else:
         open('gdown.log', 'w').write(content)
         raise ModuleError('Unknown error, full log in gdown.log')

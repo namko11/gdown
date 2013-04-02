@@ -2,8 +2,7 @@
 import re
 from datetime import datetime
 
-from ..core import browser
-from ..exceptions import AccountRemoved
+from ..core import browser, acc_info
 
 
 def getApikey(username, passwd):
@@ -15,19 +14,22 @@ def getApikey(username, passwd):
         return content
 
 
-def expireDate(username, passwd):
-    """Returns account premium expire date."""
+def accInfo(username, passwd):
+    """Returns account info."""
     # get apikey
     apikey = getApikey(username, passwd)
     if not apikey:
-        raise AccountRemoved  # invalid username or password (?)
+        acc_info['status'] = 'deleted'
+        return acc_info  # invalid username or password (?)
     opera = browser()
     content = opera.get('http://api.crocko.com/account', headers={'Authorization': apikey}).content
     premium_end = re.search('<ed:premium_end>(.*?)</ed:premium_end>', content).group(1)
     if not premium_end:
-        return datetime.min  # free
+        acc_info['status'] = 'free'
     else:
-        return datetime.fromtimestamp(premium_end)  # premium
+        acc_info['status'] = 'premium'
+        acc_info['expire_date'] = datetime.fromtimestamp(premium_end)  # premium
+    return acc_info
 
 
 def upload(username, passwd, filename):

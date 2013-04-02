@@ -4,10 +4,9 @@ import re
 from random import random
 from StringIO import StringIO
 from simplejson import JSONDecoder
-from datetime import datetime
 from dateutil import parser
 
-from ..core import browser
+from ..core import browser, acc_info
 from ..config import deathbycaptcha_username, deathbycaptcha_password
 from ..exceptions import ModuleError, AccountRemoved
 from ..deathbycaptcha import SocketClient as deathbycaptcha
@@ -50,8 +49,8 @@ def getUrl(link, username, passwd):
     return r.get(link).url
 
 
-def expireDate(username, passwd, captcha=False):
-    """Returns account premium expire date."""
+def accInfo(username, passwd, captcha=False):
+    """Returns account info."""
     r = browser()
     if captcha:
         recaptcha_challenge, recaptcha_response = decaptcha(recaptcha_public_key)
@@ -64,20 +63,25 @@ def expireDate(username, passwd, captcha=False):
             'recaptcha_response_field': recaptcha_response}
     rc = JSONDecoder().decode(r.post('http://dfiles.eu/api/user/login', data).content)
 
+    # TODO: too many returns in one method
     if rc['status'] == 'OK':
         if rc['data']['mode'] == 'free':
-            return datetime.min
+            acc_info['status'] = 'free'
+            return acc_info
         elif rc['data']['mode'] == 'gold':
             rc = r.get('http://dfiles.eu/gold/').content
             c = re.search('<div class="access">.+ <b>([0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})</b></div>', rc)
-            return parser.parse(c.group(1))
+            acc_info['status'] = 'premium'
+            acc_info['expire_date'] = parser.parse(c.group(1))
+            return acc_info
     elif rc['status'] == 'Error':
         if rc['error'] == 'CaptchaRequired':
-            return expireDate(username, passwd, captcha=True)
+            return accInfo(username, passwd, captcha=True)
         elif rc['error'] == 'CaptchaInvalid':
             decaptcha_wrong()  # add captcha_id
-            return expireDate(username, passwd, captcha=True)
+            return accInfo(username, passwd, captcha=True)
         elif rc['error'] == 'LoginInvalid':
-            raise AccountRemoved
+            acc_info['status'] = 'deleted'
+            return acc_info
     open('gdown.log', 'w').write(rc)
     raise ModuleError('Unknown error, full log in gdown.log')

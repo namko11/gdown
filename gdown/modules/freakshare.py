@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 
 import os
-from datetime import datetime
 
-from ..core import browser
+from ..core import browser, acc_info
 
 
-def expireDate(username, passwd):
-    """Returns account premium expire date."""
+def accInfo(username, passwd):
+    """Returns account info."""
     opera = browser()
     content = opera.get('http://freakshare.com/login.html', {'user': username, 'pass': passwd, 'submit': 'Login'}).content
     if '<td><b>Member (premium)</b></td>' in content:
-        return True  # TODO: Finish it!
+        acc_info['status'] = 'premium'
+        return acc_info  # TODO: Finish it!
     elif '<td><b>Member (free)</b></td>' in content:
-        return datetime.min
+        acc_info['status'] = 'free'
+        return acc_info
     # NOT FINISHED!
 
 

@@ -4,8 +4,8 @@ import re
 from datetime import datetime
 from dateutil import parser
 
-from ..core import browser
-from ..exceptions import ModuleError, AccountBlocked, AccountRemoved
+from ..core import browser, acc_info
+from ..exceptions import ModuleError
 
 
 def upload(username, passwd, filename):
@@ -19,20 +19,27 @@ def upload(username, passwd, filename):
     return 'http://www.filefactory.com/file/%s/n/%s' % (viewhash, filename)
 
 
-def expireDate(username, passwd):
-    """Returns account premium expire date."""
+def accInfo(username, passwd):
+    """Returns account info."""
     opera = browser()
     content = opera.post('http://www.filefactory.com/member/login.php', {'redirect': '/', 'email': username, 'password': passwd, 'socialID': '', 'socialType': 'facebook'}).content
     if '<p class="greenText">Free member</p>' in content:
-        return datetime.min
+        acc_info['status'] = 'free'
+        return acc_info
     elif 'The account you are trying to use has been deleted.' in content:
-        raise AccountBlocked
+        acc_info['status'] = 'blocked'
+        return acc_info
     elif 'The email or password you have entered is incorrect' in content:
-        raise AccountRemoved
+        acc_info['status'] = 'deleted'
+        return acc_info
     elif '<span class="greenText">Premium until <time datetime=' in content:
-        return parser.parse(re.search('<span class="greenText">Premium until <time datetime="([0-9]{4}\-[0-9]{2}\-[0-9]{2})">', content).group(1))
+        acc_info['status'] = 'premium'
+        acc_info['expire_date'] = parser.parse(re.search('<span class="greenText">Premium until <time datetime="([0-9]{4}\-[0-9]{2}\-[0-9]{2})">', content).group(1))
+        return acc_info
     elif "Congratulations! You're a FileFactory Lifetime member. We value your loyalty and support." in content:
-        return datetime.max
+        acc_info['status'] = 'premium'
+        acc_info['expire_date'] = datetime.max
+        return acc_info
     else:
         open('gdown.log', 'w').write(content)
         raise ModuleError('Unknown error, full log in gdown.log')
