@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
-import requests
 import re
 from datetime import datetime
 
-from ..config import headers
+from ..core import browser
 from ..exceptions import AccountRemoved
 
 
 def getApikey(username, passwd):
-    opera = requests.session(headers=headers)
+    opera = browser()
     content = re.search('<content type="text">(.+)</content>', opera.post('http://api.crocko.com/apikeys', {'login': username, 'password': passwd}).content).group(1)
     if content == 'Invalid login or password':
         return False
@@ -22,7 +21,7 @@ def expireDate(username, passwd):
     apikey = getApikey(username, passwd)
     if not apikey:
         raise AccountRemoved  # invalid username or password (?)
-    opera = requests.session(headers=headers)
+    opera = browser()
     content = opera.get('http://api.crocko.com/account', headers={'Authorization': apikey}).content
     premium_end = re.search('<ed:premium_end>(.*?)</ed:premium_end>', content).group(1)
     if not premium_end:
@@ -35,6 +34,6 @@ def upload(username, passwd, filename):
     """Returns uploaded file url."""
     # get apikey
     apikey = getApikey(username, passwd)
-    opera = requests.session(headers=headers)
+    opera = browser()
     content = opera.post('http://api.crocko.com/files', headers={'Authorization': apikey}, files={'file': open(filename, 'rb')}).content  # upload
     return re.search('<link title="download_link" href="(.+)"', content).group(1)

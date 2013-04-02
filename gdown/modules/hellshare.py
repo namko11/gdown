@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 
-import requests
 import re
 from datetime import datetime
 from dateutil import parser
 
-from ..config import headers
+from ..core import browser
 from ..exceptions import ModuleError, AccountRemoved
 
 
 def expireDate(username, passwd):
     """Returns account premium expire date."""
-    opera = requests.session(headers=headers)
+    opera = browser()
     opera.get('http://www.hellshare.com')
     opera.get('http://www.hellshare.com/?do=login-showLoginWindow')
     #   http://www.hellshare.com/members-auth/login

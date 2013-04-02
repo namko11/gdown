@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import requests
 import re
 import os
 
-from ..config import headers
+from ..core import browser
 
 
 def upload(username, passwd, filename):
     """Returns uploaded file url."""
     file_size = int(os.path.getsize(filename))
-    opera = requests.session(headers=headers)
+    opera = browser()
     content = re.match('(.+);(.+)', opera.post('http://www.share-online.biz/upv3_session.php', {'username': username, 'password': passwd}).content)  # get upload_session and best server to upload
     upload_session = content.group(1)
     host = content.group(2)

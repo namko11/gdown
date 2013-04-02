@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import requests
 import re
 from urllib import unquote
 from urlparse import parse_qs
 
-from ..config import headers
+from ..core import browser
 
 
 def getUrl(link, username=None, passwd=None):
     """Returns direct file url."""
-    opera = requests.session(headers=headers)
+    opera = browser()
     content = opera.get(link).content
     content = unquote(re.search('url_encoded_fmt_stream_map=(.+?)&', content).group(1)).split()
     links = []

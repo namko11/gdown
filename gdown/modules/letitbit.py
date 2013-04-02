@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 # TODO: use api (http://api.letitbit.net/reg/static/api.pdf)
 
-import requests
 import re
 from datetime import datetime
 from dateutil import parser
 
-from ..config import headers
+from ..core import browser
 from ..exceptions import ModuleError, AccountBlocked, AccountRemoved
 
 
 def expireDate(username, passwd):
     """Returns account premium expire date."""
-    r = requests.session(headers=headers)
+    r = browser()
     data = {'act': 'login', 'login': username, 'password': passwd}
     rc = r.post('http://letitbit.net/index.php?lang=en', data).content
     #Only for registered users
@@ -35,7 +34,7 @@ def expireDate(username, passwd):
 def getUrl(link, username, passwd):
     """Returns direct file url."""
     link = re.search('http://[w\.]{,4}letitbit.net/download/([0-9]+)/(.+)/(.+)\.html', link)  # own | uid | name
-    r = requests.session(headers=headers)
+    r = browser()
     values = {'act': 'login', 'login': username, 'password': passwd}
     rc = r.post('http://letitbit.net/download.php?own=%s&uid=%s&name=%s&page=1' % (link.group(1), link.group(2), link.group(3)), values).content  # login && get download page
     link = re.search('src="(http://.*letitbit.net/sms/check2_iframe.php\?ac_syml_uid.+)"', rc).group(1)

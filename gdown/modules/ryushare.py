@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 
-import requests
 import re
 from datetime import datetime
 from dateutil import parser
 
-from ..config import headers
+from ..core import browser
 from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
 
 
 def expireDate(username, passwd):
     """Returns account premium expire date."""
-    opera = requests.session(headers=headers)
+    opera = browser()
     content = opera.post('http://ryushare.com', {'op': 'login', 'redirect': 'http://ryushare.com/my-account.python', 'login': username, 'password': passwd, 'loginFormSubmit': 'Login'}).content
     if 'Your account was banned by administrator.' in content:
         raise AccountBlocked

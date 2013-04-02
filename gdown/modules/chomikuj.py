@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import requests
 import re
 
-from ..config import headers
+from ..core import browser
 
 
 def getUrl(link, username, passwd):
     """Returns direct file url."""
-    opera = requests.session(headers=headers)
+    opera = browser()
     # get token
     content = opera.get('http://chomikuj.pl').content
     token = re.search('name="__RequestVerificationToken" type="hidden" value="(.*?)"', content).group(1)

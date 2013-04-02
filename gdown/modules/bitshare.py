@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import requests
 import re
 import os
 from hashlib import md5
 from datetime import datetime
 from dateutil import parser
 
-from ..config import headers
+from ..core import browser
 from ..exceptions import ModuleError, IpBlocked, AccountRemoved
 
 
 def expireDate(username, passwd):
     """Returns account premium expire date."""
-    opera = requests.session(headers=headers)
+    opera = browser()
      # api version (do not return expire date)
     content = opera.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).content  # get hashkey (login)
     if content == 'ERROR:Username is not matching to the provided password!':
@@ -32,7 +31,7 @@ def expireDate(username, passwd):
 
 
 def status_manual(username, passwd):
-    opera = requests.session(headers=headers)
+    opera = browser()
     opera.get('http://bitshare.com/?language=EN')   # change language (regex)
     values = {'user': username, 'password': passwd, 'rememberlogin': '1', 'submit': 'Login'}
     content = opera.post('http://bitshare.com/login.html', values).content
@@ -52,7 +51,7 @@ def status_manual(username, passwd):
 def getUrl(link, username, passwd):
     """Returns direct file url.
     IP validator is NOT present."""
-    opera = requests.session(headers=headers)
+    opera = browser()
     values = {'user': username, 'password': passwd, 'rememberlogin': '1', 'submit': 'Login'}
     opera.post('http://bitshare.com/login.html', values)
     return opera.get(link).url
@@ -61,7 +60,7 @@ def getUrl(link, username, passwd):
 def upload(username, passwd, filename):
     """Returns uploaded file url."""
     file_size = int(os.path.getsize(filename))  # get file size
-    opera = requests.session(headers=headers)
+    opera = browser()
     hashkey = opera.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).content[8:]  # get hashkey (login)
     host = opera.post('http://bitshare.com/api/openapi/upload.php', {'action': 'getFileserver'}).content[8:]  # get host
     content = ''

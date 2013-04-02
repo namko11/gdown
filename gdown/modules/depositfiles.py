@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import requests
 import re
 from random import random
 from StringIO import StringIO
@@ -8,7 +7,8 @@ from simplejson import JSONDecoder
 from datetime import datetime
 from dateutil import parser
 
-from ..config import headers, deathbycaptcha_username, deathbycaptcha_password
+from ..core import browser
+from ..config import deathbycaptcha_username, deathbycaptcha_password
 from ..exceptions import ModuleError, AccountRemoved
 from ..deathbycaptcha import SocketClient as deathbycaptcha
 
@@ -19,7 +19,7 @@ recaptcha_public_key = '6LdRTL8SAAAAAE9UOdWZ4d0Ky-aeA7XfSqyWDM2m'
 def decaptcha(public_key):
     """Generates captcha & resolves using deathbycaptcha.
     Returns (recaptcha_challenge_field, recaptcha_response_field)."""
-    r = requests.session(headers=headers)
+    r = browser()
     rc = r.get('http://www.google.com/recaptcha/api/challenge?k=%s&ajax=1&cachestop=%s' % (recaptcha_public_key, random())).content
     recaptcha_challenge = re.search("challenge : '(.+)',", rc).group(1)
     captcha_img = StringIO(r.get('http://www.google.com/recaptcha/api/image?c=%s' % (recaptcha_challenge)).content)
@@ -42,7 +42,7 @@ def getUrl(link, username, passwd):
     """Returns direct file url
     IP validator is present
     """
-    r = requests.session(headers=headers)
+    r = browser()
     values = {'login': username, 'password': passwd, 'go': '1', 'submit': 'enter'}
     r.post('http://depositfiles.com/en/login.php', values)  # login
     rc = r.get(link).content   # get download page
@@ -52,7 +52,7 @@ def getUrl(link, username, passwd):
 
 def expireDate(username, passwd, captcha=False):
     """Returns account premium expire date."""
-    r = requests.session(headers=headers)
+    r = browser()
     if captcha:
         recaptcha_challenge, recaptcha_response = decaptcha(recaptcha_public_key)
     else:

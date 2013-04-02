@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 
-import requests
 import re
 from datetime import datetime
 from dateutil import parser
 
-from ..config import headers
+from ..core import browser
 from ..exceptions import ModuleError, AccountRemoved
 
 
 def getUrl(link, username, passwd):
     """Returns direct file url."""
-    opera = requests.session(headers=headers)
+    opera = browser()
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
     opera.post('http://turbobit.net/user/login', values)
     content = opera.get(link).content
@@ -22,7 +21,7 @@ def getUrl(link, username, passwd):
 def upload(username, passwd, filename):
     """Returns uploaded file url."""
     #file_size = os.path.getsize(filename)  # get file size
-    opera = requests.session(headers=headers)
+    opera = browser()
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
     opera.post('http://turbobit.net/user/login', values).content  # login
     content = opera.get('http://turbobit.net/').content
@@ -36,7 +35,7 @@ def upload(username, passwd, filename):
 
 def expireDate(username, passwd):
     """Returns account premium expire date."""
-    opera = requests.session(headers=headers)
+    opera = browser()
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
     content = opera.post('http://turbobit.net/user/login', values).content  # login
     if 'Incorrect login or password' in content or 'E-Mail address appears to be invalid. Please try again' in content:

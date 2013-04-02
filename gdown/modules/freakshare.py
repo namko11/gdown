@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import requests
 import os
 from datetime import datetime
 
-from ..config import headers
+from ..core import browser
 
 
 def expireDate(username, passwd):
     """Returns account premium expire date."""
-    opera = requests.session(headers=headers)
+    opera = browser()
     content = opera.get('http://freakshare.com/login.html', {'user': username, 'pass': passwd, 'submit': 'Login'}).content
     if '<td><b>Member (premium)</b></td>' in content:
         return True  # TODO: Finish it!
@@ -21,7 +20,7 @@ def expireDate(username, passwd):
 def upload(username, passwd, filename):
     """Returns uploaded file url."""
     file_size = os.path.getsize(filename)   # get file size
-    opera = requests.session(headers=headers)
+    opera = browser()
     # NOT FINISHED!
 
     host = opera.get('http://api.hotfile.com/?action=getuploadserver').content[:-1]  # get server to upload

@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-import requests
 
-from ..config import headers
+from ..core import browser
 
 
 def upload(username, passwd, filename):
     """Returns uploaded file url."""
     #file_size = os.path.getsize(filename)  # get file size
-    opera = requests.session(headers=headers)
+    opera = browser()
 
 
     host = opera.get('http://api.hotfile.com/?action=getuploadserver').content[:-1]  # get server to upload
