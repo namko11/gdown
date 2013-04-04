@@ -8,7 +8,7 @@ from dateutil import parser
 
 from ..module import browser, acc_info
 from ..config import deathbycaptcha_username, deathbycaptcha_password
-from ..exceptions import ModuleError, AccountRemoved
+from ..exceptions import ModuleError
 from ..deathbycaptcha import SocketClient as deathbycaptcha
 
 
