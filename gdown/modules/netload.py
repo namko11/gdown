@@ -3,7 +3,7 @@
 import re
 from datetime import datetime, timedelta
 
-from ..module import browser, acc_info
+from ..module import browser, acc_info_template
 from ..exceptions import IpBlocked
 
 
@@ -18,6 +18,7 @@ def getUrl(link, username, passwd):
 
 def accInfo(username, passwd):
     """Returns account info."""
+    acc_info = acc_info_template()
     opera = browser()
     values = {'txtuser': username, 'txtpass': passwd, 'txtcheck': 'login', 'txtlogin': 'Login'}
     opera.post('http://netload.in/index.php', values)

@@ -3,7 +3,7 @@
 import re
 from datetime import datetime, timedelta
 
-from ..module import browser, acc_info
+from ..module import browser, acc_info_template
 
 
 def getUrl(link, username, passwd):  # not checked
@@ -16,6 +16,7 @@ def getUrl(link, username, passwd):  # not checked
 
 def accInfo(username, passwd):
     """Returns account info."""
+    acc_info = acc_info_template()
     opera = browser()
     values = {'id': username, 'pw': passwd}
     content = opera.post('http://uploaded.net/io/login', values).content

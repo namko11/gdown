@@ -3,7 +3,7 @@
 import re
 from datetime import datetime
 
-from ..module import browser, acc_info
+from ..module import browser, acc_info_template
 from ..exceptions import ModuleError, IpBlocked
 
 
@@ -26,6 +26,7 @@ def accInfo(username, passwd):
     ERROR: Login failed. Account locked. Please contact us if you have questions. (b45c2518)
     ERROR: Login failed. Login data invalid. (0320f9f0)
     '''
+    acc_info = acc_info_template()
     opera = browser()
     content = opera.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails&login=%s&password=%s&withpublicid=1' % (username, passwd)).content
     if 'Login failed. Account locked.' in content:

@@ -3,12 +3,13 @@
 import re
 from dateutil import parser
 
-from ..module import browser, acc_info
+from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
 
 
 def accInfo(username, passwd):
     """Returns account info."""
+    acc_info = acc_info_template()
     opera = browser()
     opera.get('http://www.hellshare.com')
     opera.get('http://www.hellshare.com/?do=login-showLoginWindow')

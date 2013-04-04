@@ -13,7 +13,8 @@ import requests
 from .config import headers
 
 
-acc_info = {'email': None,
+def acc_info_template():
+    return {'email': None,
             'id': None,
             'status': None,
             'expire_date': None}

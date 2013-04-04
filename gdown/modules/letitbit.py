@@ -4,12 +4,13 @@
 import re
 from dateutil import parser
 
-from ..module import browser, acc_info
+from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
 
 
 def accInfo(username, passwd):
     """Returns account info."""
+    acc_info = acc_info_template()
     r = browser()
     data = {'act': 'login', 'login': username, 'password': passwd}
     rc = r.post('http://letitbit.net/index.php?lang=en', data).content

@@ -2,11 +2,12 @@
 
 import os
 
-from ..module import browser, acc_info
+from ..module import browser, acc_info_template
 
 
 def accInfo(username, passwd):
     """Returns account info."""
+    acc_info = acc_info_template()
     opera = browser()
     content = opera.get('http://freakshare.com/login.html', {'user': username, 'pass': passwd, 'submit': 'Login'}).content
     if '<td><b>Member (premium)</b></td>' in content:

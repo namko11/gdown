@@ -4,7 +4,7 @@ import re
 from datetime import datetime
 from dateutil import parser
 
-from ..module import browser, acc_info
+from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
 
 
@@ -21,6 +21,7 @@ def upload(username, passwd, filename):
 
 def accInfo(username, passwd):
     """Returns account info."""
+    acc_info = acc_info_template()
     opera = browser()
     content = opera.post('http://www.filefactory.com/member/login.php', {'redirect': '/', 'email': username, 'password': passwd, 'socialID': '', 'socialType': 'facebook'}).content
     if '<p class="greenText">Free member</p>' in content:

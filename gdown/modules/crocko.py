@@ -2,7 +2,7 @@
 import re
 from datetime import datetime
 
-from ..module import browser, acc_info
+from ..module import browser, acc_info_template
 
 
 def getApikey(username, passwd):
@@ -17,6 +17,7 @@ def getApikey(username, passwd):
 def accInfo(username, passwd):
     """Returns account info."""
     # get apikey
+    acc_info = acc_info_template()
     apikey = getApikey(username, passwd)
     if not apikey:
         acc_info['status'] = 'deleted'

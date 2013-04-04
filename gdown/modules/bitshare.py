@@ -5,12 +5,13 @@ import os
 from hashlib import md5
 from dateutil import parser
 
-from ..module import browser, acc_info
+from ..module import browser, acc_info_template
 from ..exceptions import ModuleError, IpBlocked
 
 
 def accInfo(username, passwd):
     """Returns account info."""
+    acc_info = acc_info_template()
     opera = browser()
      # api version (do not return expire date)
     content = opera.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).content  # get hashkey (login)

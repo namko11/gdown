@@ -6,7 +6,7 @@ from StringIO import StringIO
 from simplejson import JSONDecoder
 from dateutil import parser
 
-from ..module import browser, acc_info
+from ..module import browser, acc_info_template
 from ..config import deathbycaptcha_username, deathbycaptcha_password
 from ..exceptions import ModuleError
 from ..deathbycaptcha import SocketClient as deathbycaptcha
@@ -34,6 +34,7 @@ def decaptcha(public_key):
 
 def decaptcha_wrong():
     """Reports wrong captcha resolve to save credit."""
+    print 'wrong captcha'
     pass
 
 
@@ -51,6 +52,7 @@ def getUrl(link, username, passwd):
 
 def accInfo(username, passwd, captcha=False):
     """Returns account info."""
+    acc_info = acc_info_template()
     r = browser()
     if captcha:
         recaptcha_challenge, recaptcha_response = decaptcha(recaptcha_public_key)

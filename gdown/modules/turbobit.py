@@ -3,7 +3,7 @@
 import re
 from dateutil import parser
 
-from ..module import browser, acc_info
+from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
 
 
@@ -34,6 +34,7 @@ def upload(username, passwd, filename):
 
 def accInfo(username, passwd):
     """Returns account info."""
+    acc_info = acc_info_template()
     opera = browser()
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
     content = opera.post('http://turbobit.net/user/login', values).content  # login
