@@ -4,7 +4,7 @@ import re
 from datetime import datetime
 from dateutil import parser
 
-from ..core import browser, acc_info
+from ..module import browser, acc_info
 from ..exceptions import ModuleError
 
 

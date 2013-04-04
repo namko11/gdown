@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ..core import browser
+from ..module import browser
 
 
 def upload(username, passwd, filename):

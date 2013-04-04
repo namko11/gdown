@@ -3,7 +3,7 @@
 import re
 from urllib import unquote
 
-from ..core import browser
+from ..module import browser
 
 
 def getUrl(link, username=None, passwd=None):

@@ -2,7 +2,7 @@
 
 import os
 
-from ..core import browser, acc_info
+from ..module import browser, acc_info
 
 
 def accInfo(username, passwd):

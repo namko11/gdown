@@ -3,7 +3,7 @@
 import re
 from datetime import datetime, timedelta
 
-from ..core import browser, acc_info
+from ..module import browser, acc_info
 
 
 def getUrl(link, username, passwd):  # not checked

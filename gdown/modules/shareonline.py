@@ -3,7 +3,7 @@
 import re
 import os
 
-from ..core import browser
+from ..module import browser
 
 
 def upload(username, passwd, filename):

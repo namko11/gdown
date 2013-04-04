@@ -6,7 +6,7 @@ from StringIO import StringIO
 from simplejson import JSONDecoder
 from dateutil import parser
 
-from ..core import browser, acc_info
+from ..module import browser, acc_info
 from ..config import deathbycaptcha_username, deathbycaptcha_password
 from ..exceptions import ModuleError, AccountRemoved
 from ..deathbycaptcha import SocketClient as deathbycaptcha

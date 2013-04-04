@@ -2,7 +2,7 @@
 
 import re
 
-from ..core import browser
+from ..module import browser
 
 
 def getUrl(link, username, passwd):

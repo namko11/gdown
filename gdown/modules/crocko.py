@@ -2,7 +2,7 @@
 import re
 from datetime import datetime
 
-from ..core import browser, acc_info
+from ..module import browser, acc_info
 
 
 def getApikey(username, passwd):
