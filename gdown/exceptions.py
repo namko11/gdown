@@ -20,15 +20,3 @@ class ModuleError(GdownError):
 
 class IpBlocked(ModuleError):
     """IP blocked by hosting."""
-
-
-class AccountError(ModuleError):
-    """An account error occured."""
-
-
-class AccountBlocked(AccountError):
-    """Account is temporary(?) blocked."""
-
-
-class AccountRemoved(AccountError):
-    """Account removed or invalid username/password."""
