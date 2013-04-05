@@ -3,8 +3,8 @@
 import re
 from datetime import datetime
 
-from ..core import browser
-from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
+from ..module import browser, acc_info_template
+from ..exceptions import ModuleError, IpBlocked
 
 
 def getUrl(link, username, passwd):
@@ -19,19 +19,22 @@ def getUrl(link, username, passwd):
     return opera.get('https://%s/cgi-bin/rsapi.cgi?sub=download&fileid=%s&filename=%s&try=0&login=%s&password=%s' % (server, fileid, filename, username, passwd)).url   # return connection
 
 
-def expireDate(username, passwd):
-    """Returns account premium expire date."""
+def accInfo(username, passwd):
+    """Returns account info."""
     ''' List of errors:
     ERROR: Login failed. Password incorrect or account not found. (221a75e5)
     ERROR: Login failed. Account locked. Please contact us if you have questions. (b45c2518)
     ERROR: Login failed. Login data invalid. (0320f9f0)
     '''
+    acc_info = acc_info_template()
     opera = browser()
     content = opera.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails&login=%s&password=%s&withpublicid=1' % (username, passwd)).content
     if 'Login failed. Account locked.' in content:
-        raise AccountBlocked
+        acc_info['status'] = 'blocked'
+        return acc_info
     elif 'Login failed. Password incorrect or account not found.' in content or 'Login failed. Login data invalid.' in content:
-        raise AccountRemoved
+        acc_info['status'] = 'deleted'
+        return acc_info
     elif 'IP blocked' in content:   # ip blocked (too many wrong passwords)
         raise IpBlocked
     elif 'Login failed' in content:
@@ -39,7 +42,12 @@ def expireDate(username, passwd):
         raise ModuleError('Unknown error, full log in gdown.log')
     elif 'billeduntil=' in content:
         # TODO: catch dates < now
-        return datetime.fromtimestamp(re.search('billeduntil=(.+)\n', content).group(1))
+        acc_info['expire_date'] = datetime.fromtimestamp(re.search('billeduntil=(.+)\n', content).group(1))
+        if acc_info['expire_date'] > datetime.utcnow():
+            acc_info['status'] = 'premium'
+        else:
+            acc_info['status'] = 'free'
+        return acc_info
 
 
 def upload(username, passwd, filename):

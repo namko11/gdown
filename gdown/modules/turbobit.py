@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import re
-from datetime import datetime
 from dateutil import parser
 
-from ..core import browser
-from ..exceptions import ModuleError, AccountRemoved
+from ..module import browser, acc_info_template
+from ..exceptions import ModuleError
 
 
 def getUrl(link, username, passwd):
@@ -33,14 +32,16 @@ def upload(username, passwd, filename):
     return 'http://turbobit.net/%s.html' % (file_id)
 
 
-def expireDate(username, passwd):
-    """Returns account premium expire date."""
+def accInfo(username, passwd):
+    """Returns account info."""
+    acc_info = acc_info_template()
     opera = browser()
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
     content = opera.post('http://turbobit.net/user/login', values).content  # login
     if 'Incorrect login or password' in content or 'E-Mail address appears to be invalid. Please try again' in content:
-        raise AccountRemoved
-    elif 'Limit of login attempts exeeded.' in content:
+        acc_info['status'] = 'deleted'
+        return acc_info
+    elif 'Limit of login attempts exeeded.' in content or 'Please enter the captcha.' in content:
         # TODO: use deathbycaptcha
         print 'captcha'
         captcha
@@ -51,6 +52,9 @@ def expireDate(username, passwd):
         open('gdown.log', 'w').write(content)
         raise ModuleError('Unknown error, full log in gdown.log')
     if content == 'denied':
-        return datetime.min
+        acc_info['status'] = 'free'
+        return acc_info
     else:
-        return parser.parse(content)
+        acc_info['status'] = 'premium'
+        acc_info['expire_date'] = parser.parse(content)
+        return acc_info

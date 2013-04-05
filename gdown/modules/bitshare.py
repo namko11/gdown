@@ -3,20 +3,21 @@
 import re
 import os
 from hashlib import md5
-from datetime import datetime
 from dateutil import parser
 
-from ..core import browser
-from ..exceptions import ModuleError, IpBlocked, AccountRemoved
+from ..module import browser, acc_info_template
+from ..exceptions import ModuleError, IpBlocked
 
 
-def expireDate(username, passwd):
-    """Returns account premium expire date."""
+def accInfo(username, passwd):
+    """Returns account info."""
+    acc_info = acc_info_template()
     opera = browser()
      # api version (do not return expire date)
     content = opera.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).content  # get hashkey (login)
     if content == 'ERROR:Username is not matching to the provided password!':
-        raise AccountRemoved
+        acc_info['status'] = 'deleted'
+        return acc_info
     elif content == 'ERROR:Due to an IP-Block because of security reasons you are not allowed to send more than 10 login requests per 10 minutes!':
         raise IpBlocked
     elif 'ERROR' in content:
@@ -25,12 +26,14 @@ def expireDate(username, passwd):
     content = opera.post('http://bitshare.com/api/openapi/accountdetails.php', {'hashkey': content[8:]}).content
     content = re.search('SUCCESS:([0-9]+)#[0-9]+#[0-9]+#[0-9]+#.+', content).group(1)  # 0=noPremium | 1=premium
     if content == '1':
-        return status_manual(username, passwd)     # check expire date
+        acc_info['status'] = 'premium'
+        acc_info['expire_date'] = expireDate(username, passwd)     # check expire date
     elif content == '0':
-        return datetime.min
+        acc_info['status'] = 'free'
+    return acc_info
 
 
-def status_manual(username, passwd):
+def expireDate(username, passwd):  # manual (without api)
     opera = browser()
     opera.get('http://bitshare.com/?language=EN')   # change language (regex)
     values = {'user': username, 'password': passwd, 'rememberlogin': '1', 'submit': 'Login'}

@@ -2,11 +2,10 @@
 
 import re
 import os
-from datetime import datetime
 from dateutil import parser
 
-from ..core import browser
-from ..exceptions import ModuleError, IpBlocked, AccountBlocked, AccountRemoved
+from ..module import browser, acc_info_template
+from ..exceptions import ModuleError, IpBlocked
 
 
 def getUrl(link, username, passwd):
@@ -17,18 +16,24 @@ def getUrl(link, username, passwd):
     return opera.get(link).url  # return connection
 
 
-def expireDate(username, passwd):
-    """Returns account premium expire date."""
+def accInfo(username, passwd):
+    """Returns account info."""
+    acc_info = acc_info_template()
     opera = browser()
     content = opera.get('http://api.hotfile.com/?action=getuserinfo&username=%s&password=%s' % (username, passwd)).content
     if 'is_premium=1' in content:   # premium
-        return parser.parse(re.search('premium_until=(.+?)&', content).group(1))
+        acc_info['status'] = 'premium'
+        acc_info['expire_date'] = parser.parse(re.search('premium_until=(.+?)&', content).group(1))
+        return acc_info
     elif 'is_premium=0' in content:  # free
-        return datetime.min
+        acc_info['status'] = 'free'
+        return acc_info
     elif 'user account is suspended' in content:  # account suspended (permanent?)
-        raise AccountBlocked
+        acc_info['status'] = 'blocked'
+        return acc_info
     elif 'invalid username or password' in content:  # invalid username/passwd
-        raise AccountRemoved
+        acc_info['status'] = 'deleted'
+        return acc_info
     elif 'too many failed attemtps' in content:  # ip blocked
         raise IpBlocked
     else:
