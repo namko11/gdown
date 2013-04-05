@@ -41,7 +41,7 @@ def accInfo(username, passwd):
     if 'Incorrect login or password' in content or 'E-Mail address appears to be invalid. Please try again' in content:
         acc_info['status'] = 'deleted'
         return acc_info
-    elif 'Limit of login attempts exeeded.' in content:
+    elif 'Limit of login attempts exeeded.' in content or 'Please enter the captcha.' in content:
         # TODO: use deathbycaptcha
         print 'captcha'
         captcha
