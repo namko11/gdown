@@ -18,10 +18,10 @@ Usage
         'email': 'sample@email.com',
         'id': 542,
         'status': 'premium',
-        'expire_date': datetime.datetime(2014, 5, 28, 11, 16, 33, tzinfo=tzoffset(None, -18000))
+        'expire_date': datetime.datetime(2014, 5, 28, 11, 16, 33)
     }
     >>> hotfile.accInfo('login', 'password')['expire_date']
-    datetime.datetime(2014, 5, 28, 11, 16, 33, tzinfo=tzoffset(None, -18000))
+    datetime.datetime(2014, 5, 28, 11, 16, 33)
     >>> hotfile.upload('README.rst', 'login', 'password')
     'http://hotfile.com/dl/193968487/73da5c1/README.rst.html'
     >>> hotfile.getUrl('https://hotfile.com/dl/193966926/685bd36/chrome_frame_helper.dll.html', 'login', 'password')
@@ -35,7 +35,7 @@ CLI examples
 .. code-block:: bash
 
     >>> gdown status hotfile -u login -p password
-    Premium expire on: 2014-05-28 11:16:33-05:00
+    Premium expire on: 2014-05-28 11:16:33
     # TODO: accInfo
     >>> gdown up hotfile README.rst -u login -p password
     http://hotfile.com/dl/193968597/f3ca3eb/README.rst.html
