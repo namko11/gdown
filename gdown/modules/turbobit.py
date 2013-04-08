@@ -3,8 +3,11 @@
 import re
 from dateutil import parser
 
+from ..core import decaptcha, decaptchaReportWrong
 from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
+
+recaptcha_public_key = '6LcTGLoSAAAAAHCWY9TTIrQfjUlxu6kZlTYP50_c'
 
 
 def getUrl(link, username, passwd):
@@ -32,11 +35,18 @@ def upload(username, passwd, filename):
     return 'http://turbobit.net/%s.html' % (file_id)
 
 
-def accInfo(username, passwd):
+def accInfo(username, passwd, captcha=False):
     """Returns account info."""
+    # TODO: catch wrong captcha exception
     acc_info = acc_info_template()
     opera = browser()
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
+    if captcha:
+        recaptcha_challenge, recaptcha_response = decaptcha(recaptcha_public_key)
+        values['recaptcha_challenge_field'] = recaptcha_challenge
+        values['recaptcha_response_field'] = recaptcha_response
+        values['user[captcha_type]'] = 'recaptcha'
+        values['user[captcha_subtype]'] = ''
     content = opera.post('http://turbobit.net/user/login', values).content  # login
     if 'Incorrect login or password' in content or 'E-Mail address appears to be invalid. Please try again' in content:
         acc_info['status'] = 'deleted'
@@ -45,10 +55,7 @@ def accInfo(username, passwd):
         acc_info['status'] = 'blocked'
         return acc_info
     elif 'Limit of login attempts exeeded.' in content or 'Please enter the captcha.' in content:
-        # TODO: use deathbycaptcha
-        print 'captcha'
-        captcha
-        return -999
+        return accInfo(username, passwd, captcha=True)
     try:
         content = re.search('<u>Turbo Access</u> [to ]{,3}(.*?)\.?					</div>', content).group(1)
     except:
