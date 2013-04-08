@@ -7,8 +7,8 @@ gdown.core
 This module implements the gdown's basic methods.
 
 """
-import random
 import re
+from random import random
 from StringIO import StringIO
 
 from .config import deathbycaptcha_username, deathbycaptcha_password
