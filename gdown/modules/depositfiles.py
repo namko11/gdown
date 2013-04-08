@@ -1,41 +1,15 @@
 # -*- coding: utf-8 -*-
 
 import re
-from random import random
-from StringIO import StringIO
 from simplejson import JSONDecoder
 from dateutil import parser
 
+from ..core import decaptcha, decaptchaReportWrong
 from ..module import browser, acc_info_template
-from ..config import deathbycaptcha_username, deathbycaptcha_password
 from ..exceptions import ModuleError
-from ..deathbycaptcha import SocketClient as deathbycaptcha
 
 
 recaptcha_public_key = '6LdRTL8SAAAAAE9UOdWZ4d0Ky-aeA7XfSqyWDM2m'
-
-
-def decaptcha(public_key):
-    """Generates captcha & resolves using deathbycaptcha.
-    Returns (recaptcha_challenge_field, recaptcha_response_field)."""
-    r = browser()
-    rc = r.get('http://www.google.com/recaptcha/api/challenge?k=%s&ajax=1&cachestop=%s' % (recaptcha_public_key, random())).content
-    recaptcha_challenge = re.search("challenge : '(.+)',", rc).group(1)
-    captcha_img = StringIO(r.get('http://www.google.com/recaptcha/api/image?c=%s' % (recaptcha_challenge)).content)
-
-    client = deathbycaptcha(deathbycaptcha_username, deathbycaptcha_password)
-    captcha = client.decode(captcha_img)
-    if captcha:
-        return recaptcha_challenge, captcha['text']
-    else:
-        print 'decaptcha failed (?)'
-        return False
-
-
-def decaptcha_wrong():
-    """Reports wrong captcha resolve to save credit."""
-    print 'wrong captcha'
-    pass
 
 
 def getUrl(link, username, passwd):
@@ -80,7 +54,7 @@ def accInfo(username, passwd, captcha=False):
         if rc['error'] == 'CaptchaRequired':
             return accInfo(username, passwd, captcha=True)
         elif rc['error'] == 'CaptchaInvalid':
-            decaptcha_wrong()  # add captcha_id
+            decaptchaReportWrong()  # add captcha_id
             return accInfo(username, passwd, captcha=True)
         elif rc['error'] == 'LoginInvalid':
             acc_info['status'] = 'deleted'
