@@ -37,7 +37,6 @@ def upload(username, passwd, filename):
 
 def accInfo(username, passwd, captcha=False):
     """Returns account info."""
-    # TODO: catch wrong captcha exception
     acc_info = acc_info_template()
     opera = browser()
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
@@ -48,7 +47,10 @@ def accInfo(username, passwd, captcha=False):
         values['user[captcha_type]'] = 'recaptcha'
         values['user[captcha_subtype]'] = ''
     content = opera.post('http://turbobit.net/user/login', values).content  # login
-    if 'Incorrect login or password' in content or 'E-Mail address appears to be invalid. Please try again' in content:
+    if captcha and 'Incorrect captcha code' in content:
+        decaptchaReportWrong()  # add captcha_id
+        return accInfo(username, passwd, captcha=True)
+    elif 'Incorrect login or password' in content or 'E-Mail address appears to be invalid. Please try again' in content:
         acc_info['status'] = 'deleted'
         return acc_info
     elif 'Limit of login attempts exceeded for your account. It has been temporarily locked.' in content:
