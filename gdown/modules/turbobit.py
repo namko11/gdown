@@ -68,5 +68,5 @@ def accInfo(username, passwd, captcha=False):
         return acc_info
     else:
         acc_info['status'] = 'premium'
-        acc_info['expire_date'] = parser.parse(content)
+        acc_info['expire_date'] = parser.parse(content, dayfirst=True)
         return acc_info
