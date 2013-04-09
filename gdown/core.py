@@ -30,7 +30,6 @@ def decaptcha(recaptcha_public_key):
     if captcha:
         return recaptcha_challenge, captcha['text']
     else:
-        print 'decaptcha failed (?)'
         return False
 
 

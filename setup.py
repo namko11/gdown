@@ -36,10 +36,14 @@ setup(
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.0',
-        'Programming Language :: Python :: 3.1',
-        'Programming Language :: Python :: 3.2',
+        #'Programming Language :: Python :: 3.0',  # not tested
+        #'Programming Language :: Python :: 3.1',  # not tested
+        #'Programming Language :: Python :: 3.2',  # not tested
         'Programming Language :: Python :: 3.3',
+        #'Programming Language :: Python :: Implementation :: CPython',  # not tested
+        #'Programming Language :: Python :: Implementation :: IronPython',  # not tested
         'Programming Language :: Python :: Implementation :: PyPy',
+        'Topic :: Internet :: WWW/HTTP :: Site Management',
+        'Topic :: Software Development :: Libraries :: Python Modules',
     ),
 )
