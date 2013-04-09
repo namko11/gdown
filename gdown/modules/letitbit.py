@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
-# TODO: use api (http://api.letitbit.net/reg/static/api.pdf)
 
+"""
+gdown.modules.letitbit
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for letitbit.
+
+"""
+
+# TODO: use api (http://api.letitbit.net/reg/static/api.pdf)
 import re
 from dateutil import parser
 

@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.mediafire
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for mediafire.
+
+"""
+
 import re
 
 from ..module import browser

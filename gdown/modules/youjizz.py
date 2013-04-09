@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.youjizz
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for youjizz.
+
+"""
+
 import re
 
 from ..module import browser

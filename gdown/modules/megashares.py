@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.megashares
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for megashares.
+
+"""
+
 import re
 
 from ..module import browser

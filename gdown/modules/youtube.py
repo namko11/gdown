@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.youtube
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for youtube.
+
+"""
+
 import re
 from urllib import unquote
 from urlparse import parse_qs
@@ -8,7 +16,7 @@ from ..module import browser
 
 
 def getUrl(link, username=None, passwd=None):
-    """Returns direct file url."""
+    """Returns direct file url (best quality)."""
     opera = browser()
     content = opera.get(link).content
     content = unquote(re.search('url_encoded_fmt_stream_map=(.+?)&', content).group(1)).split()

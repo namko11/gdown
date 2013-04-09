@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.uploaded
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for uploaded.
+
+"""
+
 import re
 from datetime import datetime, timedelta
 

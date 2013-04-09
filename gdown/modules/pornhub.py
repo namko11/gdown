@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.pornhub
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for pornhub.
+
+"""
+
 import re
 from urllib import unquote
 

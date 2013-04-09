@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import gdown
 
 try:
@@ -18,7 +19,7 @@ setup(
     version=gdown.__version__,
     #description='',
     long_description=open('README.rst').read(),
-    author='Piotr Staroszczyk',
+    author=gdown.__author__,
     author_email='piotr.staroszczyk@get24.org',
     packages=packages,
     package_data={'': ['LICENSE']},
@@ -27,7 +28,7 @@ setup(
     install_requires=requires,
     license=open('LICENSE').read(),
     classifiers=(
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',

@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.freakshare
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for freakshare.
+
+"""
+
 import os
 
 from ..module import browser, acc_info_template

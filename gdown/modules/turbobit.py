@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.turbobit
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for turbobit.
+
+"""
+
 import re
 from dateutil import parser
 

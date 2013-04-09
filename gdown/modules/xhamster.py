@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.xhamster
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for xhamster.
+
+"""
+
 import re
 
 from ..module import browser

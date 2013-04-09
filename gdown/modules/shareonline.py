@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.shareonline
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for shareonline.
+
+"""
+
 import re
 import os
 

@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.chomikuj
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for chomikuj.
+
+"""
+
 import re
 
 from ..module import browser

@@ -27,6 +27,7 @@ __all__ = [
     'turbobit',
     'uploaded',
     #'uploading',
+    'uploadstation',
     #'usershare',
     'videobam',
     'xhamster',

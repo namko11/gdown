@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.rapidgator
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for rapidgator.
+
+"""
+
 import re
 from time import sleep
 from dateutil import parser

@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.hellshare
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for hellshare.
+
+"""
+
 import re
 from dateutil import parser
 

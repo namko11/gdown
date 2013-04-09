@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.uploadstation
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for uploadstation.
+
+"""
+
 import re
 
 from ..module import browser

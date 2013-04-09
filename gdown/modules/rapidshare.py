@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.rapidshare
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for rapidshare.
+
+"""
+
 import re
 from datetime import datetime
 

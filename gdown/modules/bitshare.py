@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.bitshare
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for bitshare.
+
+"""
+
 import re
 import os
 from hashlib import md5

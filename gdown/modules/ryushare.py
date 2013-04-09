@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.ryushare
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for ryushare.
+
+"""
+
 import re
 from dateutil import parser
 

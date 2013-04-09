@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.redtube
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for redtube.
+
+"""
+
 import re
 
 from ..module import browser

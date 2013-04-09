@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.xvideos
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for xvideos.
+
+"""
+
 import re
 from urllib import unquote
 

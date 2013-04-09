@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.hotfile
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for hotfile.
+
+"""
+
 import re
 import os
 from dateutil import parser

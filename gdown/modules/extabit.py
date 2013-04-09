@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.extabit
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for extabit.
+
+"""
+
 from ..module import browser
 
 

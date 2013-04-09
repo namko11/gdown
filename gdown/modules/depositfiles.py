@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.depositfiles
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for depositfiles.
+
+"""
+
 import re
 from simplejson import JSONDecoder
 from dateutil import parser

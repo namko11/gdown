@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.filefactory
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for filefactory.
+
+"""
+
 import re
 from datetime import datetime
 from dateutil import parser

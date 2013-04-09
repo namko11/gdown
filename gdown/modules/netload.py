@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.netload
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for netload.
+
+"""
+
 import re
 from datetime import datetime, timedelta
 

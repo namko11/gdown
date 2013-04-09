@@ -4,7 +4,7 @@
 gdown.exceptions
 ~~~~~~~~~~~~~~~~~~~
 
-This module contains the set of Gdown's exceptions.
+This module contains the set of gdown's exceptions.
 
 """
 

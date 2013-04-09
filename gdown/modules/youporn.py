@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+gdown.modules.youporn
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for youporn.
+
+"""
+
 import re
 
 from ..module import browser

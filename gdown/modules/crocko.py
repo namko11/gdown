@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+
+"""
+gdown.modules.crocko
+~~~~~~~~~~~~~~~~~~~
+
+This module contains handlers for crocko.
+
+"""
+
 import re
 from datetime import datetime
 
