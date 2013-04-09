@@ -9,8 +9,12 @@ This module contains handlers for youtube.
 """
 
 import re
-from urllib import unquote
-from urlparse import parse_qs
+try:
+    from urllib import unquote
+    from urlparse import parse_qs
+except:
+    from urllib.parse import unquote
+    from urllib.parse import parse_qs
 
 from ..module import browser
 
