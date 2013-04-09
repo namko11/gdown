@@ -9,7 +9,10 @@ This module contains handlers for pornhub.
 """
 
 import re
-from urllib import unquote
+try:
+    from urllib import unquote
+except:
+    from urllib.parse import unquote
 
 from ..module import browser
 
