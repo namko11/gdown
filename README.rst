@@ -1,6 +1,10 @@
 gdown
 =====
 
+
+.. image:: https://travis-ci.org/oczkers/gdown.png?branch=master
+        :target: https://travis-ci.org/oczkers/gdown
+
 gdown is a library for managing sharing websites (like netload.in and uploaded.net).
 It is written entirely in Python.
 
