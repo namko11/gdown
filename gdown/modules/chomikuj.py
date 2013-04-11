@@ -23,10 +23,14 @@ def accInfo(username, passwd):
     data = {'__RequestVerificationToken': token, 'ReturnUrl': '', 'Login': username, 'Password': passwd, 'rememberLogin': 'true', 'topBar_LoginBtn': 'Zaloguj'}
     rc = r.post('http://chomikuj.pl/action/Login/TopBarLogin', data).content
 
-    status = re.search('Abonament Twojego Chomika jest ważny do: <h3>([0-9]{4}\-[0-9]{2}\-[0-9]{2})</h3>', rc)
-    if status:
+    if 'Podane hasło jest niewłaściwe' in rc:
+        acc_info['status'] = 'deleted'
+        return acc_info
+
+    expire_date = re.search('Abonament Twojego Chomika jest ważny do: <h3>([0-9]{4}\-[0-9]{2}\-[0-9]{2})</h3>', rc)
+    if expire_date:
         acc_info['status'] = 'premium'
-        acc_info['expire_date'] = parser.parse(status.group(1))
+        acc_info['expire_date'] = parser.parse(expire_date.group(1))
     else:
         acc_info['status'] = 'free'
 
