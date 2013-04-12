@@ -31,7 +31,8 @@ def accInfo(username, passwd):
     content = opera.get('http://api.hotfile.com/?action=getuserinfo&username=%s&password=%s' % (username, passwd)).content
     if 'is_premium=1' in content:   # premium
         acc_info['status'] = 'premium'
-        acc_info['expire_date'] = parser.parse(re.search('premium_until=(.+?)&', content).group(1))
+        expire_date = re.search('premium_until=(.+?)&', content).group(1)
+        acc_info['expire_date'] = parser.parse(expire_date, ignoretz=True)
         return acc_info
     elif 'is_premium=0' in content:  # free
         acc_info['status'] = 'free'
