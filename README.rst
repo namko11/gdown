@@ -22,7 +22,9 @@ Usage
         'email': 'sample@email.com',
         'id': 542,
         'status': 'premium',
-        'expire_date': datetime.datetime(2014, 5, 28, 11, 16, 33)
+        'expire_date': datetime.datetime(2014, 5, 28, 11, 16, 33),
+        'transfer': None,
+        'points': None
     }
     >>> hotfile.accInfo('login', 'password')['expire_date']
     datetime.datetime(2014, 5, 28, 11, 16, 33)
