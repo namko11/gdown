@@ -17,7 +17,9 @@ def acc_info_template():
     return {'email': None,
             'id': None,
             'status': None,
-            'expire_date': None}
+            'expire_date': None,
+            'transfer': None,
+            'points': None}
 
 
 def browser():
