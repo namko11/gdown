@@ -40,6 +40,7 @@ def accInfo(username, passwd):
         acc_info['status'] = 'premium'
         acc_info['expire_date'] = parser.parse(data)
         return acc_info
+    #elif 'Authorization data is invalid!' in rc:  # authorization data accepted by index.php but sometime refused here, why?
     open('gdown.log', 'w').write(rc)
     raise ModuleError('Unknown error, full log in gdown.log')
 
@@ -52,5 +53,5 @@ def getUrl(link, username, passwd):
     rc = r.post('http://letitbit.net/download.php?own=%s&uid=%s&name=%s&page=1' % (link.group(1), link.group(2), link.group(3)), values).content  # login && get download page
     link = re.search('src="(http://.*letitbit.net/sms/check2_iframe.php\?ac_syml_uid.+)"', rc).group(1)
     rc = r.get(link).content  # get download iframe
-    link = re.findall('href="(.+)" style', rc)[0]  # get first link
+    link = re.findall('href="(.+)" style', rc)[0]  # get first link / replace re.findall with re.search?
     return r.get(link).url
