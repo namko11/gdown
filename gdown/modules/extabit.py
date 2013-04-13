@@ -24,7 +24,7 @@ def accInfo(username, passwd):
 
     alert = re.search('\$.jGrowl\("(.+)", \{life: [0-9]+\} \);', rc)
     if alert:
-        if 'Account not activated.' in alert.group(1):
+        if any(i in alert.group(1) for i in ('Account not activated.', 'Your account has been suspended for violating terms of service')):
             acc_info['status'] = 'blocked'
             return acc_info
         elif 'Username or password is incorrect.' in alert.group(1):
