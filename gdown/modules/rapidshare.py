@@ -50,7 +50,7 @@ def accInfo(username, passwd):
         raise ModuleError('Unknown error, full log in gdown.log')
     elif 'billeduntil=' in content:
         # TODO: catch dates < now
-        acc_info['expire_date'] = datetime.fromtimestamp(re.search('billeduntil=(.+)\n', content).group(1))
+        acc_info['expire_date'] = datetime.fromtimestamp(int(re.search('billeduntil=(.+)\n', content).group(1)))
         if acc_info['expire_date'] > datetime.utcnow():
             acc_info['status'] = 'premium'
         else:
