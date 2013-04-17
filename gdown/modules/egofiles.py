@@ -13,7 +13,7 @@ from simplejson import JSONDecoder
 from dateutil import parser
 
 from ..module import browser, acc_info_template
-from ..exceptions import ModuleError
+from ..exceptions import ModuleError, IpBlocked
 
 
 def accInfo(username, passwd):
@@ -22,8 +22,10 @@ def accInfo(username, passwd):
     r = browser()
     data = {'log': '1', 'loginV': username, 'passV': passwd}
     rc = JSONDecoder().decode(r.post('http://egofiles.com/ajax/register.php', data).content)
-    if rc.get('error') in (u'Login może mieć 4-16 znaków: a-z, A-Z i 0-9', u'Wpisane hasło jest błędne'):
+    if rc.get('error') in (u'Login może mieć 4-16 znaków: a-z, A-Z i 0-9', u'Wpisane hasło jest błędne', 'Podany login nie istnieje'):
         acc_info['status'] = 'deleted'
+    elif rc.get('error') == u'Przekroczono limit prób - odczekaj chwilę i spróbuj ponownie':
+        raise IpBlocked
     elif rc.get('ok') == 'Zalogowano.':
         rc = r.get('http://egofiles.com/settings').content
         if 'Korzystasz z konta Free User' in rc:
