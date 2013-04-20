@@ -22,6 +22,9 @@ def accInfo(username, passwd):
     if 'Wyloguj' in rc:
         acc_info['status'] = 'free'
         return acc_info
+    elif 'Konto zablokowane administracyjnie.' in rc:
+        acc_info['status'] = 'blocked'
+        return acc_info
     elif 'Niestety podany login lub has' in rc:
         acc_info['status'] = 'deleted'
         return acc_info
