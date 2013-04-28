@@ -10,6 +10,7 @@ This module contains handlers for uploaded.
 
 import re
 from datetime import datetime, timedelta
+from time import sleep
 
 from ..module import browser, acc_info_template
 
@@ -35,6 +36,10 @@ def accInfo(username, passwd):
         acc_info['status'] = 'deleted'
         return acc_info
     content = opera.get('http://uploaded.net').content
+    if '<button type="submit">Login</button>' in content:  # ip blocked(?), waiting 15s
+        print 'waiting'
+        sleep(15)
+        return accInfo(username, passwd)
     lang = re.search('<meta name="language" http-equiv="content-language" content="(.+)" />', content).group(1)
     if lang != 'en':
         content = opera.get('http://uploaded.net/language/en').content
