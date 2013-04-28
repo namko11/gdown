@@ -6,6 +6,7 @@
 import unittest
 
 import gdown
+from gdown import cli
 
 
 class GdownTestCase(unittest.TestCase):
@@ -37,6 +38,13 @@ class GdownTestCase(unittest.TestCase):
     #     for module in self.modules:
     #         url = 'http://%s/testasdasdas' % (module)
     #         self.assertRaises(gdown.ModuleError, gdown.getUrl, url, 'login', 'password')
+
+    def testCli(self):
+        self.assertEqual(gdown.__title__, cli.__title__)
+        self.assertEqual(gdown.__version__, cli.__version__)
+        self.assertEqual(gdown.__author__, cli.__author__)
+        self.assertEqual(gdown.__license__, cli.__license__)
+        self.assertEqual(gdown.__copyright__, cli.__copyright__)
 
 
 if __name__ == '__main__':

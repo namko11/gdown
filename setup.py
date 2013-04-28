@@ -46,4 +46,9 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Site Management',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ),
+    entry_points={
+        'console_scripts': [
+            'gdown = gdown.cli:main',
+        ]
+    }
 )
