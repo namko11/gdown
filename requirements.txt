@@ -2,3 +2,4 @@ requests>=1.0.0
 python-dateutil
 simplejson
 docopt
+pycrypto

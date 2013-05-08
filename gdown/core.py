@@ -7,6 +7,7 @@ gdown.core
 This module implements the gdown's basic methods.
 
 """
+
 import re
 from random import random
 from StringIO import StringIO

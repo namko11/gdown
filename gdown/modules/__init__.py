@@ -20,6 +20,7 @@ __all__ = [
     'kat',
     'letitbit',
     'mediafire',
+    'mega',
     'megashares',
     'netload',
     'onet',
