@@ -26,3 +26,5 @@ def browser():
     r = requests.Session()
     r.headers = headers
     return r
+
+# TODO: modules as classes
