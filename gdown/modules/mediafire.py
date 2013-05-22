@@ -16,8 +16,8 @@ from ..module import browser
 def getUrl(link, premium_key, username=None, passwd=None):
     """Returns direct file url."""
     fileid = re.match('http://[w\.]{,4}mediafire.com/\?(.+)', link).group(1)
-    opera = browser()
+    r = browser()
     values = {'premium_key': premium_key, 'files': fileid}
-    content = opera.post('http://www.mediafire.com/basicapi/premiumapi.php', values).content
+    content = r.post('http://www.mediafire.com/basicapi/premiumapi.php', values).content
     link = re.search('<url>(.+)</url>', content).group(1)
-    return opera.get(link).url
+    return r.get(link).url

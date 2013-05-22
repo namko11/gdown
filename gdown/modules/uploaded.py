@@ -17,32 +17,32 @@ from ..module import browser, acc_info_template
 
 def getUrl(link, username, passwd):  # not checked
     """Returns direct file url."""
-    opera = browser()
+    r = browser()
     values = {'id': username, 'pw': passwd, 'loginFormSubmit': 'Login'}
-    opera.post('http://www.uploaded.net/io/login', values)
-    return opera.get(link).url  # return connection
+    r.post('http://www.uploaded.net/io/login', values)
+    return r.get(link).url  # return connection
 
 
 def accInfo(username, passwd):
     """Returns account info."""
     acc_info = acc_info_template()
-    opera = browser()
+    r = browser()
     values = {'id': username, 'pw': passwd}
-    content = opera.post('http://uploaded.net/io/login', values).content
+    content = r.post('http://uploaded.net/io/login', values).content
     if 'Account locked. Please contact Support.' in content:
         acc_info['status'] = 'blocked'
         return acc_info
     elif 'User and password do not match!' in content or 'Benutzer wurde gelöscht' in content or 'Account has been deleted' in content:  # wrong password / acc deleted
         acc_info['status'] = 'deleted'
         return acc_info
-    content = opera.get('http://uploaded.net').content
+    content = r.get('http://uploaded.net').content
     if '<button type="submit">Login</button>' in content:  # ip blocked(?), waiting 15s
         sleep(15)
         return accInfo(username, passwd)
     lang = re.search('<meta name="language" http-equiv="content-language" content="(.+)" />', content).group(1)
     if lang != 'en':
-        content = opera.get('http://uploaded.net/language/en').content
-        opera.get('http://uploaded.net/language/%s' % (lang))  # restore old language
+        content = r.get('http://uploaded.net/language/en').content
+        r.get('http://uploaded.net/language/%s' % (lang))  # restore old language
     if re.search('<em>(.+)</em>', content).group(1) == 'Premium':
         acc_info['status'] = 'premium'
         if '<th>unlimited</th>          </tr>' in content:  # lifetime premium

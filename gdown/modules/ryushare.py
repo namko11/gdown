@@ -18,8 +18,8 @@ from ..exceptions import ModuleError, IpBlocked
 def accInfo(username, passwd):
     """Returns account info."""
     acc_info = acc_info_template()
-    opera = browser()
-    content = opera.post('http://ryushare.com', {'op': 'login', 'redirect': 'http://ryushare.com/my-account.python', 'login': username, 'password': passwd, 'loginFormSubmit': 'Login'}).content
+    r = browser()
+    content = r.post('http://ryushare.com', {'op': 'login', 'redirect': 'http://ryushare.com/my-account.python', 'login': username, 'password': passwd, 'loginFormSubmit': 'Login'}).content
     if 'Your account was banned by administrator.' in content:
         acc_info['status'] = 'blocked'
         return acc_info

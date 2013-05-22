@@ -18,19 +18,19 @@ from ..exceptions import IpBlocked
 def getUrl(link, username, passwd):
     """Returns direct file url.
     IP validator is present."""
-    opera = browser()
+    r = browser()
     values = {'txtuser': username, 'txtpass': passwd, 'txtcheck': 'login', 'txtlogin': ''}
-    opera.post('http://netload.in/index.php', values)
-    return opera.get(link).url  # return connection
+    r.post('http://netload.in/index.php', values)
+    return r.get(link).url  # return connection
 
 
 def accInfo(username, passwd):
     """Returns account info."""
     acc_info = acc_info_template()
-    opera = browser()
+    r = browser()
     values = {'txtuser': username, 'txtpass': passwd, 'txtcheck': 'login', 'txtlogin': 'Login'}
-    opera.post('http://netload.in/index.php', values)
-    content = opera.get('http://netload.in/index.php?id=15').content
+    r.post('http://netload.in/index.php', values)
+    content = r.get('http://netload.in/index.php?id=15').content
     if 'This account was locked' in content or'Sorry, please activate first your account.' in content:  # account not activated
         acc_info['status'] = 'blocked'
         return acc_info
@@ -39,7 +39,7 @@ def accInfo(username, passwd):
         return acc_info
     elif 'Please wait a moment before tryingto log in again!' in content:   # ip blocked
         raise IpBlocked
-    content = opera.get('http://netload.in/index.php?id=2').content
+    content = r.get('http://netload.in/index.php?id=2').content
     if 'No Bonus' in content or 'Kein Premium' in content:
         acc_info['status'] = 'free'
         return acc_info
@@ -55,7 +55,7 @@ def accInfo(username, passwd):
 
 def upload(username, passwd, filename):
     """Returns uploaded file url."""
-    opera = browser()
-    host = opera.get('http://api.netload.in/getserver.php').content
-    content = opera.post(host, {'user_id': username, 'user_password': passwd, 'modus': 'file_upload'}, files={'file': open(filename, 'rb')}).content
+    r = browser()
+    host = r.get('http://api.netload.in/getserver.php').content
+    content = r.post(host, {'user_id': username, 'user_password': passwd, 'modus': 'file_upload'}, files={'file': open(filename, 'rb')}).content
     return re.search('UPLOAD_OK;.+;[0-9]+;(.+);.+', content).group(1)

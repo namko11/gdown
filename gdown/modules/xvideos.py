@@ -19,7 +19,7 @@ from ..module import browser
 
 def getUrl(link, username=None, passwd=None):
     """Returns direct file url."""
-    opera = browser()
-    content = opera.get(link).content
+    r = browser()
+    content = r.get(link).content
     link = unquote(re.search('flv_url=(.*?)&amp;', content).group(1))
-    return opera.get(link).url
+    return r.get(link).url

@@ -18,20 +18,20 @@ from ..exceptions import ModuleError
 
 def upload(username, passwd, filename):
     """Returns uploaded file url."""
-    opera = browser()
-    opera.post('http://www.filefactory.com/member/login.php', {'email': username, 'password': passwd})  # login to get ff_membership cookie
-    #host = opera.get('http://www.filefactory.com/servers.php?single=1').content  # get best server to upload
+    r = browser()
+    r.post('http://www.filefactory.com/member/login.php', {'email': username, 'password': passwd})  # login to get ff_membership cookie
+    #host = r.get('http://www.filefactory.com/servers.php?single=1').content  # get best server to upload
     host = 'http://upload.filefactory.com/upload.php'  # always returning the same url (?)
-    viewhash = re.search('<viewhash>(.+)</viewhash>', opera.get('http://www.filefactory.com/upload/upload_flash_begin.php?files=1').content).group(1)  # get viewhash
-    opera.post('%s/upload_flash.php?viewhash=%s' % (host, viewhash), {'Filename': filename, 'Upload': 'Submit Query'}, files={'file': open(filename, 'rb')}).content  # upload
+    viewhash = re.search('<viewhash>(.+)</viewhash>', r.get('http://www.filefactory.com/upload/upload_flash_begin.php?files=1').content).group(1)  # get viewhash
+    r.post('%s/upload_flash.php?viewhash=%s' % (host, viewhash), {'Filename': filename, 'Upload': 'Submit Query'}, files={'file': open(filename, 'rb')}).content  # upload
     return 'http://www.filefactory.com/file/%s/n/%s' % (viewhash, filename)
 
 
 def accInfo(username, passwd):
     """Returns account info."""
     acc_info = acc_info_template()
-    opera = browser()
-    content = opera.post('http://www.filefactory.com/member/login.php', {'redirect': '/', 'email': username, 'password': passwd, 'socialID': '', 'socialType': 'facebook'}).content
+    r = browser()
+    content = r.post('http://www.filefactory.com/member/login.php', {'redirect': '/', 'email': username, 'password': passwd, 'socialID': '', 'socialType': 'facebook'}).content
     if '<p class="greenText">Free member</p>' in content:
         acc_info['status'] = 'free'
         return acc_info

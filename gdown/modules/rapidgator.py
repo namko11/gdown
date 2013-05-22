@@ -19,8 +19,8 @@ from ..exceptions import ModuleError
 def accInfo(username, passwd):
     """Returns account info."""
     acc_info = acc_info_template()
-    opera = browser()
-    content = opera.post('https://rapidgator.net/auth/login', {'LoginForm[email]': username, 'LoginForm[password]': passwd, 'LoginForm[rememberMe]': '1'}).content
+    r = browser()
+    content = r.post('https://rapidgator.net/auth/login', {'LoginForm[email]': username, 'LoginForm[password]': passwd, 'LoginForm[rememberMe]': '1'}).content
     if 'The code from a picture does not coincide' in content:
         acc_info['status'] = 'blocked'
         return acc_info
