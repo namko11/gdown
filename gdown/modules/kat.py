@@ -25,7 +25,7 @@ def __login__(username, passwd):
     return r
 
 
-def voteGood(username, passwd, torrent_hash):
+def rateGood(username, passwd, torrent_hash):
     """Vote good."""
     r = __login__(username, passwd)
     rc = JSONDecoder().decode(r.post('https://kat.ph/torrents/submitthnx/{}/'.format(torrent_hash)).content)
@@ -38,13 +38,13 @@ def voteGood(username, passwd, torrent_hash):
 
 def accInfo(username, passwd):
     """Returns account info."""
-    voteGood(username, passwd, '872C9D5EF32EEE1F6BCCC69E53E69E7254CC9A32')
     acc_info = acc_info_template()
     r = __login__(username, passwd)
     rc = r.get('https://kat.ph/').content
     username = re.search('<a href="/user/(.+)/">profile</a>', rc).group(1)
     rc = r.get('https://kat.ph/user/{}'.format(username)).content
     rating = re.search('<span title="Reputation" class="repValue positive">([0-9]+)</span>', rc).group(1)
-    print username, rating
+    acc_info['points'] = rating
     acc_info['status'] = 'free'
+    print username, rating
     return acc_info
