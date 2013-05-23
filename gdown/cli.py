@@ -15,12 +15,11 @@ Options:
 from docopt import docopt
 from clint.textui import colored
 
-#from . import __title__, __version__, __author__, __license__, __copyright__
-#from . import modules
-import modules
-__version__ = '0.0.1'
+from . import __title__, __version__, __author__, __license__, __copyright__
+from . import modules
 
 
+# TODO: api
 def accInfo(username, passwd):
     """Return account info."""
     pass
@@ -29,12 +28,13 @@ def accInfo(username, passwd):
 def main():
     args = docopt(__doc__, version=__version__)
     print args  # DEBUG
+    module = getattr(modules, args['<module>'].lower(), None)
+    if not module:
+        print 'Sorry, {} module not found.'.format(args['<module>'])
     if args['<command>'].lower() == 'accinfo':
-        if hasattr():  # module has attribute?
-            #accInfo(username, passwd)
-            pass
-        else:
-            print 'Sorry, %s module does not support this command yet.' % args['<module>']
+        if not hasattr(module, 'accInfo'):
+            print 'Sorry, {} module does not support this command yet.'.format(args['<module>'])
+        print module.accInfo(args['<username>'], args['<password>'])
 
 
 if __name__ == '__main__':
