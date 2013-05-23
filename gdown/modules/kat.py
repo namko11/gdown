@@ -11,6 +11,7 @@ This module contains handlers for kat.
 import re
 from simplejson import JSONDecoder
 
+from ..core import decaptcha
 from ..module import browser, acc_info_template
 #from ..exceptions import ModuleError, IpBlocked
 
@@ -56,3 +57,28 @@ def accInfo(username, passwd):
         acc_info['points'] = rating
         acc_info['status'] = 'free'
     return acc_info
+
+
+def signUp(email, passwd, username=None):
+    """Creates new account."""
+    if username is None:
+        username = email.split('@')[0]
+    r = browser()
+
+    # TODO: /auth/check/{username}  | {"method":"ok","html":"fail"} | {"method":"ok","html":"ok"}
+
+    # get recaptcha_public_key
+    #rc = r.get('https://kat.ph/auth/register').content
+    #recaptcha_public_key = re.search('Recaptcha\.create\("(.+?)"', rc).group(1)
+    recaptcha_public_key = '6LfHpd8SAAAAAAIkr00VqbRkWColMiVepdfsHQZ0'  # always the same
+
+    recaptcha_challenge, recaptcha_response = decaptcha(recaptcha_public_key)
+
+    data = {'return_uri': 'https://kat.ph/user/{}'.format(username),
+            'email': email, 'nickname': username, 'password': passwd,
+            'recaptcha_challenge_field': recaptcha_challenge,
+            'recaptcha_response_field': recaptcha_response,
+            'tos': '1',
+            'turing': 'iamhuman'}
+    rc = r.post('https://kat.ph/auth/socialize/', data).content
+    open('log.log', 'w').write(rc)
