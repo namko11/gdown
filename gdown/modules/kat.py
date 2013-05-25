@@ -23,7 +23,7 @@ def __login__(username, passwd):
     rc = r.post('https://kat.ph/auth/socialize/', data).content
     if '<title>Registration - KickassTorrents</title>' in rc or "You can't access your account because you were deleted" in rc:
         return False
-    open('log.log', 'w').write(rc)
+    open('gdown.log', 'w').write(rc)
     # TODO: validate login
     return r
 
