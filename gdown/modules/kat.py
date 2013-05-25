@@ -13,7 +13,7 @@ from simplejson import JSONDecoder
 
 from ..core import decaptcha
 from ..module import browser, acc_info_template
-#from ..exceptions import ModuleError, IpBlocked
+from ..exceptions import ModuleError
 
 
 def __login__(username, passwd):
@@ -38,8 +38,8 @@ def rateGood(username, passwd, torrent_hash):
     if rc['method'] == 'ok':
         return True
     else:
-        open('log.log', 'w').write(rc)
-        return False
+        open('gdown.log', 'w').write(rc)
+        raise ModuleError('Unknown error, full log in gdown.log')
 
 
 def accInfo(username, passwd):
@@ -52,7 +52,7 @@ def accInfo(username, passwd):
         rc = r.get('https://kat.ph/').content
         username = re.search('<a href="/user/(.+)/">profile</a>', rc).group(1)
         rc = r.get('https://kat.ph/user/{}'.format(username)).content
-        open('log.log', 'w').write(rc)
+        open('gdown.log', 'w').write(rc)
         rating = re.search('<span title="Reputation" class="repValue [positvenga]{8}">([0-9]+)</span>', rc).group(1)
         acc_info['points'] = rating
         acc_info['status'] = 'free'
@@ -81,4 +81,4 @@ def signUp(email, passwd, username=None):
             'tos': '1',
             'turing': 'iamhuman'}
     rc = r.post('https://kat.ph/auth/socialize/', data).content
-    open('log.log', 'w').write(rc)
+    open('gdown.log', 'w').write(rc)
