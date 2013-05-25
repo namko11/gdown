@@ -82,3 +82,4 @@ def signUp(email, passwd, username=None):
             'turing': 'iamhuman'}
     rc = r.post('https://kat.ph/auth/socialize/', data).content
     open('gdown.log', 'w').write(rc)
+    return True
