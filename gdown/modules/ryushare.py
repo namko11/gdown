@@ -20,7 +20,7 @@ def accInfo(username, passwd):
     acc_info = acc_info_template()
     r = browser()
     content = r.post('http://ryushare.com', {'op': 'login', 'redirect': 'http://ryushare.com/my-account.python', 'login': username, 'password': passwd, 'loginFormSubmit': 'Login'}).content
-    if 'Your account was banned by administrator.' in content:
+    if any(i in content for i in ('Your account was banned by administrator.', "Your account haven't confirmed yet.")):
         acc_info['status'] = 'blocked'
         return acc_info
     elif 'Incorrect Login or Password' in content:
