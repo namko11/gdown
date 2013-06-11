@@ -36,8 +36,8 @@ def accInfo(username, passwd):
         acc_info['status'] = 'deleted'
         return acc_info
     content = r.get('http://uploaded.net').content
-    if '<button type="submit">Login</button>' in content:  # ip blocked(?), waiting 15s
-        sleep(15)
+    if '<button type="submit">Login</button>' in content:  # ip blocked(?), waiting 30s
+        sleep(30)
         return accInfo(username, passwd)
     lang = re.search('<meta name="language" http-equiv="content-language" content="(.+)" />', content).group(1)
     if lang != 'en':
