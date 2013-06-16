@@ -21,7 +21,7 @@ def __login__(username, passwd):
     r = browser()
     data = {'return_uri': 'http://kickass.to/', 'email': username, 'password': passwd}
     rc = r.post('http://kickass.to/auth/socialize/', data).content
-    if '<title>Registration - KickassTorrents</title>' in rc or "You can't access your account because you were deleted" in rc:
+    if any(i in rc for i in ('<title>Registration - KickassTorrents</title>', "You can't access your account because you were deleted", 'DELETED USER')):
         return False
     open('gdown.log', 'w').write(rc)
     # TODO: validate login
