@@ -17,7 +17,7 @@ __all__ = [
     'hotfile',
     'imgur',
     'interia',
-    'kat',
+    'kickass',
     'letitbit',
     'mediafire',
     'megashares',
