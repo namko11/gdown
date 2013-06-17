@@ -59,7 +59,7 @@ def accInfo(username, passwd, captcha=False):
     if captcha and 'Incorrect captcha code' in content:
         decaptchaReportWrong()  # add captcha_id
         return accInfo(username, passwd, captcha=True)
-    elif 'Incorrect login or password' in content or 'E-Mail address appears to be invalid. Please try again' in content:
+    elif any(i in content for i in ('Incorrect login or password', 'E-Mail address appears to be invalid. Please try again', 'Username(Email) does not exist')):
         acc_info['status'] = 'deleted'
         return acc_info
     elif 'Limit of login attempts exceeded for your account. It has been temporarily locked.' in content:
