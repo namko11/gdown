@@ -54,6 +54,7 @@ def accInfo(username, passwd, captcha=False):
         values['recaptcha_response_field'] = recaptcha_response
         values['user[captcha_type]'] = 'recaptcha'
         values['user[captcha_subtype]'] = ''
+    r.headers['Referer'] = 'http://turbobit.net/login'
     content = r.post('http://turbobit.net/user/login', values).content  # login
     if captcha and 'Incorrect captcha code' in content:
         decaptchaReportWrong()  # add captcha_id
