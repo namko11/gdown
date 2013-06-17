@@ -35,7 +35,7 @@ def accInfo(username, passwd):
     elif 'User and password do not match!' in content or 'Benutzer wurde gelöscht' in content or 'Account has been deleted' in content:  # wrong password / acc deleted
         acc_info['status'] = 'deleted'
         return acc_info
-    content = r.get('http://uploaded.net').content
+    content = r.get('http://uploaded.net/me').content
     if '<button type="submit">Login</button>' in content:  # ip blocked(?), waiting 30s
         sleep(30)
         return accInfo(username, passwd)
