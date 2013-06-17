@@ -30,8 +30,7 @@ def browser():
     return r
 
 
-def random_word():
-    lenght = random.randint(1, 15)
-    return ''.join(random.choice(string.lowercase) for i in range(lenght))
+def random_word(size=random.randint(1, 15), chars=string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(size))
 
 # TODO: modules as classes
