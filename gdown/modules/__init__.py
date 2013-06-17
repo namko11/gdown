@@ -27,6 +27,7 @@ __all__ = [
     'rapidshare',
     'rapidgator',
     'redtube',
+    'rlslog',
     'ryushare',
     'shareonline',
     #'soundclound',

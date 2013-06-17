@@ -9,6 +9,8 @@ Basic methods for modules.
 """
 
 import requests
+import random
+import string
 
 from .config import headers
 
@@ -26,5 +28,10 @@ def browser():
     r = requests.Session()
     r.headers = headers
     return r
+
+
+def random_word():
+    lenght = random.randint(1, 15)
+    return ''.join(random.choice(string.lowercase) for i in range(lenght))
 
 # TODO: modules as classes
