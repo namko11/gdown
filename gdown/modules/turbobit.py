@@ -68,7 +68,7 @@ def accInfo(username, passwd, captcha=False):
     elif 'Limit of login attempts exeeded.' in content or 'Please enter the captcha.' in content:
         return accInfo(username, passwd, captcha=True)
     try:
-        content = re.search('<u>Turbo Access</u> [to ]{,3}(.*?)\.?					</div>', content).group(1)
+        content = re.search('<u>Turbo Access</u> [to ]{,3}(.*?)\.?[	]+</div>', content).group(1)
     except:
         open('gdown.log', 'w').write(content)
         raise ModuleError('Unknown error, full log in gdown.log')
