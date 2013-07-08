@@ -35,7 +35,7 @@ def accInfo(username, passwd, proxy=False):
     if '<p class="greenText">Free member</p>' in content:
         acc_info['status'] = 'free'
         return acc_info
-    elif 'The account you are trying to use has been deleted.' in content:
+    elif any(i in content for i in ('The account you are trying to use has been deleted.', 'This account has been automatically suspended due to account sharing.')):
         acc_info['status'] = 'blocked'
         return acc_info
     elif 'The email or password you have entered is incorrect' in content:
