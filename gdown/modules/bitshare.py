@@ -17,10 +17,10 @@ from ..module import browser, acc_info_template
 from ..exceptions import ModuleError, IpBlocked
 
 
-def accInfo(username, passwd):
+def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
-    r = browser()
+    r = browser(proxy)
      # api version (do not return expire date)
     content = r.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).content  # get hashkey (login)
     if content == 'ERROR:Username is not matching to the provided password!':
