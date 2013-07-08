@@ -24,10 +24,10 @@ def getUrl(link, username, passwd):
     return r.get(link).url  # return connection
 
 
-def accInfo(username, passwd):
+def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
-    r = browser()
+    r = browser(proxy)
     values = {'txtuser': username, 'txtpass': passwd, 'txtcheck': 'login', 'txtlogin': 'Login'}
     r.post('http://netload.in/index.php', values)
     content = r.get('http://netload.in/index.php?id=15').content
