@@ -27,7 +27,7 @@ def getUrl(link, username, passwd):
     return r.get('https://%s/cgi-bin/rsapi.cgi?sub=download&fileid=%s&filename=%s&try=0&login=%s&password=%s' % (server, fileid, filename, username, passwd)).url   # return connection
 
 
-def accInfo(username, passwd):
+def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     ''' List of errors:
     ERROR: Login failed. Password incorrect or account not found. (221a75e5)
@@ -35,7 +35,7 @@ def accInfo(username, passwd):
     ERROR: Login failed. Login data invalid. (0320f9f0)
     '''
     acc_info = acc_info_template()
-    r = browser()
+    r = browser(proxy)
     content = r.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails&login=%s&password=%s&withpublicid=1' % (username, passwd)).content
     if 'Login failed. Account locked.' in content:
         acc_info['status'] = 'blocked'
