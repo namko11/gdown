@@ -12,10 +12,10 @@ from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
 
 
-def accInfo(username, passwd):
+def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
-    r = browser()
+    r = browser(proxy)
     data = {'noscript': '1', 'login': username, 'password': passwd, 'perm': '1'}
     rc = r.post('https://konto.onet.pl/login.html?app_id=poczta.onet.pl.front', data).content
     if any(i in rc for i in ('Wprowadź poprawny adres e-mail.', 'Nieistniejący login.', 'Niepoprawne hasło.')):
