@@ -12,7 +12,7 @@ import requests
 import random
 import string
 
-from .config import headers
+from .config import headers, proxies
 
 
 def acc_info_template():
@@ -24,9 +24,11 @@ def acc_info_template():
             'points': None}
 
 
-def browser():
+def browser(proxy=False):
     r = requests.Session()
     r.headers = headers
+    if proxy:
+        r.proxies = proxies
     return r
 
 
