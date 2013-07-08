@@ -12,10 +12,10 @@ from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
 
 
-def accInfo(username, passwd):
+def accInfo(username, passwd, proxy):
     """Returns account info."""
     acc_info = acc_info_template()
-    r = browser()
+    r = browser(proxy)
     r.get('https://profil.wp.pl/login_poczta.html')
     data = {'_action': 'login', 'enticket': '', 'idu': '99', 'serwis': '', 'url': '//poczta.wp.pl/index.html', 'login_username': username, 'login_password': passwd, 'mini': '1', '': ''}
     rc = r.post('https://profil.wp.pl/login_poczta.html', data).content
