@@ -13,10 +13,10 @@ import os
 from ..module import browser, acc_info_template
 
 
-def accInfo(username, passwd):
+def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
-    r = browser()
+    r = browser(proxy)
     content = r.get('http://freakshare.com/login.html', {'user': username, 'pass': passwd, 'submit': 'Login'}).content
     if '<td><b>Member (premium)</b></td>' in content:
         acc_info['status'] = 'premium'
