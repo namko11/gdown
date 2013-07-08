@@ -23,10 +23,10 @@ def getUrl(link, username, passwd):  # not checked
     return r.get(link).url  # return connection
 
 
-def accInfo(username, passwd):
+def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
-    r = browser()
+    r = browser(proxy)
     values = {'id': username, 'pw': passwd}
     content = r.post('http://uploaded.net/io/login', values).content
     if 'Account locked. Please contact Support.' in content:
@@ -38,7 +38,7 @@ def accInfo(username, passwd):
     content = r.get('http://uploaded.net/me').content
     if '<button type="submit">Login</button>' in content:  # ip blocked(?), waiting 30s
         sleep(30)
-        return accInfo(username, passwd)
+        return accInfo(username, passwd, proxy=proxy)
     lang = re.search('<meta name="language" http-equiv="content-language" content="(.+)" />', content).group(1)
     if lang != 'en':
         content = r.get('http://uploaded.net/language/en').content
