@@ -15,10 +15,10 @@ from ..module import browser, acc_info_template
 from ..exceptions import ModuleError, IpBlocked
 
 
-def accInfo(username, passwd):
+def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
-    r = browser()
+    r = browser(proxy)
     content = r.post('http://ryushare.com', {'op': 'login', 'redirect': 'http://ryushare.com/my-account.python', 'login': username, 'password': passwd, 'loginFormSubmit': 'Login'}).content
     if any(i in content for i in ('Your account was banned by administrator.', "Your account haven't confirmed yet.")):
         acc_info['status'] = 'blocked'
