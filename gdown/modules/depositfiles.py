@@ -32,10 +32,10 @@ def getUrl(link, username, passwd):
     return r.get(link).url
 
 
-def accInfo(username, passwd, captcha=False):
+def accInfo(username, passwd, captcha=False, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
-    r = browser()
+    r = browser(proxy)
     if captcha:
         recaptcha_challenge, recaptcha_response = decaptcha(recaptcha_public_key)
     else:
@@ -60,10 +60,10 @@ def accInfo(username, passwd, captcha=False):
             return acc_info
     elif rc['status'] == 'Error':
         if rc['error'] == 'CaptchaRequired':
-            return accInfo(username, passwd, captcha=True)
+            return accInfo(username, passwd, captcha=True, proxy=proxy)
         elif rc['error'] == 'CaptchaInvalid':
             decaptchaReportWrong()  # add captcha_id
-            return accInfo(username, passwd, captcha=True)
+            return accInfo(username, passwd, captcha=True, proxy=proxy)
         elif rc['error'] == 'LoginInvalid':
             acc_info['status'] = 'deleted'
             return acc_info
