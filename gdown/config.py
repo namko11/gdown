@@ -9,5 +9,10 @@ headers = {
     'TE': 'deflate, gzip, chunked, identity, trailers',
 }
 
+proxies = {
+    "http": "http://202.125.84.145:8080",
+    "https": "http://202.125.84.145:8080",
+}
+
 deathbycaptcha_username = ''
 deathbycaptcha_password = ''
