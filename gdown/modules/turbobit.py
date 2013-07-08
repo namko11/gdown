@@ -43,10 +43,10 @@ def upload(username, passwd, filename):
     return 'http://turbobit.net/%s.html' % (file_id)
 
 
-def accInfo(username, passwd, captcha=False):
+def accInfo(username, passwd, captcha=False, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
-    r = browser()
+    r = browser(proxy)
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
     if captcha:
         recaptcha_challenge, recaptcha_response = decaptcha(recaptcha_public_key)
@@ -58,7 +58,7 @@ def accInfo(username, passwd, captcha=False):
     content = r.post('http://turbobit.net/user/login', values).content  # login
     if captcha and 'Incorrect captcha code' in content:
         decaptchaReportWrong()  # add captcha_id
-        return accInfo(username, passwd, captcha=True)
+        return accInfo(username, passwd, captcha=True, proxy=proxy)
     elif any(i in content for i in ('Incorrect login or password', 'E-Mail address appears to be invalid. Please try again', 'Username(Email) does not exist')):
         acc_info['status'] = 'deleted'
         return acc_info
@@ -66,7 +66,7 @@ def accInfo(username, passwd, captcha=False):
         acc_info['status'] = 'blocked'
         return acc_info
     elif 'Limit of login attempts exeeded.' in content or 'Please enter the captcha.' in content:
-        return accInfo(username, passwd, captcha=True)
+        return accInfo(username, passwd, captcha=True, proxy=proxy)
     try:
         content = re.search('<u>Turbo Access</u> [to ]{,3}(.*?)\.?[	]+</div>', content).group(1)
     except:
