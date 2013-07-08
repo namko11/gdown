@@ -23,7 +23,7 @@ def getApikey(username, passwd):
         return content
 
 
-def accInfo(username, passwd):
+def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     # get apikey
     acc_info = acc_info_template()
@@ -31,7 +31,7 @@ def accInfo(username, passwd):
     if not apikey:
         acc_info['status'] = 'deleted'
         return acc_info  # invalid username or password (?)
-    r = browser()
+    r = browser(proxy)
     content = r.get('http://api.crocko.com/account', headers={'Authorization': apikey}).content
     premium_end = re.search('<ed:premium_end>(.*?)</ed:premium_end>', content).group(1)
     if not premium_end:
