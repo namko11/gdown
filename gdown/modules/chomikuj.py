@@ -14,10 +14,10 @@ from dateutil import parser
 from ..module import browser, acc_info_template
 
 
-def accInfo(username, passwd):
+def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
-    r = browser()
+    r = browser(proxy)
     rc = r.get('http://chomikuj.pl').content
     token = re.search('name="__RequestVerificationToken" type="hidden" value="(.*?)"', rc).group(1)
     data = {'__RequestVerificationToken': token, 'ReturnUrl': '', 'Login': username, 'Password': passwd, 'rememberLogin': 'true', 'topBar_LoginBtn': 'Zaloguj'}
