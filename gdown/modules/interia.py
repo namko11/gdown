@@ -12,10 +12,10 @@ from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
 
 
-def accInfo(username, passwd):
+def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
-    r = browser()
+    r = browser(proxy)
     r.get('https://poczta.interia.pl')
     data = {'email': username, 'pass': passwd, 'permanent': '1', 'formHTTP': '1', 'webmailSelect': 'classicMail', 'formSubmit': ''}  # 'webmailSelect': 'htmlMail'
     rc = r.post('https://logowanie.interia.pl/poczta/zaloguj', data).content
