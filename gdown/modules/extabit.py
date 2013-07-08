@@ -15,10 +15,10 @@ from ..module import browser, acc_info_template
 from ..exceptions import ModuleError, IpBlocked
 
 
-def accInfo(username, passwd):
+def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
-    r = browser()
+    r = browser(proxy)
     data = {'email': username, 'pass': passwd, 'remember': '1', 'auth_submit_login.x': '38', 'auth_submit_login.y': '26', 'auth_submit_login': 'Enter'}
     rc = r.post('http://extabit.com/login.jsp', data).content
 
