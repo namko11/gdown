@@ -27,10 +27,10 @@ def upload(username, passwd, filename):
     return 'http://www.filefactory.com/file/%s/n/%s' % (viewhash, filename)
 
 
-def accInfo(username, passwd):
+def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
-    r = browser()
+    r = browser(proxy)
     content = r.post('http://www.filefactory.com/member/login.php', {'redirect': '/', 'email': username, 'password': passwd, 'socialID': '', 'socialType': 'facebook'}).content
     if '<p class="greenText">Free member</p>' in content:
         acc_info['status'] = 'free'
