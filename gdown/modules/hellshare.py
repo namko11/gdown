@@ -15,10 +15,10 @@ from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
 
 
-def accInfo(username, passwd):
+def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
-    r = browser()
+    r = browser(proxy)
     r.get('http://www.hellshare.com')
     r.get('http://www.hellshare.com/?do=login-showLoginWindow')
     #   http://www.hellshare.com/members-auth/login
