@@ -45,7 +45,7 @@ def accInfo(username, passwd, proxy=False):
         r.get('http://uploaded.net/language/%s' % (lang))  # restore old language
     if re.search('<em>(.+)</em>', content).group(1) == 'Premium':
         acc_info['status'] = 'premium'
-        if '<th>unlimited</th>          </tr>' in content:  # lifetime premium
+        if '<th>unlimited</th>			</tr>' in content:  # lifetime premium
             acc_info['expire_date'] = datetime.max
             return acc_info
         content = re.search('<th>([0-9]+.+)</th>[ 	]+</tr>', content).group(1)
