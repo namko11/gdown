@@ -9,6 +9,7 @@ This module contains handlers for rlslog.
 """
 
 import re
+from time import sleep
 
 from ..core import decaptcha, decaptchaReportWrong
 from ..module import browser, random_word
@@ -36,8 +37,16 @@ def comment(title, body, name=random_word(), email=None):
               'recaptcha_challenge_field': recaptcha_challenge,
               'recaptcha_response_field': recaptcha_response}
     rc = r.post('http://www.rlslog.net/wp-comments-post.php', values).content
+    open('log.log', 'w').write(rc)  # DEBUG
     if 'That reCAPTCHA response was incorrect.' in rc:
         decaptchaReportWrong()  # add captcha_id
-        return comment(title, name, email, body)  # try again
+        return comment(title, body, name, email)  # try again
+
+    if 'You are posting comments too quickly.  Slow down.' in rc:
+        sleep(10)  # less?
+        return comment(title, body, name, email)
+    elif 'Duplicate comment detected' in rc:
+        return False
+
 
     return True
