@@ -20,7 +20,16 @@ def getUrl(link, username, passwd):  # not checked
     r = browser()
     values = {'id': username, 'pw': passwd, 'loginFormSubmit': 'Login'}
     r.post('http://www.uploaded.net/io/login', values)
-    return r.get(link).url  # return connection
+    return r.get(link, stream=True).url  # return connection
+
+
+def get(link, username, passwd):
+    """Returns file content."""
+    # TODO: return file-object with filename etc.
+    r = browser()
+    values = {'id': username, 'pw': passwd, 'loginFormSubmit': 'Login'}
+    r.post('http://www.uploaded.net/io/login', values)
+    return r.get(link).content
 
 
 def accInfo(username, passwd, proxy=False):
