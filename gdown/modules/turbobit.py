@@ -11,7 +11,7 @@ This module contains handlers for turbobit.
 import re
 from dateutil import parser
 
-from ..core import decaptcha, decaptchaReportWrong
+from ..core import recaptcha, recaptchaReportWrong
 from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
 
@@ -49,7 +49,7 @@ def accInfo(username, passwd, captcha=False, proxy=False):
     r = browser(proxy)
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
     if captcha:
-        recaptcha_challenge, recaptcha_response = decaptcha(recaptcha_public_key)
+        recaptcha_challenge, recaptcha_response = recaptcha(recaptcha_public_key)
         values['recaptcha_challenge_field'] = recaptcha_challenge
         values['recaptcha_response_field'] = recaptcha_response
         values['user[captcha_type]'] = 'recaptcha'
@@ -57,7 +57,7 @@ def accInfo(username, passwd, captcha=False, proxy=False):
     r.headers['Referer'] = 'http://turbobit.net/login'
     content = r.post('http://turbobit.net/user/login', values).content  # login
     if captcha and 'Incorrect captcha code' in content:
-        decaptchaReportWrong()  # add captcha_id
+        recaptchaReportWrong()  # add captcha_id
         return accInfo(username, passwd, captcha=True, proxy=proxy)
     elif any(i in content for i in ('Incorrect login or password', 'E-Mail address appears to be invalid. Please try again', 'Username(Email) does not exist')):
         acc_info['status'] = 'deleted'

@@ -11,13 +11,15 @@ import re
 from random import random
 from StringIO import StringIO
 
-from .config import deathbycaptcha_username, deathbycaptcha_password
+#from .config import deathbycaptcha_username, deathbycaptcha_password
+from .config import decaptchercom_username, decaptchercom_password
 from .module import browser
-from .deathbycaptcha import SocketClient as deathbycaptcha
+#from .deathbycaptcha import SocketClient as decaptcha
+from .decaptchercom import client as decaptcha
 
 
-def decaptcha(recaptcha_public_key):
-    """Generates recaptcha & resolves using deathbycaptcha.
+def recaptcha(recaptcha_public_key):
+    """Generates recaptcha & resolves.
     Returns (recaptcha_challenge_field, recaptcha_response_field).
     """
     r = browser()
@@ -25,7 +27,7 @@ def decaptcha(recaptcha_public_key):
     recaptcha_challenge = re.search("challenge : '(.+)',", rc).group(1)
     captcha_img = StringIO(r.get('http://www.google.com/recaptcha/api/image?c=%s' % (recaptcha_challenge)).content)
 
-    client = deathbycaptcha(deathbycaptcha_username, deathbycaptcha_password)
+    client = decaptcha(decaptchercom_username, decaptchercom_password)  # TODO: choose good acc info
     captcha = client.decode(captcha_img)
     if captcha:
         return recaptcha_challenge, captcha['text']
@@ -33,7 +35,7 @@ def decaptcha(recaptcha_public_key):
         return False
 
 
-def decaptchaReportWrong():
+def recaptchaReportWrong():
     """Reports wrong captcha to deathbycaptcha to save credit."""
     # TODO: write me ;-)
     pass

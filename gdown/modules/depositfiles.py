@@ -12,7 +12,7 @@ import re
 from simplejson import JSONDecoder
 from dateutil import parser
 
-from ..core import decaptcha, decaptchaReportWrong
+from ..core import recaptcha, recaptchaReportWrong
 from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
 
@@ -37,7 +37,7 @@ def accInfo(username, passwd, captcha=False, proxy=False):
     acc_info = acc_info_template()
     r = browser(proxy)
     if captcha:
-        recaptcha_challenge, recaptcha_response = decaptcha(recaptcha_public_key)
+        recaptcha_challenge, recaptcha_response = recaptcha(recaptcha_public_key)
     else:
         recaptcha_challenge = ''
         recaptcha_response = ''
@@ -62,7 +62,7 @@ def accInfo(username, passwd, captcha=False, proxy=False):
         if rc['error'] == 'CaptchaRequired':
             return accInfo(username, passwd, captcha=True, proxy=proxy)
         elif rc['error'] == 'CaptchaInvalid':
-            decaptchaReportWrong()  # add captcha_id
+            recaptchaReportWrong()  # add captcha_id
             return accInfo(username, passwd, captcha=True, proxy=proxy)
         elif rc['error'] == 'LoginInvalid':
             acc_info['status'] = 'deleted'
