@@ -27,14 +27,14 @@ def accInfo(username, passwd):
 
 def main():
     args = docopt(__doc__, version=__version__)
-    print args  # DEBUG
+    print(args)  # DEBUG
     module = getattr(modules, args['<module>'].lower(), None)
     if not module:
-        print 'Sorry, {} module not found.'.format(args['<module>'])
+        print('Sorry, {} module not found.'.format(args['<module>']))
     if args['<command>'].lower() == 'accinfo':
         if not hasattr(module, 'accInfo'):
-            print 'Sorry, {} module does not support this command yet.'.format(args['<module>'])
-        print module.accInfo(args['<username>'], args['<password>'])
+            print('Sorry, {} module does not support this command yet.'.format(args['<module>']))
+        print(module.accInfo(args['<username>'], args['<password>']))
 
 
 if __name__ == '__main__':

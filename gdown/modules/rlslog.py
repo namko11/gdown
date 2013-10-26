@@ -43,7 +43,7 @@ def comment(title, body, name=random_word(), email=None):
         return comment(title, body, name, email)  # try again
 
     if 'You are posting comments too quickly.  Slow down.' in rc:
-        print 'sleeping'  # DEBUG
+        print('sleeping')  # DEBUG
         sleep(360)  # less?
         return comment(title, body, name, email)
     elif 'Duplicate comment detected' in rc:
