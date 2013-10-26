@@ -9,7 +9,10 @@ This module implements the gdown's basic methods.
 """
 import re
 from random import random
-from StringIO import StringIO
+try:
+    from io import StringIO
+except ImportError:
+    from StringIO import StringIO
 
 #from .config import deathbycaptcha_username, deathbycaptcha_password
 from .config import decaptchercom_username, decaptchercom_password
