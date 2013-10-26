@@ -35,8 +35,6 @@ def accInfo(username, passwd, proxy=False):
 
     if 'What is your date of birth?' in content:
         raise ModuleError('Birth date not set.')
-    #    print 'db'  # DEBUG
-    #    content = r.post('http://www.filefactory.com/member/setdob.php', {'newDobMonth': '1', 'newDobDay': '1', 'newDobYear': '1970', 'Submit': 'Continue'}).content
 
     if '<strong>Free Member</strong>' in content:
         acc_info['status'] = 'free'
@@ -44,7 +42,7 @@ def accInfo(username, passwd, proxy=False):
     elif any(i in content for i in ('The account you are trying to use has been deleted.', 'This account has been automatically suspended due to account sharing.', 'The account you have tried to sign into is pending deletion.')):
         acc_info['status'] = 'blocked'
         return acc_info
-    elif any(i in content for i in ('The email or password you have entered is incorrect', 'The email or password wre invalid.  Please try again.', 'The Email Address submitted was invalid')):
+    elif any(i in content for i in ('The email or password you have entered is incorrect', 'The email or password wre invalid.  Please try again.', 'The Email Address submitted was invalid', 'The email address or password you have entered is incorrect.')):
         acc_info['status'] = 'deleted'
         return acc_info
     elif 'title="Premium valid until:' in content:
