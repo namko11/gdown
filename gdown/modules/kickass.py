@@ -33,8 +33,7 @@ def rateGood(username, passwd, torrent_hash):
     r = __login__(username, passwd)
     if r is False:
         return False
-    rc = JSONDecoder().decode(r.post('http://kickass.to/torrents/submitthnx/{}/'.format(torrent_hash)).content)
-    print rc
+    rc = r.post('https://kickass.to/torrents/vote/like/%s/' % torrent_hash, data={'ajax': 1}).json()
     if rc['method'] == 'ok':
         return True
     else:
