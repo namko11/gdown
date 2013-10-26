@@ -16,3 +16,6 @@ proxies = {
 
 deathbycaptcha_username = ''
 deathbycaptcha_password = ''
+
+decaptchercom_username = ''
+decaptchercom_password = ''
