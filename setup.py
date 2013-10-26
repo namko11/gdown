@@ -1,32 +1,40 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import gdown
-
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
+
+
+__title__ = 'gdown'
+__version__ = '0.0.1'
+__author__ = 'Piotr Staroszczyk'
+__author_email__ = 'piotr.staroszczyk@get24.org'
+__license__ = 'GNU GPL v3'
+__copyright__ = 'Copyright 2013 Piotr Staroszczyk'
 
 packages = [
     'gdown',
     'gdown.modules',
 ]
 
-requires = []
+with open('requirements.txt') as f:
+    requires = f.read().splitlines()
 
 setup(
-    name=gdown.__title__,
-    version=gdown.__version__,
+    name=__title__,
+    version=__version__,
     #description='',
     long_description=open('README.rst').read(),
-    author=gdown.__author__,
+    author=__author__,
     author_email='piotr.staroszczyk@get24.org',
     packages=packages,
     package_data={'': ['LICENSE']},
     package_dir={'gdown': 'gdown'},
     include_package_data=True,
     install_requires=requires,
-    license=open('LICENSE').read(),
+    #license=open('LICENSE').read(),
+    license=__license__,
     classifiers=(
         'Development Status :: 3 - Alpha',
         #'Development Status :: 4 - Beta',
