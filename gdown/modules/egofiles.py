@@ -9,7 +9,6 @@ This module contains handlers for egofiles.
 """
 
 import re
-from simplejson import JSONDecoder
 from dateutil import parser
 
 from ..module import browser, acc_info_template
@@ -21,7 +20,7 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser(proxy)
     data = {'log': '1', 'loginV': username, 'passV': passwd}
-    rc = JSONDecoder().decode(r.post('http://egofiles.com/ajax/register.php', data).content)
+    rc = r.post('http://egofiles.com/ajax/register.php', data).json()
     if rc.get('error') in (u'Login może mieć 4-16 znaków: a-z, A-Z i 0-9', u'Wpisane hasło jest błędne', 'Podany login nie istnieje'):
         acc_info['status'] = 'deleted'
     elif rc.get('error') == u'Przekroczono limit prób - odczekaj chwilę i spróbuj ponownie':

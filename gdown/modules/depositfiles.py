@@ -9,7 +9,6 @@ This module contains handlers for depositfiles.
 """
 
 import re
-from simplejson import JSONDecoder
 from dateutil import parser
 
 from ..core import recaptcha, recaptchaReportWrong
@@ -45,7 +44,7 @@ def accInfo(username, passwd, captcha=False, proxy=False):
     data = {'login': username, 'password': passwd,
             'recaptcha_challenge_field': recaptcha_challenge,
             'recaptcha_response_field': recaptcha_response}
-    rc = JSONDecoder().decode(r.post('http://dfiles.eu/api/user/login', data).content)
+    rc = r.post('http://dfiles.eu/api/user/login', data).json()
 
     # TODO: too many returns in one method
     if rc['status'] == 'OK':

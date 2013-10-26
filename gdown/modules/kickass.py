@@ -9,7 +9,6 @@ This module contains handlers for kickass.
 """
 
 import re
-from simplejson import JSONDecoder
 
 from ..core import decaptcha
 from ..module import browser, acc_info_template
