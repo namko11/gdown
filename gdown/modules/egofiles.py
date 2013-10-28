@@ -8,6 +8,8 @@ This module contains handlers for egofiles.
 
 """
 
+from __future__ import unicode_literals
+
 import re
 from dateutil import parser
 
@@ -21,12 +23,12 @@ def accInfo(username, passwd, proxy=False):
     r = browser(proxy)
     data = {'log': '1', 'loginV': username, 'passV': passwd}
     rc = r.post('http://egofiles.com/ajax/register.php', data).json()
-    if rc.get('error') in ('Login może mieć 4-16 znaków: a-z, A-Z i 0-9', 'Wpisane hasło jest błędne', 'Podany login nie istnieje'):
+    if rc.get('error') in (u'Login może mieć 4-16 znaków: a-z, A-Z i 0-9', u'Wpisane hasło jest błędne', 'Podany login nie istnieje'):
         acc_info['status'] = 'deleted'
     elif rc.get('error') == 'Przekroczono limit prób - odczekaj chwilę i spróbuj ponownie':
         raise IpBlocked
     elif rc.get('ok') == 'Zalogowano.':
-        rc = r.get('http://egofiles.com/settings').content
+        rc = r.get('http://egofiles.com/settings').text
         if 'Korzystasz z konta Free User' in rc:
             acc_info['status'] = 'free'
         elif 'Korzystasz z konta Premium' in rc:

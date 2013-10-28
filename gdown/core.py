@@ -9,10 +9,7 @@ This module implements the gdown's basic methods.
 """
 import re
 from random import random
-try:
-    from io import StringIO
-except ImportError:
-    from StringIO import StringIO
+from io import BytesIO
 
 #from .config import deathbycaptcha_username, deathbycaptcha_password
 from .config import decaptchercom_username, decaptchercom_password
@@ -26,9 +23,9 @@ def recaptcha(recaptcha_public_key):
     Returns (recaptcha_challenge_field, recaptcha_response_field).
     """
     r = browser()
-    rc = r.get('http://www.google.com/recaptcha/api/challenge?k=%s&ajax=1&cachestop=%s' % (recaptcha_public_key, random())).content
+    rc = r.get('http://www.google.com/recaptcha/api/challenge?k=%s&ajax=1&cachestop=%s' % (recaptcha_public_key, random())).text
     recaptcha_challenge = re.search("challenge : '(.+)',", rc).group(1)
-    captcha_img = StringIO(r.get('http://www.google.com/recaptcha/api/image?c=%s' % (recaptcha_challenge)).content)
+    captcha_img = BytesIO(r.get('http://www.google.com/recaptcha/api/image?c=%s' % (recaptcha_challenge)).content)
 
     client = decaptcha(decaptchercom_username, decaptchercom_password)  # TODO: choose good acc info
     captcha = client.decode(captcha_img)
