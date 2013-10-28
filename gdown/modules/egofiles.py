@@ -23,7 +23,7 @@ def accInfo(username, passwd, proxy=False):
     r = browser(proxy)
     data = {'log': '1', 'loginV': username, 'passV': passwd}
     rc = r.post('http://egofiles.com/ajax/register.php', data).json()
-    if rc.get('error') in (u'Login może mieć 4-16 znaków: a-z, A-Z i 0-9', u'Wpisane hasło jest błędne', 'Podany login nie istnieje'):
+    if rc.get('error') in ('Login może mieć 4-16 znaków: a-z, A-Z i 0-9', 'Wpisane hasło jest błędne', 'Podany login nie istnieje'):
         acc_info['status'] = 'deleted'
     elif rc.get('error') == 'Przekroczono limit prób - odczekaj chwilę i spróbuj ponownie':
         raise IpBlocked
