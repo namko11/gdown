@@ -34,7 +34,22 @@ def accInfo(username, passwd, proxy=False):
     content = r.post('http://www.filefactory.com/member/signin.php', {'loginEmail': username, 'loginPassword': passwd, 'Submit': 'Sign In'}).content
 
     if 'What is your date of birth?' in content:
-        raise ModuleError('Birth date not set.')
+    #    raise ModuleError('Birth date not set.')
+        print('db',)  # DEBUG
+        content = r.post('http://www.filefactory.com/member/setdob.php', {'newDobMonth': '1', 'newDobDay': '1', 'newDobYear': '1970', 'Submit': 'Continue'}).content
+
+    if 'Please Update your Password' in content:
+        print('pw',)  # DEBUG
+        content = r.post('http://www.filefactory.com/member/setpwd.php', {'dobMonth': '1', 'dobDay': '1', 'dobYear': '1970', 'newPassword': passwd, 'Submit': 'Continue'}).content
+        if 'Your Date of Birth was incorrect.' in content:
+            print('wrong db',)
+            acc_info['status'] = 'free'
+            return acc_info
+        elif 'You have been signed out of your account due to a change being made to one of your core account settings.  Please sign in again.' in content:
+            print('asd')
+            from time import sleep
+            sleep(5)
+            return accInfo(username, passwd)
 
     if '<strong>Free Member</strong>' in content:
         acc_info['status'] = 'free'
