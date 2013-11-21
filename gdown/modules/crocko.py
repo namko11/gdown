@@ -33,7 +33,7 @@ def accInfo(username, passwd, proxy=False):
         return acc_info  # invalid username or password (?)
     r = browser(proxy)
     content = r.get('http://api.crocko.com/account', headers={'Authorization': apikey}).content
-    premium_end = re.search('<ed:premium_end>(.*?)</ed:premium_end>', content).group(1)
+    premium_end = re.search('<ed:premium_end>(.*?)</ed:premium_end>', content).group(1)  # TODO: detect free acc (blind guess now)
     if not premium_end:
         acc_info['status'] = 'free'
     else:

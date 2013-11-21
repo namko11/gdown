@@ -77,5 +77,6 @@ def accInfo(username, passwd, proxy=False):
         acc_info['expire_date'] = expire_date
         return acc_info
     else:
+        # TODO: detect (blind guess now)
         acc_info['status'] = 'free'
         return acc_info
