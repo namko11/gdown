@@ -67,6 +67,7 @@ def accInfo(username, passwd, captcha=False, proxy=False):
         return acc_info
     elif 'Limit of login attempts exeeded.' in content or 'Please enter the captcha.' in content:
         return accInfo(username, passwd, captcha=True, proxy=proxy)
+    # TODO: use if (check value) instead of try-except
     try:
         content = re.search('<u>Turbo Access</u> [to ]{,3}(.*?)\.?[	]+</div>', content).group(1)
     except:

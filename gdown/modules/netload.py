@@ -44,6 +44,7 @@ def accInfo(username, passwd, proxy=False):
         acc_info['status'] = 'free'
         return acc_info
     else:
+        # blind guess?
         content = re.search('<div style="float: left; width: 150px; color: #FFFFFF;"><span style="color: green">([0-9]*?)[ Tage,]{,7}([0-9]+) Stunden</span></div>', content)
         acc_info['status'] = 'premium'
         if content.group(1):
