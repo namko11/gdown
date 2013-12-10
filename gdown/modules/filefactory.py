@@ -27,26 +27,29 @@ def upload(username, passwd, filename):
     return 'http://www.filefactory.com/file/%s/n/%s' % (viewhash, filename)
 
 
-def accInfo(username, passwd, proxy=False):
+def accInfo(username, passwd, date_birth=None, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
     r = browser(proxy)
     content = r.post('http://www.filefactory.com/member/signin.php', {'loginEmail': username, 'loginPassword': passwd, 'Submit': 'Sign In'}).content
 
     if 'What is your date of birth?' in content:
-    #    raise ModuleError('Birth date not set.')
-        print('db',)  # DEBUG
+        if not date_birth:
+            raise ModuleError('Birth date not set.')
+        print('date birth',)  # DEBUG
         content = r.post('http://www.filefactory.com/member/setdob.php', {'newDobMonth': '1', 'newDobDay': '1', 'newDobYear': '1970', 'Submit': 'Continue'}).content
 
     if 'Please Update your Password' in content:
-        print('pw',)  # DEBUG
+        if not date_birth:
+            raise ModuleError('Password has to be updated.')
+        print('password resetting',)  # DEBUG
         content = r.post('http://www.filefactory.com/member/setpwd.php', {'dobMonth': '1', 'dobDay': '1', 'dobYear': '1970', 'newPassword': passwd, 'Submit': 'Continue'}).content
         if 'Your Date of Birth was incorrect.' in content:
-            print('wrong db',)
+            print('wrong date birth',)  # DEBUG
             acc_info['status'] = 'free'
             return acc_info
         elif 'You have been signed out of your account due to a change being made to one of your core account settings.  Please sign in again.' in content:
-            print('asd')
+            print('relogging after password reset',)  # DEBUG
             from time import sleep
             sleep(5)
             return accInfo(username, passwd)
