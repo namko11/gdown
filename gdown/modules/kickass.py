@@ -22,17 +22,18 @@ def __login__(username, passwd):
     rc = r.post('http://kickass.to/auth/socialize/', data).content
     if any(i in rc for i in ('<title>Registration - KickassTorrents</title>', "You can't access your account because you were deleted", 'DELETED USER')):
         return False
-    open('gdown.log', 'w').write(rc)
+    #open('gdown.log', 'w').write(rc)
     # TODO: validate login
     return r
 
 
-def rateGood(username, passwd, torrent_hash):
+def rateGood(username, passwd, torrent_hash, referer):
     """Vote good."""
     r = __login__(username, passwd)
     if r is False:
         return False
-    rc = r.post('https://kickass.to/torrents/vote/like/%s/' % torrent_hash, data={'ajax': 1}).json()
+    r.headers['Referer'] = referer
+    rc = r.post('https://kickass.to/torrents/vote/like/%s/' % torrent_hash).json()
     if rc['method'] == 'ok':
         return True
     else:
