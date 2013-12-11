@@ -11,6 +11,7 @@ This module contains handlers for uploaded.
 import re
 from datetime import datetime, timedelta
 from time import sleep
+from decimal import Decimal
 
 from ..module import browser, acc_info_template
 
@@ -52,6 +53,11 @@ def accInfo(username, passwd, proxy=False):
     if lang != 'en':
         content = r.get('http://uploaded.net/language/en').content
         r.get('http://uploaded.net/language/%s' % (lang))  # restore old language
+
+    balance = re.search('title="Request payout" onclick="location.href=\'/affiliate\'">([0-9]+),([0-9]+) &([a-zA-Z]+);</em>', content)
+    acc_info['balance_currency'] = balance.group(3)
+    acc_info['balance'] = Decimal(balance.group(1)+'.'+balance.group(2))
+
     if re.search('<em>(.+)</em>', content).group(1) == 'Premium':
         acc_info['status'] = 'premium'
         if '<th>unlimited</th>			</tr>' in content:  # lifetime premium

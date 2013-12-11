@@ -21,7 +21,9 @@ def acc_info_template():
             'status': None,
             'expire_date': None,
             'transfer': None,
-            'points': None}
+            'points': None,
+            'balance': None,
+            'balance_currency': None}
 
 
 def browser(proxy=False):
