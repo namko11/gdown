@@ -37,6 +37,7 @@ __all__ = [
     'uploadstation',
     #'usershare',
     'videobam',
+    'weeb',
     'wp',
     'xhamster',
     'xvideos',
