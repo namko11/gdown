@@ -54,9 +54,9 @@ def accInfo(username, passwd, proxy=False):
         content = r.get('http://uploaded.net/language/en').content
         r.get('http://uploaded.net/language/%s' % (lang))  # restore old language
 
-    balance = re.search('title="Request payout" onclick="location.href=\'/affiliate\'">([0-9]+),([0-9]+) &([a-zA-Z]+);</em>', content)
-    acc_info['balance_currency'] = balance.group(3)
-    acc_info['balance'] = Decimal(balance.group(1)+'.'+balance.group(2))
+    balance = re.search('title="Request payout" onclick="location.href=\'/affiliate\'">([0-9]*?)\.?([0-9]+),([0-9]+) &([a-zA-Z]+);</em>', content)
+    acc_info['balance_currency'] = balance.group(4)
+    acc_info['balance'] = Decimal(balance.group(1)+balance.group(2)+'.'+balance.group(3))
 
     if re.search('<em>(.+)</em>', content).group(1) == 'Premium':
         acc_info['status'] = 'premium'
