@@ -25,6 +25,8 @@ def accInfo(username, passwd, proxy=False):
     rc = r.post('http://egofiles.com/ajax/register.php', data).json()
     if rc.get('error') in ('Login może mieć 4-16 znaków: a-z, A-Z i 0-9', 'Wpisane hasło jest błędne', 'Podany login nie istnieje'):
         acc_info['status'] = 'deleted'
+    elif rc.get('error') == 'Konto zostało tymczasowo zawieszone':
+        acc_info['status'] = 'blocked'
     elif rc.get('error') == 'Przekroczono limit prób - odczekaj chwilę i spróbuj ponownie':
         raise IpBlocked
     elif rc.get('ok') == 'Zalogowano.':
@@ -38,6 +40,6 @@ def accInfo(username, passwd, proxy=False):
             open('gdown.log', 'w').write(rc)
             raise ModuleError('Unknown account status, full log in gdown.log')
     else:
-        open('gdown.log', 'w').write(rc)
+        open('gdown.log', 'w').write(rc.__str__())
         raise ModuleError('Unknown error, full log in gdown.log')
     return acc_info
