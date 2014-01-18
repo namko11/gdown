@@ -16,8 +16,8 @@ Usage
 
 .. code-block:: pycon
 
-    >>> from gdown import hotfile
-    >>> hotfile.accInfo('login', 'password')
+    >>> from gdown import uploaded
+    >>> uploaded.accInfo('login', 'password')
     {
         'email': 'sample@email.com',
         'id': 542,
@@ -26,12 +26,12 @@ Usage
         'transfer': None,
         'points': None
     }
-    >>> hotfile.accInfo('login', 'password')['expire_date']
+    >>> uploaded.accInfo('login', 'password')['expire_date']
     datetime.datetime(2014, 5, 28, 11, 16, 33)
-    >>> hotfile.upload('README.rst', 'login', 'password')
-    'http://hotfile.com/dl/193968487/73da5c1/README.rst.html'
-    >>> hotfile.getUrl('https://hotfile.com/dl/193966926/685bd36/chrome_frame_helper.dll.html', 'login', 'password')
-    'http://s749.hotfile.com/get/f4ac4f6ae12e42973bca22b969c3b99915f9383b/51196253/1/4a70d63eb35925fa/b8fb34e/496034/chrome_frame_helper.dll'
+    >>> uploaded.upload('README.rst', 'login', 'password')
+    'http://uploaded.net/file/b66fx0q9'
+    >>> uploaded.getUrl('http://uploaded.net/file/b66fx0q9', 'login', 'password')
+    'http://am4-r1f9-stor06.uploaded.net/dl/d1010186-518b-4b3a-8f90-140b58ad75a0'
     ...
 
 
@@ -39,12 +39,12 @@ CLI examples
 ------------
 .. code-block:: bash
 
-    >>> gdown status hotfile -u login -p password
+    >>> gdown status uploaded -u login -p password
     Premium expire on: 2014-05-28 11:16:33
     # TODO: accInfo
-    >>> gdown up hotfile README.rst -u login -p password
-    http://hotfile.com/dl/193968597/f3ca3eb/README.rst.html
-    >>> gdown dl https://hotfile.com/dl/193966926/685bd36/chrome_frame_helper.dll.html -u login -p password
+    >>> gdown up uploaded README.rst -u login -p password
+    http://uploaded.net/file/b66fx0q9
+    >>> gdown dl http://uploaded.net/file/b66fx0q9 -u login -p password
     done.
     # TODO: more verbose download (show progress etc.)
     ...
@@ -73,8 +73,6 @@ Hosting sites
 |freakshare   |freakshare.com   |✔          |✖          |✔          |
 +-------------+-----------------+-----------+-----------+-----------+
 |hellshare    |hellshare.com    |✔          |✖          |✖          |
-+-------------+-----------------+-----------+-----------+-----------+
-|hotfile      |hotfile.com      |✔          |✔          |✔          |
 +-------------+-----------------+-----------+-----------+-----------+
 |imgur        |imgur.com        |✖          |✖          |✖          |
 +-------------+-----------------+-----------+-----------+-----------+

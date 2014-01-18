@@ -14,7 +14,6 @@ __all__ = [
     'freakshare',
     #'gigasize',
     'hellshare',
-    'hotfile',
     'imgur',
     'interia',
     'kickass',
