@@ -37,7 +37,7 @@ def accInfo(username, passwd, proxy=False):
             acc_info['status'] = 'premium'
             acc_info['expire_date'] = parser.parse(re.search('Premium: ([0-9\-]{10} [0-9:]{8}) /', rc).group(1))
         else:
-            open('gdown.log', 'w').write(rc)
+            open('gdown.log', 'w').write(rc.encode('ascii', 'ignore'))
             raise ModuleError('Unknown account status, full log in gdown.log')
     else:
         open('gdown.log', 'w').write(rc.__str__())
