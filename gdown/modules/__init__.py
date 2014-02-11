@@ -11,6 +11,7 @@ __all__ = [
     #'enterupload',
     'extabit',
     'filefactory',
+    'filesmonster',
     'freakshare',
     #'gigasize',
     'hellshare',
