@@ -7,7 +7,6 @@ __all__ = [
     'crocko',
     'depositfiles',
     #'easyshare',
-    'egofiles',
     #'enterupload',
     'extabit',
     'filefactory',
