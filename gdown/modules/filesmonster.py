@@ -22,7 +22,7 @@ def accInfo(username, passwd, proxy=False):
     data = {'act': 'login', 'user': username, 'pass': passwd, 'captcha_shown': 0, 'login': 'Login'}
     rc = r.post('https://filesmonster.com/login.php', data).content
     if 'For security reasons, please enter captcha code below' in rc:
-        print 'captcha'
+        print('captcha')
         adassa
     elif 'Username/Password can not be found in our database!' in rc:
         acc_info['status'] = 'deleted'
