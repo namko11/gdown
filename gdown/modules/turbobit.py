@@ -68,6 +68,15 @@ def accInfo(username, passwd, captcha=False, proxy=False):
     elif 'Limit of login attempts exeeded.' in content or 'Please enter the captcha.' in content:
         return accInfo(username, passwd, captcha=True, proxy=proxy)
     # TODO: use if (check value) instead of try-except
+    elif 'Turbo access denied' in content:
+        acc_info['status'] = 'free'
+        return acc_info
+    elif 'Turbo access till' in content:
+        content = re.search("<span class='note'>Turbo access till ([0-9]{2}\.[0-9]{2}\.[0-9]{4})</span>", content).group(1)
+        acc_info['status'] = 'premium'
+        acc_info['expire_date'] = parser.parse(content, dayfirst=True)
+        return acc_info
+'''
     try:
         content = re.search('<u>Turbo Access</u> [to ]{,3}(.*?)\.?[	]+</div>', content).group(1)
     except:
@@ -80,3 +89,4 @@ def accInfo(username, passwd, captcha=False, proxy=False):
         acc_info['status'] = 'premium'
         acc_info['expire_date'] = parser.parse(content, dayfirst=True)
         return acc_info
+'''
