@@ -36,7 +36,7 @@ def accInfo(username, passwd, proxy=False):
         return acc_info
     elif 'Premium                    <span style="margin-left:10px;">' in content:
         rc = r.get('https://rapidgator.net/Payment/Payment', verify=False).content
-        rc = re.search('<tr class="odd"><td>[0-9]{4}\-[0-9]{2}\-[0-9]{2}</td><td style="width:100px;">[0-9]{2,3}</td><td>([0-9]{4}\-[0-9]{2}\-[0-9]{2})</td><td style="width:50px;">.+?</td><td style="width:150px;">.+?</td><td style="width:150px;">Paid</td></tr>', rc)
+        rc = re.search('<tr class="odd"><td style="width:[0-9]{2,3}px;">[0-9]{4}\-[0-9]{2}\-[0-9]{2}</td><td style="width:[0-9]{2,3}px;">[0-9]{2,3}</td><td style="width:[0-9]{2,3}px;">([0-9]{4}\-[0-9]{2}\-[0-9]{2})</td><td style="width:[0-9]{2,3}px;">.+?</td><td style="width:[0-9]{2,3}px;">.+?</td><td style="width:[0-9]{2,3}px;">Paid</td></tr>', rc)
         acc_info['status'] = 'premium'
         acc_info['expire_date'] = parser.parse(rc.group(1))
         return acc_info
