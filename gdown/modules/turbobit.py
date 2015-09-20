@@ -30,7 +30,7 @@ def getUrl(link, username, passwd):
 
 def upload(username, passwd, filename):
     """Returns uploaded file url."""
-    #file_size = os.path.getsize(filename)  # get file size
+    # file_size = os.path.getsize(filename)  # get file size
     r = browser()
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
     r.post('http://turbobit.net/user/login', values).content  # login
@@ -56,13 +56,14 @@ def accInfo(username, passwd, captcha=False, proxy=False):
         values['user[captcha_subtype]'] = ''
     r.headers['Referer'] = 'http://turbobit.net/login'
     content = r.post('http://turbobit.net/user/login', values).content  # login
+    open('log.log', 'w').write(content)
     if captcha and 'Incorrect captcha code' in content:
         recaptchaReportWrong()  # add captcha_id
         return accInfo(username, passwd, captcha=True, proxy=proxy)
     elif any(i in content for i in ('Incorrect login or password', 'E-Mail address appears to be invalid. Please try again', 'Username(Email) does not exist')):
         acc_info['status'] = 'deleted'
         return acc_info
-    elif 'Limit of login attempts exceeded for your account. It has been temporarily locked.' in content:
+    elif 'Limit of login attempts exceeded for your account. It has been temporarily locked.' in content or "You have reached the <a href='/user/messages'>daily</a> limit of premium downloads" in content:
         acc_info['status'] = 'blocked'
         return acc_info
     elif 'Limit of login attempts exeeded.' in content or 'Please enter the captcha.' in content:
