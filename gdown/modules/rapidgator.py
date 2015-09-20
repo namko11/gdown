@@ -21,7 +21,7 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser(proxy)
     content = r.post('https://rapidgator.net/auth/login', {'LoginForm[email]': username, 'LoginForm[password]': passwd, 'LoginForm[rememberMe]': '1'}).content
-    if 'The code from a picture does not coincide' in content:
+    if 'The code from a picture does not coincide' in content or 'ACCOUNT LOCKED FOR VIOLATION OF OUR TERMS. PLEASE CONTACT SUPPORT.' in content:
         acc_info['status'] = 'blocked'
         return acc_info
     elif 'Error e-mail or password.' in content:
