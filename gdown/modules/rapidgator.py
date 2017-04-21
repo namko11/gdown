@@ -24,7 +24,7 @@ def accInfo(username, passwd, proxy=False):
     if 'The code from a picture does not coincide' in content or 'ACCOUNT LOCKED FOR VIOLATION OF OUR TERMS. PLEASE CONTACT SUPPORT.' in content:
         acc_info['status'] = 'blocked'
         return acc_info
-    elif 'Error e-mail or password.' in content:
+    elif 'Error e-mail or password.' in content or 'Wrong e-mail or password.' in content:
         acc_info['status'] = 'deleted'
         return acc_info
     elif 'Account:&nbsp;<a href="/article/premium">Free</a>' in content:
