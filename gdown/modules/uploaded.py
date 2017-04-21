@@ -59,16 +59,17 @@ def accInfo(username, passwd, proxy=False):
     acc_info['balance'] = Decimal(balance.group(1)+balance.group(2)+'.'+balance.group(3))
 
     if re.search('<em>(.+)</em>', content).group(1) == 'Premium':
+        content = content.replace(' ', '').replace('	', '')
         acc_info['status'] = 'premium'
-        if '<th>unlimited</th>			</tr>' in content:  # lifetime premium
+        if 'unlimited</th>' in content:  # lifetime premium
             acc_info['expire_date'] = datetime.max
             return acc_info
-        content = re.search('<th>([0-9]+.+)</th>[ 	]+</tr>', content).group(1)
-        seconds = re.search('([0-9]+) second', content)
-        minutes = re.search('([0-9]+) M|minute', content)
-        hours = re.search('([0-9]+) hour', content)
-        days = re.search('([0-9]+) day', content)
-        weeks = re.search('([0-9]+) [wW]{1}eek', content)
+        content = re.search('<th>\n?([0-9]+.+)</th>\n?</tr>', content).group(1)
+        seconds = re.search('([0-9]+)second', content)
+        minutes = re.search('([0-9]+)M|minute', content)
+        hours = re.search('([0-9]+)hour', content)
+        days = re.search('([0-9]+)day', content)
+        weeks = re.search('([0-9]+)[wW]{1}eek', content)
         expire_date = datetime.utcnow()
         if seconds:
             expire_date += timedelta(seconds=int(seconds.group(1)))
