@@ -38,20 +38,20 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser(proxy)
     values = {'id': username, 'pw': passwd}
-    content = r.post('http://uploaded.net/io/login', values).content
+    content = r.post('http://uploaded.net/io/login', values).text
     if 'Account locked. Please contact Support.' in content:
         acc_info['status'] = 'blocked'
         return acc_info
     elif 'User and password do not match!' in content or 'Benutzer wurde gelöscht' in content or 'Account has been deleted' in content:  # wrong password / acc deleted
         acc_info['status'] = 'deleted'
         return acc_info
-    content = r.get('http://uploaded.net/me').content
+    content = r.get('http://uploaded.net/me').text
     if '<button type="submit">Login</button>' in content:  # ip blocked(?), waiting 30s
         sleep(30)
         return accInfo(username, passwd, proxy=proxy)
     lang = re.search('<meta name="language" http-equiv="content-language" content="(.+)" />', content).group(1)
     if lang != 'en':
-        content = r.get('http://uploaded.net/language/en').content
+        content = r.get('http://uploaded.net/language/en').text
         r.get('http://uploaded.net/language/%s' % (lang))  # restore old language
 
     balance = re.search('title="Request payout" onclick="location.href=\'/affiliate\'">([0-9]*?)\.?([0-9]+),([0-9]+) &([a-zA-Z]+);</em>', content)
@@ -59,6 +59,8 @@ def accInfo(username, passwd, proxy=False):
     acc_info['balance'] = Decimal(balance.group(1)+balance.group(2)+'.'+balance.group(3))
 
     if re.search('<em>(.+)</em>', content).group(1) == 'Premium':
+        # transfer
+        acc_info['transfer'] = re.search('<th colspan="2"><b class="cB">(.+?)</b></th>', content).group(1)
         content = content.replace(' ', '').replace('	', '')
         acc_info['status'] = 'premium'
         if 'unlimited</th>' in content:  # lifetime premium
@@ -82,6 +84,7 @@ def accInfo(username, passwd, proxy=False):
         if weeks:
             expire_date += timedelta(weeks=int(weeks.group(1)))
         acc_info['expire_date'] = expire_date
+
         return acc_info
     else:
         # TODO: detect (blind guess now)
