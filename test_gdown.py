@@ -37,7 +37,7 @@ class GdownTestCase(unittest.TestCase):
     # def testInvalidUrl(self):
     #     for module in self.modules:
     #         url = 'http://%s/testasdasdas' % (module)
-    #         self.assertRaises(gdown.ModuleError, gdown.getUrl, url, 'login', 'password')
+    #         self.assertRaises(gdown.exceptions.ModuleError, gdown.getUrl, url, 'login', 'password')
 
     def testCli(self):
         self.assertEqual(gdown.__title__, cli.__title__)
