@@ -18,9 +18,10 @@ from ..exceptions import ModuleError
 
 def accInfo(username, passwd, proxy=False):
     """Returns account info."""
+    sleep(1)
     acc_info = acc_info_template()
     r = browser(proxy)
-    content = r.post('https://rapidgator.net/auth/login', {'LoginForm[email]': username, 'LoginForm[password]': passwd, 'LoginForm[rememberMe]': '1'}).content
+    content = r.post('https://rapidgator.net/auth/login', {'LoginForm[email]': username, 'LoginForm[password]': passwd, 'LoginForm[rememberMe]': '1'}).text
     if 'The code from a picture does not coincide' in content or 'ACCOUNT LOCKED FOR VIOLATION OF OUR TERMS. PLEASE CONTACT SUPPORT.' in content:
         acc_info['status'] = 'blocked'
         return acc_info
@@ -35,7 +36,7 @@ def accInfo(username, passwd, proxy=False):
         acc_info['expire_date'] = parser.parse(re.search('Premium till ([0-9]{4}\-[0-9]{2}\-[0-9]{2})', content).group(1))
         return acc_info
     elif 'Premium                    <span style="margin-left:10px;">' in content:
-        rc = r.get('https://rapidgator.net/Payment/Payment', verify=False).content
+        rc = r.get('https://rapidgator.net/Payment/Payment', verify=False).text
         rc = re.search('<tr class="odd"><td style="width:[0-9]{2,3}px;">[0-9]{4}\-[0-9]{2}\-[0-9]{2}</td><td style="width:[0-9]{2,3}px;">[0-9]{2,3}</td><td style="width:[0-9]{2,3}px;">([0-9]{4}\-[0-9]{2}\-[0-9]{2})</td><td style="width:[0-9]{2,3}px;">.+?</td><td style="width:[0-9]{2,3}px;">.+?</td><td style="width:[0-9]{2,3}px;">Paid</td></tr>', rc)
         acc_info['status'] = 'premium'
         acc_info['expire_date'] = parser.parse(rc.group(1))
