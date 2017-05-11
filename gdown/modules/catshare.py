@@ -30,7 +30,7 @@ def accInfo(username, passwd, proxy=False):
     elif '<span class="hidden-xs">Premium</span>' in rc:
         acc_info['status'] = 'premium'
         open('gdown.log', 'w').write(rc)  # DEBUG
-        s = re.search('<span class="hidden-xs">Premium</span> <b>([0-9]+) dni</b> \( ([0-9]+ GB) \)', rc)
+        s = re.search('<span class="hidden-xs">Premium</span> <b>([0-9]+) dni</b> \( ([0-9\.]+ GB) \)', rc)
         expire_date = datetime.utcnow()
         '''
         if seconds:
