@@ -25,6 +25,9 @@ def accInfo(username, passwd, proxy=False):
     if 'The code from a picture does not coincide' in content or 'ACCOUNT LOCKED FOR VIOLATION OF OUR TERMS. PLEASE CONTACT SUPPORT.' in content:
         acc_info['status'] = 'blocked'
         return acc_info
+    elif 'Frequent logins. Please wait 20 sec...' in content:
+        sleep(20)
+        return accInfo(username, passwd)
     elif 'Error e-mail or password.' in content or 'Wrong e-mail or password.' in content:
         acc_info['status'] = 'deleted'
         return acc_info
