@@ -26,8 +26,11 @@ def accInfo(username, passwd, proxy=False):
         acc_info['status'] = 'blocked'
         return acc_info
     elif 'Frequent logins. Please wait 20 sec...' in content:
-        sleep(20)
-        return accInfo(username, passwd)
+        print('ip/acc blocked')
+        acc_info['status'] = 'blocked'
+        return acc_info
+        #sleep(20)
+        #return accInfo(username, passwd)
     elif 'Error e-mail or password.' in content or 'Wrong e-mail or password.' in content:
         acc_info['status'] = 'deleted'
         return acc_info
