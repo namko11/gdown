@@ -37,9 +37,13 @@ def accInfo(username, passwd, proxy=False):
     elif 'Incorrect username or password' in rc:
         acc_info['status'] = 'deleted'
         return acc_info
-    elif 'Premium expires: <b>LifeTime</b>' in rc:
+    elif 'Premium expires: ' in rc:
         acc_info['status'] = 'premium'
-        acc_info['expire_date'] = datetime.max
+        if '<b>LifeTime</b>' in rc:
+            acc_info['expire_date'] = datetime.max
+        else:
+            d = re.search('Premium expires: <b>([0-9]{4})\.([0-9]{2})\.([0-9]{2})</b>', rc)
+            acc_info['expire_date'] = datetime(int(d.group(1)), int(d.group(2)), int(d.group(3)))
         return acc_info
     else:
         open('gdown.log', 'w').write(rc)
