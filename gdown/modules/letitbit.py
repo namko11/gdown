@@ -21,7 +21,7 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser(proxy)
     data = {'act': 'login', 'login': username, 'password': passwd}
-    rc = r.post('http://letitbit.net/index.php?lang=en', data).content
+    rc = r.post('http://letitbit.net/index.php?lang=en', data).text
     #Only for registered users
     if 'Account has been blocked. Please contact' in rc:
         acc_info['status'] = 'blocked'
@@ -31,7 +31,7 @@ def accInfo(username, passwd, proxy=False):
         return acc_info
 
     data = {'act': 'get_attached_passwords'}
-    rc = r.post('http://letitbit.net/ajax/get_attached_passwords.php', data).content
+    rc = r.post('http://letitbit.net/ajax/get_attached_passwords.php', data).text
     if 'There are no attached premium accounts found' in rc:
         acc_info['status'] = 'free'
         return acc_info
@@ -50,8 +50,8 @@ def getUrl(link, username, passwd):
     link = re.search('http://[w\.]{,4}letitbit.net/download/([0-9]+)/(.+)/(.+)\.html', link)  # own | uid | name
     r = browser()
     values = {'act': 'login', 'login': username, 'password': passwd}
-    rc = r.post('http://letitbit.net/download.php?own=%s&uid=%s&name=%s&page=1' % (link.group(1), link.group(2), link.group(3)), values).content  # login && get download page
+    rc = r.post('http://letitbit.net/download.php?own=%s&uid=%s&name=%s&page=1' % (link.group(1), link.group(2), link.group(3)), values).text  # login && get download page
     link = re.search('src="(http://.*letitbit.net/sms/check2_iframe.php\?ac_syml_uid.+)"', rc).group(1)
-    rc = r.get(link).content  # get download iframe
+    rc = r.get(link).text  # get download iframe
     link = re.findall('href="(.+)" style', rc)[0]  # get first link / replace re.findall with re.search?
     return r.get(link).url

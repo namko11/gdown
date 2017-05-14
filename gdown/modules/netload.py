@@ -30,7 +30,7 @@ def accInfo(username, passwd, proxy=False):
     r = browser(proxy)
     values = {'txtuser': username, 'txtpass': passwd, 'txtcheck': 'login', 'txtlogin': 'Login'}
     r.post('https://netload.in/index.php', values)
-    content = r.get('https://netload.in/index.php?id=15').content
+    content = r.get('https://netload.in/index.php?id=15').text
     if 'This account was locked' in content or'Sorry, please activate first your account.' in content:  # account not activated
         acc_info['status'] = 'blocked'
         return acc_info
@@ -39,7 +39,7 @@ def accInfo(username, passwd, proxy=False):
         return acc_info
     elif 'Please wait a moment before tryingto log in again!' in content:   # ip blocked
         raise IpBlocked
-    rc = r.get('https://netload.in/index.php?id=2').content
+    rc = r.get('https://netload.in/index.php?id=2').text
     content = re.search('<div class="num">([0-9d, h\-]+?)</div>\n[ ]{16}<h3>Remaining Premium</h3>', rc).group(1)
     if content == '-':
         acc_info['status'] = 'free'
@@ -58,6 +58,6 @@ def accInfo(username, passwd, proxy=False):
 def upload(username, passwd, filename):
     """Returns uploaded file url."""
     r = browser()
-    host = r.get('http://api.netload.in/getserver.php').content
-    content = r.post(host, {'user_id': username, 'user_password': passwd, 'modus': 'file_upload'}, files={'file': open(filename, 'rb')}).content
+    host = r.get('http://api.netload.in/getserver.php').text
+    content = r.post(host, {'user_id': username, 'user_password': passwd, 'modus': 'file_upload'}, files={'file': open(filename, 'rb')}).text
     return re.search('UPLOAD_OK;.+;[0-9]+;(.+);.+', content).group(1)

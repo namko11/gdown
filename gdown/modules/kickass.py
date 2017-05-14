@@ -19,7 +19,7 @@ def __login__(username, passwd):
     """Returns requests object after logging in."""
     r = browser()
     data = {'return_uri': 'http://kickass.to/', 'email': username, 'password': passwd}
-    rc = r.post('http://kickass.to/auth/socialize/', data).content
+    rc = r.post('http://kickass.to/auth/socialize/', data).text
     if any(i in rc for i in ('<title>Registration - KickassTorrents</title>', "You can't access your account because you were deleted", 'DELETED USER')):
         return False
     #open('gdown.log', 'w').write(rc)
@@ -48,9 +48,9 @@ def accInfo(username, passwd):
     if r is False:
         acc_info['status'] = 'deleted'
     else:
-        rc = r.get('http://kickass.to/').content
+        rc = r.get('http://kickass.to/').text
         username = re.search('<a href="/user/(.+)/">profile</a>', rc).group(1)
-        rc = r.get('http://kickass.to/user/{}'.format(username)).content
+        rc = r.get('http://kickass.to/user/{}'.format(username)).text
         open('gdown.log', 'w').write(rc)
         rating = re.search('<span title="Reputation" class="repValue [positvenga]{8}">([0-9]+)</span>', rc).group(1)
         acc_info['points'] = rating
@@ -67,7 +67,7 @@ def signUp(email, passwd, username=None):
     # TODO: /auth/check/{username}  | {"method":"ok","html":"fail"} | {"method":"ok","html":"ok"}
 
     # get recaptcha_public_key
-    #rc = r.get('http://kickass.to/auth/register').content
+    #rc = r.get('http://kickass.to/auth/register').text
     #recaptcha_public_key = re.search('Recaptcha\.create\("(.+?)"', rc).group(1)
     recaptcha_public_key = '6LfHpd8SAAAAAAIkr00VqbRkWColMiVepdfsHQZ0'  # always the same
 
@@ -79,6 +79,6 @@ def signUp(email, passwd, username=None):
             'recaptcha_response_field': recaptcha_response,
             'tos': '1',
             'turing': 'iamhuman'}
-    rc = r.post('http://kickass.to/auth/socialize/', data).content
+    rc = r.post('http://kickass.to/auth/socialize/', data).text
     open('gdown.log', 'w').write(rc)
     return True

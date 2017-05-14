@@ -26,7 +26,7 @@ def getUrl(link, username, passwd):
     r = browser()
     values = {'login': username, 'password': passwd, 'go': '1', 'submit': 'enter'}
     r.post('http://depositfiles.com/en/login.php', values)  # login
-    rc = r.get(link).content   # get download page
+    rc = r.get(link).text   # get download page
     link = re.search('<a href="(.+)" onClick="download_started\(\);" class="hide_download_started">Download the file', rc).group(1)
     return r.get(link).url
 
@@ -52,7 +52,7 @@ def accInfo(username, passwd, captcha=False, proxy=False):
             acc_info['status'] = 'free'
             return acc_info
         elif rc['data']['mode'] == 'gold':
-            rc = r.get('http://dfiles.eu/gold/').content
+            rc = r.get('http://dfiles.eu/gold/').text
             c = re.search('<div class="access">.+ <b>([0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})</b></div>', rc)
             acc_info['status'] = 'premium'
             acc_info['expire_date'] = parser.parse(c.group(1))

@@ -17,7 +17,7 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser(proxy)
     data = {'noscript': '1', 'login': username, 'password': passwd, 'perm': '1'}
-    rc = r.post('https://konto.onet.pl/login.html?app_id=poczta.onet.pl.front', data).content
+    rc = r.post('https://konto.onet.pl/login.html?app_id=poczta.onet.pl.front', data).text
     if any(i in rc for i in ('Wprowadź poprawny adres e-mail.', 'Nieistniejący login.', 'Niepoprawne hasło.')):
         acc_info['status'] = 'deleted'
     elif 'Wyloguj się' in rc:

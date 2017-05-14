@@ -20,7 +20,7 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser(proxy)
     data = {'act': 'login', 'user': username, 'pass': passwd, 'captcha_shown': 0, 'login': 'Login'}
-    rc = r.post('https://filesmonster.com/login.php', data).content
+    rc = r.post('https://filesmonster.com/login.php', data).text
     if 'For security reasons, please enter captcha code below' in rc:
         print('captcha')
         adassa

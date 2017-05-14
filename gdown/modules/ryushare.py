@@ -19,7 +19,7 @@ def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
     r = browser(proxy)
-    content = r.post('http://ryushare.com', {'op': 'login', 'redirect': 'http://ryushare.com/my-account.python', 'login': username, 'password': passwd, 'loginFormSubmit': 'Login'}).content
+    content = r.post('http://ryushare.com', {'op': 'login', 'redirect': 'http://ryushare.com/my-account.python', 'login': username, 'password': passwd, 'loginFormSubmit': 'Login'}).text
     if any(i in content for i in ('Your account was banned by administrator.', "Your account haven't confirmed yet.")):
         acc_info['status'] = 'blocked'
         return acc_info

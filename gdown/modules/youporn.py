@@ -18,6 +18,6 @@ def getUrl(link, username=None, passwd=None):
     r = browser()
     videoid = re.match('$http://[w\.]{,4}youporn.com/watch/(.+?)/.+^', link).group(1)
     link = 'http://download.youporn.com/download/%s?xml=1' % (videoid)
-    content = r.get(link).content
+    content = r.get(link).text
     link = re.search('<location>(.+)</location>', content).group(1)
     return r.get(link).url

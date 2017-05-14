@@ -18,7 +18,7 @@ def accInfo(username, passwd, proxy=False):
     r = browser(proxy)
     r.get('https://profil.wp.pl/login_poczta.html')
     data = {'_action': 'login', 'enticket': '', 'idu': '99', 'serwis': '', 'url': '//poczta.wp.pl/index.html', 'login_username': username, 'login_password': passwd, 'mini': '1', '': ''}
-    rc = r.post('https://profil.wp.pl/login_poczta.html', data).content
+    rc = r.post('https://profil.wp.pl/login_poczta.html', data).text
     if 'Wyloguj' in rc:
         acc_info['status'] = 'free'
     elif 'Konto zablokowane administracyjnie.' in rc:

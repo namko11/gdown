@@ -22,7 +22,7 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser(proxy)
      # api version (do not return expire date)
-    content = r.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).content  # get hashkey (login)
+    content = r.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).text  # get hashkey (login)
     if content == 'ERROR:Username is not matching to the provided password!':
         acc_info['status'] = 'deleted'
         return acc_info
@@ -31,7 +31,7 @@ def accInfo(username, passwd, proxy=False):
     elif 'ERROR' in content:
         open('gdown.log', 'w').write(content)
         raise ModuleError('Unknown error, full log in gdown.log')
-    content = r.post('http://bitshare.com/api/openapi/accountdetails.php', {'hashkey': content[8:]}).content
+    content = r.post('http://bitshare.com/api/openapi/accountdetails.php', {'hashkey': content[8:]}).text
     content = re.search('SUCCESS:([0-9]+)#[0-9]+#[0-9]+#[0-9]+#.+', content).group(1)  # 0=noPremium | 1=premium
     if content == '1':
         acc_info['status'] = 'premium'
@@ -45,9 +45,9 @@ def expireDate(username, passwd):  # manual (without api)
     r = browser()
     r.get('http://bitshare.com/?language=EN')   # change language (regex)
     values = {'user': username, 'password': passwd, 'rememberlogin': '1', 'submit': 'Login'}
-    content = r.post('http://bitshare.com/login.html', values).content
+    content = r.post('http://bitshare.com/login.html', values).text
     if '(<b>Premium</b>)' in content:
-        content = r.get('http://bitshare.com/myaccount.html').content
+        content = r.get('http://bitshare.com/myaccount.html').text
         content = re.search('Valid until: ([0-9]+\-[0-9]+\-[0-9]+)', content).group(1)
         return parser.parse(content)
     #elif '(<b><a href="http://bitshare.com/myupgrade.html">Free</a></b>)' in content:  # no need to check this
@@ -72,9 +72,9 @@ def upload(username, passwd, filename):
     """Returns uploaded file url."""
     file_size = int(os.path.getsize(filename))  # get file size
     r = browser()
-    hashkey = r.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).content[8:]  # get hashkey (login)
-    host = r.post('http://bitshare.com/api/openapi/upload.php', {'action': 'getFileserver'}).content[8:]  # get host
+    hashkey = r.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).text[8:]  # get hashkey (login)
+    host = r.post('http://bitshare.com/api/openapi/upload.php', {'action': 'getFileserver'}).text[8:]  # get host
     content = ''
     while 'SUCCESS' not in content:
-        content = r.post(host, {'hashkey': hashkey, 'filesize': file_size}, files={'file': open(filename, 'rb')}).content  # upload
+        content = r.post(host, {'hashkey': hashkey, 'filesize': file_size}, files={'file': open(filename, 'rb')}).text  # upload
     return re.search('SUCCESS:(.+?)#\[URL', content).group(1)

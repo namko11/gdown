@@ -16,7 +16,7 @@ from ..module import browser
 def getUrl(link, username=None, passwd=None):
     """Returns direct file url."""
     r = browser()
-    content = r.get(link).content
+    content = r.get(link).text
     srv = re.search("'srv': '(.+)',", content).group(1)
     file_name = re.search("'file': '(.+)',", content).group(1)
     link = '%s/flv2/%s' % (srv, file_name)

@@ -18,7 +18,7 @@ def accInfo(username, passwd, proxy=False):
     r = browser(proxy)
     r.get('https://poczta.interia.pl')
     data = {'email': username, 'pass': passwd, 'permanent': '1', 'formHTTP': '1', 'webmailSelect': 'classicMail', 'formSubmit': ''}  # 'webmailSelect': 'htmlMail'
-    rc = r.post('https://logowanie.interia.pl/poczta/zaloguj', data).content
+    rc = r.post('https://logowanie.interia.pl/poczta/zaloguj', data).text
     if any(i in rc for i in ('Konto zostało zablokowane', 'Blokada konta', 'Nie możesz już korzystać ze swojej skrzynki pocztowej')):
         acc_info['status'] = 'blocked'
     elif 'Błędny login lub hasło' in rc:

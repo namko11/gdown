@@ -22,6 +22,9 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser(proxy)
     rc = r.get('https://keep2share.cc/login.html').text
+    if 'LoginForm_verifyCode' in rc:
+        print('captcha')
+        raise ModuleError('CAPTCHA')
     csrf_token = re.search('value\="(.+?)" name\="YII_CSRF_TOKEN"', rc).group(1)
     login_form = {'username': username,
                   'password': passwd,
@@ -30,6 +33,13 @@ def accInfo(username, passwd, proxy=False):
 
     if '<a href="/premium.html" class="free" style="color: red">free</a>' in rc:
         acc_info['status'] = 'free'
+        return acc_info
+    elif 'Incorrect username or password' in rc:
+        acc_info['status'] = 'deleted'
+        return acc_info
+    elif 'Premium expires: <b>LifeTime</b>' in rc:
+        acc_info['premium']
+        acc_info['expire_date'] = datetime.max
         return acc_info
     else:
         open('gdown.log', 'w').write(rc)

@@ -22,7 +22,7 @@ def getUrl(link, username, passwd):
     content = re.match('^https?://[w\.]{,4}rapidshare.com/files/([0-9]+)/(.+)$', link)
     fileid = content.group(1)
     filename = content.group(2)
-    content = r.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=download&fileid=%s&filename=%s&try=1&login=%s&password=%s' % (fileid, filename, username, passwd)).content
+    content = r.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=download&fileid=%s&filename=%s&try=1&login=%s&password=%s' % (fileid, filename, username, passwd)).text
     server = re.match('DL:(.+?),', content).group(1)
     return r.get('https://%s/cgi-bin/rsapi.cgi?sub=download&fileid=%s&filename=%s&try=0&login=%s&password=%s' % (server, fileid, filename, username, passwd)).url   # return connection
 
@@ -36,7 +36,7 @@ def accInfo(username, passwd, proxy=False):
     '''
     acc_info = acc_info_template()
     r = browser(proxy)
-    content = r.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails&login=%s&password=%s&withpublicid=1' % (username, passwd)).content
+    content = r.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails&login=%s&password=%s&withpublicid=1' % (username, passwd)).text
     if 'Login failed. Account locked.' in content:
         acc_info['status'] = 'blocked'
         return acc_info
@@ -61,7 +61,7 @@ def accInfo(username, passwd, proxy=False):
 def upload(username, passwd, filename):
     """Returns uploaded file url."""
     r = browser()
-    server_id = r.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=nextuploadserver').content
-    content = r.post('https://rs%s.rapidshare.com/cgi-bin/rsapi.cgi?sub=upload' % (server_id), {'login': username, 'password': passwd}, files={'filecontent': open(filename, 'rb')}).content
+    server_id = r.get('https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=nextuploadserver').text
+    content = r.post('https://rs%s.rapidshare.com/cgi-bin/rsapi.cgi?sub=upload' % (server_id), {'login': username, 'password': passwd}, files={'filecontent': open(filename, 'rb')}).text
     file_id = re.search('([0-9]+),[0-9]+,.+', content).group(1)
     return 'https://rapidshare.com/files/%s/%s' % (file_id, filename)

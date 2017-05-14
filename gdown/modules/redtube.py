@@ -16,6 +16,6 @@ from ..module import browser
 def getUrl(link, username=None, passwd=None):
     """Returns direct file url."""
     r = browser()
-    content = r.get(link).content
+    content = r.get(link).text
     link = re.search('<source src="(.+)" type="video/mp4">', content).group(1)
     return r.get(link).url

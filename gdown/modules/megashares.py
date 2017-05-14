@@ -21,6 +21,6 @@ def getUrl(link, username, passwd):
     link = 'http://d01.megashares.com/index.php?d01=%s' % (fileid)
     r = browser()
     values = {'mymslogin_name': username, 'mymspassword': passwd, 'httpref': link, 'myms_login': 'Login'}
-    content = r.post('http://d01.megashares.com/myms_login.php', values).content
+    content = r.post('http://d01.megashares.com/myms_login.php', values).text
     link = re.search('show_download_button_1">\n    <a href="(.+)">', content).group(1)
     return r.get(link).url

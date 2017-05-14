@@ -22,7 +22,7 @@ from ..module import browser
 def getUrl(link, username=None, passwd=None):
     """Returns direct file url (best quality)."""
     r = browser()
-    content = r.get(link).content
+    content = r.get(link).text
     content = unquote(re.search('url_encoded_fmt_stream_map=(.+?)&', content).group(1)).split()
     links = []
     for i in content:

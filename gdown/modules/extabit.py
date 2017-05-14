@@ -20,7 +20,7 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser(proxy)
     data = {'email': username, 'pass': passwd, 'remember': '1', 'auth_submit_login.x': '38', 'auth_submit_login.y': '26', 'auth_submit_login': 'Enter'}
-    rc = r.post('http://extabit.com/login.jsp', data).content
+    rc = r.post('http://extabit.com/login.jsp', data).text
 
     alert = re.search('\$.jGrowl\("(.+)", \{life: [0-9]+\} \);', rc)
     if alert:
@@ -55,7 +55,7 @@ def upload(username, passwd, filename):
     #file_size = os.path.getsize(filename)  # get file size
     r = browser()
 
-    host = r.get('http://api.hotfile.com/?action=getuploadserver').content[:-1]  # get server to upload
-    upload_id = r.post('http://%s/segmentupload.php?action=start' % (host), {'size': file_size}).content[:-1]  # start upload
-    r.post('http://%s/segmentupload.php?action=upload' % (host), {'id': upload_id, 'offset': 0}, files={'segment': open(filename, 'rb')}).content  # upload
-    return r.post('http://%s/segmentupload.php?action=finish' % (host), {'id': upload_id, 'name': filename, 'username': username, 'password': passwd}).content[:-1]  # start upload
+    host = r.get('http://api.hotfile.com/?action=getuploadserver').text[:-1]  # get server to upload
+    upload_id = r.post('http://%s/segmentupload.php?action=start' % (host), {'size': file_size}).text[:-1]  # start upload
+    r.post('http://%s/segmentupload.php?action=upload' % (host), {'id': upload_id, 'offset': 0}, files={'segment': open(filename, 'rb')}).text  # upload
+    return r.post('http://%s/segmentupload.php?action=finish' % (host), {'id': upload_id, 'name': filename, 'username': username, 'password': passwd}).text[:-1]  # start upload

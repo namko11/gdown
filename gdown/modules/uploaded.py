@@ -30,7 +30,7 @@ def get(link, username, passwd):
     r = browser()
     values = {'id': username, 'pw': passwd, 'loginFormSubmit': 'Login'}
     r.post('http://www.uploaded.net/io/login', values)
-    return r.get(link).content
+    return r.get(link).text
 
 
 def accInfo(username, passwd, proxy=False):

@@ -17,7 +17,7 @@ def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
     r = browser(proxy)
-    content = r.get('http://freakshare.com/login.html', {'user': username, 'pass': passwd, 'submit': 'Login'}).content
+    content = r.get('http://freakshare.com/login.html', {'user': username, 'pass': passwd, 'submit': 'Login'}).text
     if '<td><b>Member (premium)</b></td>' in content:
         acc_info['status'] = 'premium'
         return acc_info  # TODO: Finish it!
@@ -33,7 +33,7 @@ def upload(username, passwd, filename):
     r = browser()
     # NOT FINISHED!
 
-    host = r.get('http://api.hotfile.com/?action=getuploadserver').content[:-1]  # get server to upload
-    upload_id = r.post('http://%s/segmentupload.php?action=start' % (host), {'size': file_size}).content[:-1]  # start upload
-    r.post('http://%s/segmentupload.php?action=upload' % (host), {'id': upload_id, 'offset': 0}, files={'segment': open(filename, 'rb')}).content  # upload
-    return r.post('http://%s/segmentupload.php?action=finish' % (host), {'id': upload_id, 'name': filename, 'username': username, 'password': passwd}).content[:-1]  # start upload
+    host = r.get('http://api.hotfile.com/?action=getuploadserver').text[:-1]  # get server to upload
+    upload_id = r.post('http://%s/segmentupload.php?action=start' % (host), {'size': file_size}).text[:-1]  # start upload
+    r.post('http://%s/segmentupload.php?action=upload' % (host), {'id': upload_id, 'offset': 0}, files={'segment': open(filename, 'rb')}).text  # upload
+    return r.post('http://%s/segmentupload.php?action=finish' % (host), {'id': upload_id, 'name': filename, 'username': username, 'password': passwd}).text[:-1]  # start upload

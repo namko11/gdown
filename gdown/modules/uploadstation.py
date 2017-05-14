@@ -26,10 +26,10 @@ def upload(username, passwd, filename):
     r = browser()
     values = {'loginUserName': username, 'loginUserPassword': passwd, 'loginFormSubmit': 'Login', 'autoLogin': 'on'}
     r.post('http://uploadstation.com/login.php', values)
-    content = r.get('http://uploadstation.com/upload.php').content
+    content = r.get('http://uploadstation.com/upload.php').text
     host = re.search('action="(http://upload.uploadstation.com/upload/[0-9]+/[0-9]+/)"', content).group(1)
-    content = r.get('%s?callback=jsonp' % (host)).content  # get sessionId
+    content = r.get('%s?callback=jsonp' % (host)).text  # get sessionId
     sessionId = re.search("sessionId:'(.+)'", content).group(1)
-    content = r.post('%s%s/' % (host, sessionId), files={'file': open(filename, 'rb')}).content
+    content = r.post('%s%s/' % (host, sessionId), files={'file': open(filename, 'rb')}).text
     open('log.log', 'w').write(content)
     return 0

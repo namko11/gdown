@@ -23,7 +23,7 @@ def getUrl(link, username, passwd):
     r = browser()
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
     r.post('http://turbobit.net/user/login', values)
-    content = r.get(link).content
+    content = r.get(link).text
     link = re.search("<h1><a href='(.+)'>", content).group(1)
     return r.get(link).url  # return connection
 
@@ -33,12 +33,12 @@ def upload(username, passwd, filename):
     # file_size = os.path.getsize(filename)  # get file size
     r = browser()
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
-    r.post('http://turbobit.net/user/login', values).content  # login
-    content = r.get('http://turbobit.net/').content
+    r.post('http://turbobit.net/user/login', values).text  # login
+    content = r.get('http://turbobit.net/').text
     content = re.search('urlSite=(http://s[0-9]+.turbobit.ru/uploadfile)&userId=(.+)&', content)
     host = content.group(1)
     user_id = content.group(2)
-    content = r.post(host, {'Filename': filename, 'user_id': user_id, 'stype': 'null', 'apptype': 'fd1', 'id': 'null', 'Upload': 'Submit Query'}, files={'Filedata': open(filename, 'rb')}).content  # upload
+    content = r.post(host, {'Filename': filename, 'user_id': user_id, 'stype': 'null', 'apptype': 'fd1', 'id': 'null', 'Upload': 'Submit Query'}, files={'Filedata': open(filename, 'rb')}).text  # upload
     file_id = re.search('{"result":true,"id":"(.+)","message":"Everything is ok"}', content).group(1)
     return 'http://turbobit.net/%s.html' % (file_id)
 
@@ -55,7 +55,7 @@ def accInfo(username, passwd, captcha=False, proxy=False):
         values['user[captcha_type]'] = 'recaptcha'
         values['user[captcha_subtype]'] = ''
     r.headers['Referer'] = 'http://turbobit.net/login'
-    content = r.post('http://turbobit.net/user/login', values).content  # login
+    content = r.post('http://turbobit.net/user/login', values).text  # login
     open('log.log', 'w').write(content)
     if captcha and 'Incorrect captcha code' in content:
         recaptchaReportWrong()  # add captcha_id
