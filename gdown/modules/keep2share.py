@@ -38,7 +38,7 @@ def accInfo(username, passwd, proxy=False):
         acc_info['status'] = 'deleted'
         return acc_info
     elif 'Premium expires: <b>LifeTime</b>' in rc:
-        acc_info['premium']
+        acc_info['status'] = 'premium'
         acc_info['expire_date'] = datetime.max
         return acc_info
     else:
