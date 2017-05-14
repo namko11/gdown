@@ -67,7 +67,7 @@ def accInfo(username, passwd, date_birth=None, proxy=False):
         acc_info['status'] = 'premium'
         acc_info['expire_date'] = parser.parse(re.search('title="Premium valid until: <strong>(.+?)</strong>">', content).group(1))
         return acc_info
-    elif "Congratulations! You're a FileFactory Lifetime member. We value your loyalty and support." in content:
+    elif "Congratulations! You're a FileFactory Lifetime member. We value your loyalty and support." in content or '<strong>Lifetime</strong>' in content:
         acc_info['status'] = 'premium'
         acc_info['expire_date'] = datetime.max
         return acc_info
