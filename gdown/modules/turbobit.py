@@ -10,6 +10,7 @@ This module contains handlers for turbobit.
 
 import re
 from dateutil import parser
+import time
 
 from ..core import recaptcha, recaptchaReportWrong
 from ..module import browser, acc_info_template
@@ -33,7 +34,7 @@ def upload(username, passwd, filename):
     # file_size = os.path.getsize(filename)  # get file size
     r = browser()
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
-    r.post('http://turbobit.net/user/login', values).text  # login
+    r.post('https://turbobit.net/user/login', values).text  # login
     content = r.get('http://turbobit.net/').text
     content = re.search('urlSite=(http://s[0-9]+.turbobit.ru/uploadfile)&userId=(.+)&', content)
     host = content.group(1)
@@ -45,6 +46,7 @@ def upload(username, passwd, filename):
 
 def accInfo(username, passwd, captcha=False, proxy=False):
     """Returns account info."""
+    time.sleep(5)
     acc_info = acc_info_template()
     r = browser(proxy)
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
@@ -54,8 +56,8 @@ def accInfo(username, passwd, captcha=False, proxy=False):
         values['recaptcha_response_field'] = recaptcha_response
         values['user[captcha_type]'] = 'recaptcha'
         values['user[captcha_subtype]'] = ''
-    r.headers['Referer'] = 'http://turbobit.net/login'
-    content = r.post('http://turbobit.net/user/login', values).text  # login
+    r.headers['Referer'] = 'https://turbobit.net/login'
+    content = r.post('https://turbobit.net/user/login', values).text  # login
     open('log.log', 'w').write(content)
     if captcha and 'Incorrect captcha code' in content:
         recaptchaReportWrong()  # add captcha_id
