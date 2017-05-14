@@ -17,6 +17,7 @@ __all__ = [
     'hellshare',
     'imgur',
     'interia',
+    'keep2share',
     'kickass',
     'letitbit',
     'mediafire',
