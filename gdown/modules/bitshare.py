@@ -22,7 +22,7 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser(proxy)
      # api version (do not return expire date)
-    content = r.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).text  # get hashkey (login)
+    content = r.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd.encode('utf-8')).hexdigest()}).text  # get hashkey (login)
     if content == 'ERROR:Username is not matching to the provided password!':
         acc_info['status'] = 'deleted'
         return acc_info
@@ -32,6 +32,7 @@ def accInfo(username, passwd, proxy=False):
         open('gdown.log', 'w').write(content)
         raise ModuleError('Unknown error, full log in gdown.log')
     content = r.post('http://bitshare.com/api/openapi/accountdetails.php', {'hashkey': content[8:]}).text
+    open('gdown.log', 'w').write(content)
     content = re.search('SUCCESS:([0-9]+)#[0-9]+#[0-9]+#[0-9]+#.+', content).group(1)  # 0=noPremium | 1=premium
     if content == '1':
         acc_info['status'] = 'premium'
@@ -72,7 +73,7 @@ def upload(username, passwd, filename):
     """Returns uploaded file url."""
     file_size = int(os.path.getsize(filename))  # get file size
     r = browser()
-    hashkey = r.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd).hexdigest()}).text[8:]  # get hashkey (login)
+    hashkey = r.post('http://bitshare.com/api/openapi/login.php', {'user': username, 'password': md5(passwd.encode('utf-8')).hexdigest()}).text[8:]  # get hashkey (login)
     host = r.post('http://bitshare.com/api/openapi/upload.php', {'action': 'getFileserver'}).text[8:]  # get host
     content = ''
     while 'SUCCESS' not in content:
