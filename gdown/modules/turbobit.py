@@ -65,7 +65,7 @@ def accInfo(username, passwd, captcha=False, proxy=False):
     elif any(i in content for i in ('Incorrect login or password', 'E-Mail address appears to be invalid. Please try again', 'Username(Email) does not exist')):
         acc_info['status'] = 'deleted'
         return acc_info
-    elif 'Limit of login attempts exceeded for your account. It has been temporarily locked.' in content or "You have reached the <a href='/user/messages'>daily</a> limit of premium downloads" in content:
+    elif 'Limit of login attempts exceeded for your account. It has been temporarily locked.' in content or "You have reached the <a href='/user/messages'>daily</a> limit of premium downloads" in content or 'You have reached daily login limit' in content:
         acc_info['status'] = 'blocked'
         return acc_info
     elif 'Limit of login attempts exeeded.' in content or 'Please enter the captcha.' in content:
