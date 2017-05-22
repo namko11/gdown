@@ -23,7 +23,9 @@ def accInfo(username, passwd, proxy=False):
     data = {'__RequestVerificationToken': token, 'ReturnUrl': '', 'Login': username, 'Password': passwd, 'rememberLogin': 'true', 'topBar_LoginBtn': 'Zaloguj'}
     rc = r.post('http://chomikuj.pl/action/Login/TopBarLogin', data).text
 
-    if 'Podane hasło jest niewłaściwe' in rc:
+    open('gdown.log', 'w').write(rc)  # DEBUG
+
+    if 'Podane hasło jest niewłaściwe' in rc or '<span id="loginErrorContent">Chomik o takiej nazwie nie istnieje</span>' in rc:
         acc_info['status'] = 'deleted'
         return acc_info
 
@@ -34,8 +36,11 @@ def accInfo(username, passwd, proxy=False):
     else:
         acc_info['status'] = 'free'
 
-    transfer = float(re.search('title="Transfer" rel="nofollow"><strong>([0-9,]+) MB</strong>', rc).group(1).replace(',', '.'))
-    acc_info['transfer'] = int(transfer * 1024 * 1024)  # convert MB to B
+    result = re.search('title="Transfer" rel="nofollow"><strong>([0-9,]+) (G?M?B)</strong>', rc)
+    transfer = float(result.group(1).replace(',', '.'))
+    if result.group(2) == 'GB':
+        transfer = transfer * 1024  # GB -> MB
+    acc_info['transfer'] = int(transfer * 1024 * 1024 * 1024)  # convert MB to B
 
     acc_info['points'] = int(re.search('title="Punkty" rel="nofollow"><strong>([0-9]+)</strong>', rc).group(1))
 
