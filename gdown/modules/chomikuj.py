@@ -24,15 +24,17 @@ def accInfo(username, passwd, proxy=False):
     r.headers['X-Requested-With'] = 'XMLHttpRequest'
     rc = r.post('http://chomikuj.pl/action/Login/TopBarLogin', data).json()
     del r.headers['X-Requested-With']
-    if rc.get('IsSuccess') is not True:
+    print(rc)
+    if rc.get('IsSuccess') is True:
+        if 'RequireCaptcha' in rc.get('Content'):
+            print('captcha')
+            asddsadsadsa
+    else:
         print(rc)
         print('failed')
 
     rc = r.get('http://chomikuj.pl').text
     open('gdown.log', 'w').write(rc)
-
-    if 'g-recaptcha-response' in rc:  # doesnt work
-        print('captcha?')
 
     if 'Nie masz jeszcze własnego chomika?' in rc:
         print('acc does not exists?')
