@@ -20,13 +20,31 @@ def accInfo(username, passwd, proxy=False):
     r = browser(proxy)
     rc = r.get('http://chomikuj.pl').text
     token = re.search('name="__RequestVerificationToken" type="hidden" value="(.*?)"', rc).group(1)
-    data = {'__RequestVerificationToken': token, 'ReturnUrl': '', 'Login': username, 'Password': passwd, 'rememberLogin': 'true', 'topBar_LoginBtn': 'Zaloguj'}
-    rc = r.post('http://chomikuj.pl/action/Login/TopBarLogin', data).text
+    data = {'__RequestVerificationToken': token, 'ReturnUrl': '', 'Login': username, 'Password': passwd}  # , 'rememberLogin': 'true', 'topBar_LoginBtn': 'Zaloguj'
+    r.headers['X-Requested-With'] = 'XMLHttpRequest'
+    rc = r.post('http://chomikuj.pl/action/Login/TopBarLogin', data).json()
+    del r.headers['X-Requested-With']
+    if rc.get('IsSuccess') is not True:
+        print(rc)
+        print('failed')
 
-    open('gdown.log', 'w').write(rc)  # DEBUG
+    rc = r.get('http://chomikuj.pl').text
+    open('gdown.log', 'w').write(rc)
+
+    if 'g-recaptcha-response' in rc:  # doesnt work
+        print('captcha?')
+
+    if 'Nie masz jeszcze własnego chomika?' in rc:
+        print('acc does not exists?')
+
+    if '<span id="loginErrorContent"></span> <a href="javascript:;" class="closeLoginError"' in rc:
+        print('cannot login? ip blocked?')
 
     if 'Podane hasło jest niewłaściwe' in rc or '<span id="loginErrorContent">Chomik o takiej nazwie nie istnieje</span>' in rc:
         acc_info['status'] = 'deleted'
+        return acc_info
+    elif '<span id="loginErrorContent">Ten chomik został zablokowany</span>' in rc:
+        acc_info['status'] = 'blocked'
         return acc_info
 
     expire_date = re.search('Abonament Twojego Chomika jest ważny do: <h3>([0-9]{4}\-[0-9]{2}\-[0-9]{2})</h3>', rc)
