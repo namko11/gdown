@@ -313,7 +313,7 @@ class SocketClient(Client):
             self.socket.settimeout(0)
             try:
                 self.socket.connect(host)
-            except socket.error, err:
+            except socket.error as err:
                 if err.args[0] not in (errno.EAGAIN, errno.EWOULDBLOCK, errno.EINPROGRESS):
                     self.close()
                     raise err
@@ -345,7 +345,7 @@ class SocketClient(Client):
                             raise IOError('recv(): connection lost')
                         else:
                             response += s
-            except socket.error, err:
+            except socket.error as err:
                 if err.args[0] not in (errno.EAGAIN, errno.EWOULDBLOCK, errno.EINPROGRESS):
                     raise err
             if response.endswith(self.TERMINATOR):
@@ -368,10 +368,10 @@ class SocketClient(Client):
             try:
                 sock = self.connect()
                 response = self._sendrecv(sock, request)
-            except IOError, err:
+            except IOError as err:
                 sys.stderr.write(str(err) + "\n")
                 self.close()
-            except socket.error, err:
+            except socket.error as err:
                 sys.stderr.write(str(err) + "\n")
                 self.close()
                 raise IOError('Connection refused')
