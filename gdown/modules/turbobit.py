@@ -71,7 +71,7 @@ def accInfo(username, passwd, captcha=False, proxy=False):
     elif 'Limit of login attempts exeeded.' in content or 'Please enter the captcha.' in content:
         return accInfo(username, passwd, captcha=True, proxy=proxy)
     # TODO: use if (check value) instead of try-except
-    elif 'Turbo access denied' in content:
+    elif 'Turbo access denied' in content or 'Turbo access is inactive' in content:
         acc_info['status'] = 'free'
         return acc_info
     elif 'Turbo access till' in content:
