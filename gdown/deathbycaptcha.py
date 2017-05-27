@@ -144,7 +144,7 @@ class Client(object):
 
     def _log(self, cmd, msg=''):
         if self.is_verbose:
-            print '%d %s %s' % (time.time(), cmd, msg.rstrip())
+            print('%d %s %s' % (time.time(), cmd, msg.rstrip()))
         return self
 
     def close(self):
@@ -225,7 +225,7 @@ class HttpClient(Client):
                 data=payload,
                 headers=headers
             )).read()
-        except urllib2.HTTPError, err:
+        except urllib2.HTTPError as err:
             if 403 == err.code:
                 raise AccessDeniedException('Access denied, please check your credentials and/or balance')
             elif 400 == err.code or 413 == err.code:
@@ -433,11 +433,11 @@ class SocketClient(Client):
 
 if '__main__' == __name__:
     # Put your DBC username & password here:
-    #client = HttpClient(sys.argv[1], sys.argv[2])
+    # client = HttpClient(sys.argv[1], sys.argv[2])
     client = SocketClient(sys.argv[1], sys.argv[2])
     client.is_verbose = True
 
-    print 'Your balance is %s US cents' % client.get_balance()
+    print('Your balance is %s US cents' % client.get_balance()
 
     for fn in sys.argv[3:]:
         try:
@@ -449,8 +449,8 @@ if '__main__' == __name__:
             captcha = None
 
         if captcha:
-            print 'CAPTCHA %d solved: %s' % \
-                  (captcha['captcha'], captcha['text'])
+            print('CAPTCHA %d solved: %s' % \
+                  (captcha['captcha'], captcha['text']))
 
             # Report as incorrectly solved if needed.  Make sure the CAPTCHA was
             # in fact incorrectly solved!
