@@ -9,6 +9,7 @@ This module contains handlers for chomikuj.
 """
 
 import re
+import time
 from dateutil import parser
 
 from ..module import browser, acc_info_template
@@ -16,6 +17,7 @@ from ..module import browser, acc_info_template
 
 def accInfo(username, passwd, proxy=False):
     """Returns account info."""
+    time.sleep(1)  # TEST
     acc_info = acc_info_template()
     r = browser(proxy)
     rc = r.get('http://chomikuj.pl').text
@@ -24,11 +26,14 @@ def accInfo(username, passwd, proxy=False):
     r.headers['X-Requested-With'] = 'XMLHttpRequest'
     rc = r.post('http://chomikuj.pl/action/Login/TopBarLogin', data).json()
     del r.headers['X-Requested-With']
-    print(rc)
     if rc.get('IsSuccess') is True:
-        if 'RequireCaptcha' in rc.get('Content'):
+        if 'RequireCaptcha' in rc.get('Content', ''):
             print('captcha')
             asddsadsadsa
+    elif rc.get('IsSuccess') is False:
+        if rc.get('Message') in ('Podane hasło jest niewłaściwe', 'Chomik o takiej nazwie nie istnieje'):
+            acc_info['status'] = 'deleted'
+            return acc_info
     else:
         print(rc)
         print('failed')
@@ -36,18 +41,19 @@ def accInfo(username, passwd, proxy=False):
     rc = r.get('http://chomikuj.pl').text
     open('gdown.log', 'w').write(rc)
 
-    if 'Nie masz jeszcze własnego chomika?' in rc:
-        print('acc does not exists?')
+    # if 'Nie masz jeszcze własnego chomika?' in rc:
+    #     print('acc does not exists?')
 
     if '<span id="loginErrorContent"></span> <a href="javascript:;" class="closeLoginError"' in rc:
-        print('cannot login? ip blocked?')
+        print('ip blocked?')
+        adsdaas
 
-    if 'Podane hasło jest niewłaściwe' in rc or '<span id="loginErrorContent">Chomik o takiej nazwie nie istnieje</span>' in rc:
-        acc_info['status'] = 'deleted'
-        return acc_info
-    elif '<span id="loginErrorContent">Ten chomik został zablokowany</span>' in rc:
-        acc_info['status'] = 'blocked'
-        return acc_info
+    # if 'Podane hasło jest niewłaściwe' in rc or '<span id="loginErrorContent">Chomik o takiej nazwie nie istnieje</span>' in rc:
+    #     acc_info['status'] = 'deleted'
+    #     return acc_info
+    # elif '<span id="loginErrorContent">Ten chomik został zablokowany</span>' in rc:  # <--
+    #     acc_info['status'] = 'blocked'
+    #     return acc_info
 
     expire_date = re.search('Abonament Twojego Chomika jest ważny do: <h3>([0-9]{4}\-[0-9]{2}\-[0-9]{2})</h3>', rc)
     if expire_date:
