@@ -76,13 +76,27 @@ def accInfo(username, passwd, proxy=False):
 def getUrl(link, username, passwd):
     """Returns direct file url."""
     r = browser()
-    rc = r.get('http://chomikuj.pl').text
+    rc = r.get('https://chomikuj.pl').text
     token = re.search('name="__RequestVerificationToken" type="hidden" value="(.*?)"', rc).group(1)
     data = {'__RequestVerificationToken': token, 'ReturnUrl': link, 'Login': username, 'Password': passwd, 'rememberLogin': 'true', 'topBar_LoginBtn': 'Zaloguj'}
-    rc = r.post('http://chomikuj.pl/action/Login/TopBarLogin', data).text
+    rc = r.post('https://chomikuj.pl/action/Login/TopBarLogin', data).text
     # get download url
+    r.headers['X-Requested-With'] = 'XMLHttpRequest'
     fileId = re.search('name="FileId" value="([0-9]+)"', rc).group(1)
     token = re.search('name="__RequestVerificationToken" type="hidden" value="(.*?)"', rc).group(1)
     data = {'fileId': fileId, '__RequestVerificationToken': token}
-    rc = r.post('http://chomikuj.pl/action/License/Download', data).text
-    return re.search('"redirectUrl":"(.*?)"', rc).group(1)
+    rc = r.post('https://chomikuj.pl/action/License/DownloadContext', data).json()
+    if rc['IsSuccess'] is True and rc['ContainsCaptcha'] is False:
+        print(rc['Content'])
+        org_file = re.search('name="SerializedOrgFile" type="hidden" value="(.+?)"', rc['Content']).group(1)
+        user_selection = re.search('name="SerializedUserSelection" type="hidden" value="(.+?)"', rc['Content']).group(1)
+        data = {'SerializedOrgFile': org_file,
+                'SerializedUserSeleciton': user_selection,
+                'FileId': fileId,
+                '__RequestVerificationToken': token}
+        print(data)
+        rc = r.post('https://chomikuj.pl/action/License/DownloadWarningAccept', data).text
+        open('log.log', 'w').write(rc)
+        return re.search('"redirectUrl":"(.*?)"', rc).group(1)  # TODO json
+    else:
+        return False

@@ -6,6 +6,7 @@
 Usage:
     gdown
     gdown -h | --help | --version
+    gdown accinfo site username passwd
 
 Options:
     -h --help  Show this screen.

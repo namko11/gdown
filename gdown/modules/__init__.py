@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 __all__ = [
+    'fichier',  # 1fichier
     # '4shared',
     'bitshare',
     'catshare',
     'chomikuj',
     'crocko',
+    'depfile',
     'depositfiles',
     # 'easyshare',
     # 'enterupload',
