@@ -23,7 +23,7 @@ def accInfo(username, passwd, proxy=False):
     if 'Invalid username.' in rc:
         acc_info['status'] = 'deleted'
         return acc_info
-    elif 'For security reasons, following many identification errors, your IP address (176.9.140.205) is temporarily locked.':
+    elif 'For security reasons, following many identification errors, your IP address (176.9.140.205) is temporarily locked.' in rc:
         print('ip AND ACC blocked')
         asdasdsad
     elif 'Logout' not in rc:
