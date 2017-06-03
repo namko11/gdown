@@ -34,6 +34,9 @@ def accInfo(username, passwd, proxy=False):
     if '<a href="/premium.html" class="free" style="color: red">free</a>' in rc:
         acc_info['status'] = 'free'
         return acc_info
+    elif 'You account was used from a different countries and automatically locked for security reasons.' in rc:
+        acc_info['status'] = 'blocked'
+        return acc_info
     elif 'Incorrect username or password' in rc:
         acc_info['status'] = 'deleted'
         return acc_info
