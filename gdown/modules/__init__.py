@@ -12,6 +12,7 @@ __all__ = [
     # 'easyshare',
     # 'enterupload',
     'extabit',
+    'fileboom',
     'filefactory',
     'filesmonster',
     'freakshare',

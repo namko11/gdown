@@ -10,11 +10,10 @@ This module contains handlers for keep2share.
 
 import re
 from datetime import datetime
-from dateutil import parser
+# from dateutil import parser
 
 from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
-
 
 
 def accInfo(username, passwd, proxy=False):
@@ -26,10 +25,11 @@ def accInfo(username, passwd, proxy=False):
         print('captcha')
         raise ModuleError('CAPTCHA')
     csrf_token = re.search('value\="(.+?)" name\="YII_CSRF_TOKEN"', rc).group(1)
-    login_form = {'username': username,
-                  'password': passwd,
-                  'rememberMe': 0}
-    rc = r.post('https://keep2share.cc/login.html', {'LoginForm[username]': username, 'LoginForm[password]': passwd, 'LoginForm[rememberMe]': 0, 'YII_CSRF_TOKEN': csrf_token}).text  #
+    data = {'LoginForm[username]': username,
+            'LoginForm[password]': passwd,
+            'LoginForm[rememberMe]': 0,
+            'YII_CSRF_TOKEN': csrf_token}
+    rc = r.post('https://keep2share.cc/login.html', data=data).text  #
 
     if '<a href="/premium.html" class="free" style="color: red">free</a>' in rc:
         acc_info['status'] = 'free'
