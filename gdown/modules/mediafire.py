@@ -25,6 +25,9 @@ def accInfo(username, passwd, proxy=False):
         if e.code == 107:
             acc_info['status'] = 'deleted'
             return acc_info
+        elif e.code == 114:
+            acc_info['status'] = 'blocked'
+            return acc_info
         elif e.code == 129:
             print('ip blocked?')
             asasdas

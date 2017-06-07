@@ -11,6 +11,7 @@ __all__ = [
     'depositfiles',
     # 'easyshare',
     # 'enterupload',
+    'expressvpn',
     'extabit',
     'fileboom',
     'filefactory',

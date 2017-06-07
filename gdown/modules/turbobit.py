@@ -68,8 +68,10 @@ def accInfo(username, passwd, captcha=False, proxy=False):
     elif 'Limit of login attempts exceeded for your account. It has been temporarily locked.' in content or "You have reached the <a href='/user/messages'>daily</a> limit of premium downloads" in content or 'You have reached daily login limit' in content:
         acc_info['status'] = 'blocked'
         return acc_info
-    elif 'Limit of login attempts exeeded.' in content or 'Please enter the captcha.' in content:
-        return accInfo(username, passwd, captcha=True, proxy=proxy)
+    elif 'Limit of login attempts exeeded.' in content or 'Please enter the captcha.' in content or 'Please enter the captcha code.' in content:
+        print('CAPTCHA')
+        asddd
+        # return accInfo(username, passwd, captcha=True, proxy=proxy)
     # TODO: use if (check value) instead of try-except
     elif 'Turbo access denied' in content or 'Turbo access is inactive' in content:
         acc_info['status'] = 'free'

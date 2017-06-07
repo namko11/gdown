@@ -20,14 +20,14 @@ def upload(username, passwd, filename):
     """Returns uploaded file url."""
     r = browser()
     r.post('http://www.filefactory.com/member/signin.php', {'loginEmail': username, 'loginPassword': passwd, 'Submit': 'Sign In'})  # login to get ff_membership cookie
-    #host = r.get('http://www.filefactory.com/servers.php?single=1').text  # get best server to upload
+    # host = r.get('http://www.filefactory.com/servers.php?single=1').text  # get best server to upload
     host = 'http://upload.filefactory.com/upload.php'  # always returning the same url (?)
     viewhash = re.search('<viewhash>(.+)</viewhash>', r.get('http://www.filefactory.com/upload/upload_flash_begin.php?files=1').text).group(1)  # get viewhash
     r.post('%s/upload_flash.php?viewhash=%s' % (host, viewhash), {'Filename': filename, 'Upload': 'Submit Query'}, files={'file': open(filename, 'rb')}).text  # upload
     return 'http://www.filefactory.com/file/%s/n/%s' % (viewhash, filename)
 
 
-def accInfo(username, passwd, date_birth=None, proxy=False):
+def accInfo(username, passwd, date_birth=True, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
     r = browser(proxy)
@@ -48,7 +48,7 @@ def accInfo(username, passwd, date_birth=None, proxy=False):
             print('wrong date birth',)  # DEBUG
             acc_info['status'] = 'free'
             return acc_info
-        elif 'You have been signed out of your account due to a change being made to one of your core account settings.  Please sign in again.' in content:
+        elif 'You have been signed out of your account due to a change being made to one of your core account settings.  Please sign in again.' in content or 'Your password has been changed successfully' in content:
             print('relogging after password reset',)  # DEBUG
             from time import sleep
             sleep(5)
