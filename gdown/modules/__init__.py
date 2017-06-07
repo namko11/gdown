@@ -25,6 +25,7 @@ __all__ = [
     'keep2share',
     'kickass',
     'letitbit',
+    'lunaticfiles',
     'mediafire',
     'megashares',
     'netload',
