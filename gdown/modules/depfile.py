@@ -20,6 +20,9 @@ def accInfo(username, passwd, proxy=False):
     data = {'login': 'login', 'loginemail': username, 'loginpassword': passwd, 'submit': 'login', 'rememberme': 'on'}
     rc = r.post('https://depfile.com', data).text
     open('gdown.log', 'w').write(rc)
+    if 'Premium account expired' in rc:
+        acc_info['status'] = 'free'
+        return acc_info
     expire_date = re.search("href='/myspace/space/premium'>(.+?)<img", rc).group(1)
     acc_info['status'] = 'premium'
     acc_info['expire_date'] = parser.parse(expire_date)
