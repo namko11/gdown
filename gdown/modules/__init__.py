@@ -16,6 +16,7 @@ __all__ = [
     'fileboom',
     'filefactory',
     'filesmonster',
+    'fileshark',
     'freakshare',
     # 'gigasize',
     'hellshare',
