@@ -34,5 +34,8 @@ def accInfo(username, passwd, proxy=False):
         date_expire = re.search('Premium <span title="([0-9\- \:]+?)"', rc).group(1)
         acc_info['expire_date'] = parser.parse(date_expire)
         return acc_info
+    elif 'Rodzaj konta <strong>Standardowe' in rc:
+        acc_info['status'] = 'free'
+        return acc_info
     else:
         pasddassad
