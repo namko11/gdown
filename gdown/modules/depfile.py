@@ -18,12 +18,15 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser()
     data = {'login': 'login', 'loginemail': username, 'loginpassword': passwd, 'submit': 'login', 'rememberme': 'on', 'language': 2}
-    rc = r.post('https://depfile.com', data).text
+    rc = r.post('https://depfile.com', data=data).text
     open('gdown.log', 'w').write(rc)
+    if 'Incorrect password' in rc:
+        acc_info['status'] = 'deleted'
+        return acc_info
     data = {'SetLng': 'SetLng',
             'language': '2'}
     rc = r.post('https://depfile.com/myspace/space/personal', data=data).text
-    open('gdown.log', 'w').write(rc)
+    open('gdown2.log', 'w').write(rc)
     if 'Premium account expired' in rc:
         acc_info['status'] = 'free'
         return acc_info
