@@ -25,6 +25,7 @@ def accInfo(username, passwd, proxy=False):
         return acc_info
     elif rc['message'] == 'success':
         rc = r.get('https://rapidu.net', verify=False).text
+        open('gdown.log', 'w').write(rc)
         if 'Account: <b>Free</b>' in rc or 'Konto: <b>Free</b>' in rc:
             acc_info['status'] = 'free'
             return acc_info
@@ -32,8 +33,9 @@ def accInfo(username, passwd, proxy=False):
             days = re.search('A?c?c?o?u?n?t?K?o?n?t?o?: <b>Premium \(([0-9]+) da?y?s?n?i?\)</b>', rc).group(1)  # TODO: this is just wrong
             acc_info['status'] = 'premium'
             acc_info['expire_date'] = datetime.utcnow() + timedelta(days=int(days))
-            acc_info['transfer'] = re.search('title="Transfer left" class="tipsyS"><b>(.+?)</b>', rc).group(1)
+            acc_info['transfer'] = re.search('class="tipsyS"><b>(.+?)</b>', rc).group(1)
             return acc_info
     else:
-        open('gdown.log', 'w').write(rc)
+        print(rc)
+        open('gdown.log', 'w').write(rc)  # this won't work - json.dumps first
         ModuleError('Unknown error, full log in gdown.log')
