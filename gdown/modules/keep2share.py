@@ -10,7 +10,8 @@ This module contains handlers for keep2share.
 
 import re
 from datetime import datetime
-# from dateutil import parser
+from bs4 import BeautifulSoup
+from dateutil import parser
 
 from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
@@ -29,9 +30,11 @@ def accInfo(username, passwd, proxy=False):
             'LoginForm[password]': passwd,
             'LoginForm[rememberMe]': 0,
             'YII_CSRF_TOKEN': csrf_token}
-    rc = r.post('https://keep2share.cc/login.html', data=data).text  #
+    rc = r.post('https://keep2share.cc/login.html', data=data).text
+    open('gdown.log', 'w').write(rc)
 
-    if '<a href="/premium.html" class="free" style="color: red">free</a>' in rc:
+    # if '<a href="/premium.html" class="free" style="color: red">free</a>' in rc:
+    if '<strong>Free <br>' in rc:
         acc_info['status'] = 'free'
         return acc_info
     elif 'You account was used from a different countries and automatically locked for security reasons.' in rc:
@@ -45,8 +48,14 @@ def accInfo(username, passwd, proxy=False):
         if '<b>LifeTime</b>' in rc:
             acc_info['expire_date'] = datetime.max
         else:
-            d = re.search('Premium expires: <b>([0-9]{4})\.([0-9]{2})\.([0-9]{2})</b>', rc)
-            acc_info['expire_date'] = datetime(int(d.group(1)), int(d.group(2)), int(d.group(3)))
+            # d = re.search('Premium expires: <b>([0-9]{4})\.([0-9]{2})\.([0-9]{2})</b>', rc)
+            bs = BeautifulSoup(rc, 'lxml')
+            expire_date = bs.find('strong', class_='nowrap-item').contents[0].strip()
+            if expire_date == 'LifeTime':
+                acc_info['expire_date'] = datetime.max
+            else:
+                acc_info['expire_date'] = parser.parse(expire_date)
+            # acc_info['expire_date'] = datetime(int(d.group(1)), int(d.group(2)), int(d.group(3)))
         return acc_info
     else:
         open('gdown.log', 'w').write(rc)
