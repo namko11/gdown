@@ -44,7 +44,10 @@ def accInfo(username, passwd, proxy=False):
     elif 'Premium        </p>' in rc:
         acc_info['status'] = 'premium'
         expire_date = re.search("<span class='green'>([0-9\., :]+?)</span>", rc).group(1)  # this probably won't be "green" allways
-        acc_info['expire_date'] = parser.parse(expire_date)
+        acc_info['expire_date'] = parser.parse(expire_date, dayfirst=True)
+        return acc_info
+    elif '* Login data invalid *' in rc:
+        acc_info['status'] = 'deleted'
         return acc_info
     else:
         asddsadsa
