@@ -9,6 +9,7 @@ This module contains handlers for uploaded.
 """
 
 import re
+from dateutil import parser
 # from datetime import datetime, timedelta
 # from time import sleep
 # from decimal import Decimal
@@ -22,7 +23,7 @@ def accInfo(username, passwd, proxy=False):
     r = browser(proxy)
     rc = r.get('https://fileboom.me/login.html').text
     if 'LoginForm[verifyCode]' in rc:
-        print('captcha')
+        print('CAPTCHA')
         asdadsdsa
     csrf_token = re.search('value="(.+?)" name="YII_CSRF_TOKEN"', rc).group(1)
     data = {'YII_CSRF_TOKEN': csrf_token,
@@ -33,4 +34,9 @@ def accInfo(username, passwd, proxy=False):
     open('gdown.log', 'w').write(rc)
     if 'Incorrect username or password' in rc:
         acc_info['status'] = 'deleted'
+    rc = r.get('https://fileboom.me/site/profile.html').text  # TODO?: redirect on login?
+    expire_date = re.search('Premium expires:            <b>([0-9\.]+)</b>', rc)
+    if expire_date:
+        acc_info['status'] = 'premium'
+        acc_info['expire_date'] = parser.parse(expire_date.group(1))
     return acc_info
