@@ -27,6 +27,10 @@ def accInfo(username, passwd, proxy=False):
     open('gdown.log', 'w').write(rc)
     if 'Bledny login lub haslo' in rc:
         acc_info['status'] = 'deleted'
+        return acc_info
+    elif 'Wyloguj' in rc and 'EXPIRE_DATE_FORMAT2' not in rc:
+        acc_info['status'] = 'free'
+        return acc_info
     # TRAFFIC_LEFT_ADDITIONAL 16191 MB TRAFFIC_LEFT_ADDITIONAL
     # TRAFFIC_LEFT 20480 MB TRAFFIC_LEFT
     expire_date = re.search('EXPIRE_DATE_FORMAT2 ([0-9\- :]+) EXPIRE_DATE_FORMAT2', rc).group(1)
