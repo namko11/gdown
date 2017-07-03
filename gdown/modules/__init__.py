@@ -15,6 +15,7 @@ __all__ = [
     'extabit',
     'fileboom',
     'filefactory',
+    'filejoker',
     'filesmonster',
     'fileshark',
     'freakshare',
