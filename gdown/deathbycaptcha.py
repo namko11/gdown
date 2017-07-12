@@ -1,7 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
-
-# Author: Sergey Kolchin <ksa242@gmail.com>
 
 """Death by Captcha HTTP and socket API clients.
 
@@ -71,18 +69,15 @@ Visit http://www.deathbycaptcha.com/user/api for updates.
 """
 
 import base64
-import binascii
 import errno
 import imghdr
 import random
-import os
 import select
 import socket
 import sys
 import threading
 import time
-import urllib
-import urllib2
+import requests
 try:
     from json import read as json_decode, write as json_encode
 except ImportError:
@@ -93,11 +88,12 @@ except ImportError:
 
 
 # API version and unique software ID
-API_VERSION = 'DBC/Python v4.1.2'
+API_VERSION = 'DBC/Python v4.5'
 
 # Default CAPTCHA timeout and decode() polling interval
 DEFAULT_TIMEOUT = 60
-POLLS_INTERVAL = 5
+POLLS_INTERVAL = [1, 1, 2, 3, 2, 2, 3, 2, 2]
+DFLT_POLL_INTERVAL = 3
 
 # Base HTTP API url
 HTTP_BASE_URL = 'http://api.dbcapi.me/api'
@@ -107,7 +103,7 @@ HTTP_RESPONSE_TYPE = 'application/json'
 
 # Socket API server's host & ports range
 SOCKET_HOST = 'api.dbcapi.me'
-SOCKET_PORTS = range(8123, 8131)
+SOCKET_PORTS = list(range(8123, 8131))
 
 
 def _load_image(captcha):
@@ -182,7 +178,7 @@ class Client(object):
         """
         raise NotImplementedError()
 
-    def decode(self, captcha, timeout=DEFAULT_TIMEOUT):
+    def decode(self, captcha, timeout=DEFAULT_TIMEOUT, **kwargs):
         """Try to solve a CAPTCHA.
 
         See Client.upload() for arguments details.
@@ -192,13 +188,27 @@ class Client(object):
 
         """
         deadline = time.time() + (max(0, timeout) or DEFAULT_TIMEOUT)
-        uploaded_captcha = self.upload(captcha)
+        uploaded_captcha = self.upload(captcha, **kwargs)
         if uploaded_captcha:
+            intvl_idx = 0  # POLL_INTERVAL index
             while deadline > time.time() and not uploaded_captcha.get('text'):
-                time.sleep(POLLS_INTERVAL)
+                intvl, intvl_idx = self._get_poll_interval(intvl_idx)
+                time.sleep(intvl)
                 uploaded_captcha = self.get_captcha(uploaded_captcha['captcha'])
-            if uploaded_captcha.get('text') and uploaded_captcha.get('is_correct'):
+            if (uploaded_captcha.get('text') and
+                    uploaded_captcha.get('is_correct')):
                 return uploaded_captcha
+
+    def _get_poll_interval(self, idx):
+        """Returns poll interval and next index depending on index provided"""
+
+        if len(POLLS_INTERVAL) > idx:
+            intvl = POLLS_INTERVAL[idx]
+        else:
+            intvl = DFLT_POLL_INTERVAL
+        idx += 1
+
+        return intvl, idx
 
 
 class HttpClient(Client):
@@ -207,37 +217,40 @@ class HttpClient(Client):
 
     def __init__(self, *args):
         Client.__init__(self, *args)
-        self.opener = urllib2.build_opener(urllib2.HTTPRedirectHandler())
 
-    def _call(self, cmd, payload=None, headers=None):
+    def _call(self, cmd, payload=None, headers=None, files=None):
         if headers is None:
             headers = {}
+        if not payload:
+            payload = {}
         headers['Accept'] = HTTP_RESPONSE_TYPE
         headers['User-Agent'] = API_VERSION
-        if hasattr(payload, 'items'):
-            payload = urllib.urlencode(payload)
-            self._log('SEND', '%s %d %s' % (cmd, len(payload), payload))
-        if payload is not None:
-            headers['Content-Length'] = len(payload)
-        try:
-            response = self.opener.open(urllib2.Request(
-                HTTP_BASE_URL + '/' + cmd.strip('/'),
-                data=payload,
-                headers=headers
-            )).read()
-        except urllib2.HTTPError as err:
-            if 403 == err.code:
-                raise AccessDeniedException('Access denied, please check your credentials and/or balance')
-            elif 400 == err.code or 413 == err.code:
-                raise ValueError("CAPTCHA was rejected by the service, check if it's a valid image")
-            elif 503 == err.code:
-                raise OverflowError("CAPTCHA was rejected due to service overload, try again later")
+        self._log('SEND', '%s %d %s' % (cmd, len(payload), payload))
+        if payload:
+            response = requests.post(HTTP_BASE_URL + '/' + cmd.strip('/'),
+                                     data=payload,
+                                     files=files,
+                                     headers=headers)
         else:
-            self._log('RECV', '%d %s' % (len(response), response))
-            try:
-                return json_decode(response)
-            except Exception:
-                raise RuntimeError('Invalid API response')
+            response = requests.get(
+                HTTP_BASE_URL + '/' + cmd.strip('/'), headers=headers)
+        status = response.status_code
+        if 403 == status:
+            raise AccessDeniedException('Access denied, please check'
+                                        ' your credentials and/or balance')
+        elif status in (400, 413):
+            raise ValueError("CAPTCHA was rejected by the service, check"
+                             " if it's a valid image")
+        elif 503 == status:
+            raise OverflowError("CAPTCHA was rejected due to service"
+                                " overload, try again later")
+        if not response.ok:
+            raise RuntimeError('Invalid API response')
+        self._log('RECV', '%d %s' % (len(response.text), response.text))
+        try:
+            return json_decode(response.text)
+        except Exception:
+            raise RuntimeError('Invalid API response')
         return {}
 
     def get_user(self):
@@ -250,34 +263,14 @@ class HttpClient(Client):
         return not self._call('captcha/%d/report' % cid,
                               self.userpwd.copy()).get('is_correct')
 
-    def upload(self, captcha):
-        boundary = binascii.hexlify(os.urandom(16))
-
-        body = '\r\n'.join(('\r\n'.join((
-            '--%s' % boundary,
-            'Content-Disposition: form-data; name="%s"' % k,
-            'Content-Type: text/plain',
-            'Content-Length: %d' % len(str(v)),
-            '',
-            str(v)
-        ))) for k, v in self.userpwd.items())
-
-        img = _load_image(captcha)
-        body += '\r\n'.join((
-            '',
-            '--%s' % boundary,
-            'Content-Disposition: form-data; name="captchafile"; filename="captcha"',
-            'Content-Type: application/octet-stream',
-            'Content-Length: %d' % len(img),
-            '',
-            img,
-            '--%s--' % boundary,
-            ''
-        ))
-
-        response = self._call('captcha', body, {
-            'Content-Type': 'multipart/form-data; boundary="%s"' % boundary
-        }) or {}
+    def upload(self, captcha, **kwargs):
+        banner = kwargs.get('banner', '')
+        data = self.userpwd.copy()
+        data.update(kwargs)
+        files = {"captchafile": _load_image(captcha)}
+        if banner:
+            files.update({"banner": _load_image(banner)})
+        response = self._call('captcha', payload=data, files=files) or {}
         if response.get('captcha'):
             return response
 
@@ -286,7 +279,7 @@ class SocketClient(Client):
 
     """Death by Captcha socket API client."""
 
-    TERMINATOR = '\r\n'
+    TERMINATOR = bytes('\r\n', 'ascii')
 
     def __init__(self, *args):
         Client.__init__(self, *args)
@@ -314,7 +307,8 @@ class SocketClient(Client):
             try:
                 self.socket.connect(host)
             except socket.error as err:
-                if err.args[0] not in (errno.EAGAIN, errno.EWOULDBLOCK, errno.EINPROGRESS):
+                if (err.errno not in
+                        (errno.EAGAIN, errno.EWOULDBLOCK, errno.EINPROGRESS)):
                     self.close()
                     raise err
         return self.socket
@@ -325,13 +319,15 @@ class SocketClient(Client):
     def _sendrecv(self, sock, buf):
         self._log('SEND', buf)
         fds = [sock]
-        buf += self.TERMINATOR
-        response = ''
+        buf = bytes(buf, 'utf-8') + self.TERMINATOR
+        response = bytes()
+        intvl_idx = 0
         while True:
+            intvl, intvl_idx = self._get_poll_interval(intvl_idx)
             rds, wrs, exs = select.select((not buf and fds) or [],
                                           (buf and fds) or [],
                                           fds,
-                                          POLLS_INTERVAL)
+                                          intvl)
             if exs:
                 raise IOError('select() failed')
             try:
@@ -346,11 +342,12 @@ class SocketClient(Client):
                         else:
                             response += s
             except socket.error as err:
-                if err.args[0] not in (errno.EAGAIN, errno.EWOULDBLOCK, errno.EINPROGRESS):
+                if (err.errno not in
+                        (errno.EAGAIN, errno.EWOULDBLOCK, errno.EINPROGRESS)):
                     raise err
             if response.endswith(self.TERMINATOR):
                 self._log('RECV', response)
-                return response.rstrip(self.TERMINATOR)
+                return str(response.rstrip(self.TERMINATOR), 'utf-8')
         raise IOError('send/recv timed out')
 
     def _call(self, cmd, data=None):
@@ -361,7 +358,7 @@ class SocketClient(Client):
         request = json_encode(data)
 
         response = None
-        for _ in range(2):
+        for i in range(2):
             if not self.socket and cmd != 'login':
                 self._call('login', self.userpwd.copy())
             self.socket_lock.acquire()
@@ -381,7 +378,7 @@ class SocketClient(Client):
                 self.socket_lock.release()
 
         if response is None:
-            raise IOError('Connection lost or timed out during API request')
+            raise IOError('Connection lost timed out during API request')
 
         try:
             response = json_decode(response)
@@ -397,11 +394,13 @@ class SocketClient(Client):
         elif 'banned' == error:
             raise AccessDeniedException('Access denied, account is suspended')
         elif 'insufficient-funds' == error:
-            raise AccessDeniedException('CAPTCHA was rejected due to low balance')
+            raise AccessDeniedException(
+                'CAPTCHA was rejected due to low balance')
         elif 'invalid-captcha' == error:
             raise ValueError('CAPTCHA is not a valid image')
         elif 'service-overload' == error:
-            raise OverflowError('CAPTCHA was rejected due to service overload, try again later')
+            raise OverflowError(
+                'CAPTCHA was rejected due to service overload, try again later')
         else:
             self.socket_lock.acquire()
             self.close()
@@ -414,10 +413,16 @@ class SocketClient(Client):
     def get_captcha(self, cid):
         return self._call('captcha', {'captcha': cid}) or {'captcha': 0}
 
-    def upload(self, captcha):
-        response = self._call('upload', {
-            'captcha': base64.b64encode(_load_image(captcha))
-        })
+    def upload(self, captcha, **kwargs):
+        data = {}
+        data['captcha'] = str(base64.b64encode(_load_image(captcha)), 'ascii')
+        if kwargs:
+            banner = kwargs.get('banner', '')
+            if banner:
+                kwargs['banner'] = str(base64.b64encode(
+                    _load_image(banner)), 'ascii')
+            data.update(kwargs)
+        response = self._call('upload', data)
         if response.get('captcha'):
             uploaded_captcha = dict(
                 (k, response.get(k))
@@ -437,24 +442,24 @@ if '__main__' == __name__:
     client = SocketClient(sys.argv[1], sys.argv[2])
     client.is_verbose = True
 
-    print('Your balance is %s US cents' % client.get_balance()
+    print('Your balance is %s US cents' % client.get_balance())
 
     for fn in sys.argv[3:]:
         try:
             # Put your CAPTCHA image file name or file-like object, and optional
             # solving timeout (in seconds) here:
             captcha = client.decode(fn, DEFAULT_TIMEOUT)
-        except Exception, e:
-            sys.stderr.write('Failed uploading CAPTCHA: %s\n' % (e, ))
+        except Exception as err:
+            sys.stderr.write('Failed uploading CAPTCHA: %s\n' % (err, ))
             captcha = None
 
         if captcha:
-            print('CAPTCHA %d solved: %s' % \
-                  (captcha['captcha'], captcha['text']))
+            print('CAPTCHA %d solved: %s' % (
+                captcha['captcha'], captcha['text']))
 
             # Report as incorrectly solved if needed.  Make sure the CAPTCHA was
             # in fact incorrectly solved!
-            #try:
+            # try:
             #    client.report(captcha['captcha'])
-            #except Exception, e:
-            #    sys.stderr.write('Failed reporting CAPTCHA: %s\n' % (e, ))
+            # except Exception, err:
+            #    sys.stderr.write('Failed reporting CAPTCHA: %s\n' % (err, ))
