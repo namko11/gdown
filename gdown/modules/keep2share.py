@@ -30,16 +30,20 @@ def accInfo(username, passwd, proxy=False):
             'LoginForm[rememberMe]': 0,
             'YII_CSRF_TOKEN': csrf_token}
     if 'LoginForm_verifyCode' in rc:
-        print('captcha')
+        # print('captcha')
         img_url = 'https://keep2share.cc' + re.search('id="captcha_auth0" src="(/auth/captcha.html\?v=.+?)"', rc).group(1)
         img = r.get(img_url).content
-        data['LoginForm[verifyCode]': captcha(img)]  # TODO: verification (False)
+        data['LoginForm[verifyCode]'] = captcha(img)  # TODO: verification (False)
         # raise ModuleError('CAPTCHA')
     rc = r.post('https://keep2share.cc/login.html', data=data).text
     open('gdown.log', 'w').write(rc)
 
     # if '<a href="/premium.html" class="free" style="color: red">free</a>' in rc:
-    if '<strong>Free <br>' in rc:
+    if 'The verification code is incorrect.' in rc:  # wrong captcha
+        # TODO: report wrong captcha
+        print('wrong captcha')
+        return accInfo(username, passwd, proxy)
+    elif '<strong>Free <br>' in rc:
         acc_info['status'] = 'free'
         return acc_info
     elif 'You account was used from a different countries and automatically locked for security reasons.' in rc:
