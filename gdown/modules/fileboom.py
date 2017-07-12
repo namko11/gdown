@@ -14,6 +14,7 @@ from dateutil import parser
 # from time import sleep
 # from decimal import Decimal
 
+from ..core import captcha
 from ..module import browser, acc_info_template
 
 
@@ -22,14 +23,17 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser(proxy)
     rc = r.get('https://fileboom.me/login.html').text
-    if 'LoginForm[verifyCode]' in rc:
-        print('CAPTCHA')
-        asdadsdsa
+    open('gdown.log', 'w').write(rc)
     csrf_token = re.search('value="(.+?)" name="YII_CSRF_TOKEN"', rc).group(1)
     data = {'YII_CSRF_TOKEN': csrf_token,
             'LoginForm[username]': username,
             'LoginForm[password]': passwd,
             'LoginForm[rememberMe]': 0}
+    if 'LoginForm[verifyCode]' in rc:
+        print('CAPTCHA')
+        img_url = 'https://fileboom.me' + re.search('id="captcha_auth1" src="(/auth/captcha.html\?v=.+?)"', rc).group(1)
+        img = r.get(img_url).content
+        data['LoginForm[verifyCode]'] = captcha(img)  # TODO: verification (False)
     rc = r.post('https://fileboom.me/login.html', data=data).text
     open('gdown.log', 'w').write(rc)
     if 'Incorrect username or password' in rc:
