@@ -31,7 +31,7 @@ def accInfo(username, passwd, proxy=False):
             'LoginForm[rememberMe]': 0}
     if 'LoginForm[verifyCode]' in rc:
         print('CAPTCHA')
-        img_url = 'https://fileboom.me' + re.search('id="captcha_auth1" src="(/auth/captcha.html\?v=.+?)"', rc).group(1)
+        img_url = 'https://fileboom.me' + re.search('id="captcha_auth0" src="(/auth/captcha.html\?v=.+?)"', rc).group(1)
         img = r.get(img_url).content
         data['LoginForm[verifyCode]'] = captcha(img)  # TODO: verification (False)
     rc = r.post('https://fileboom.me/login.html', data=data).text
