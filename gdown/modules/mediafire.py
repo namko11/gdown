@@ -34,12 +34,12 @@ def accInfo(username, passwd, proxy=False):
         print(e)
         print(r.session)
     rc = r.user_get_info()
-    print(rc)
+    #print(rc)
     if rc['user_info']['premium'] == 'no':
         acc_info['status'] = 'free'
         return acc_info
     rc = r.request('billing/get_invoice')
-    print(rc)
+    #print(rc)
     acc_info['status'] = 'premium'
     acc_info['expire_date'] = parser.parse(rc['invoice']['recurring_startdate'])
     return acc_info
