@@ -13,6 +13,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from dateutil import parser
 
+from ..core import captcha
 from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
 
@@ -22,14 +23,18 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser(proxy)
     rc = r.get('https://keep2share.cc/login.html').text
-    if 'LoginForm_verifyCode' in rc:
-        print('captcha')
-        raise ModuleError('CAPTCHA')
+    open('gdown.log', 'w').write(rc)
     csrf_token = re.search('value\="(.+?)" name\="YII_CSRF_TOKEN"', rc).group(1)
     data = {'LoginForm[username]': username,
             'LoginForm[password]': passwd,
             'LoginForm[rememberMe]': 0,
             'YII_CSRF_TOKEN': csrf_token}
+    if 'LoginForm_verifyCode' in rc:
+        print('captcha')
+        img_url = 'https://keep2share.cc' + re.search('id="captcha_auth0" src="(/auth/captcha.html\?v=.+?)"', rc).group(1)
+        img = r.get(img_url).content
+        data['LoginForm[verifyCode]': captcha(img)]  # TODO: verification (False)
+        # raise ModuleError('CAPTCHA')
     rc = r.post('https://keep2share.cc/login.html', data=data).text
     open('gdown.log', 'w').write(rc)
 

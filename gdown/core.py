@@ -11,11 +11,20 @@ import re
 from random import random
 from io import BytesIO
 
-#from .config import deathbycaptcha_username, deathbycaptcha_password
-from .config import decaptchercom_username, decaptchercom_password
+from .config import deathbycaptcha_username as decaptcha_username, deathbycaptcha_password as decaptcha_password
+# from .config import decaptchercom_username, decaptchercom_password
 from .module import browser
-#from .deathbycaptcha import SocketClient as decaptcha
-from .decaptchercom import client as decaptcha
+from .deathbycaptcha import SocketClient as decaptcha
+# from .decaptchercom import client as decaptcha
+
+
+def captcha(img):
+    client = decaptcha(decaptcha_username, decaptcha_password)
+    captcha = client.decode(BytesIO(img))
+    if captcha:
+        return captcha['text']
+    else:
+        return False
 
 
 def recaptcha(recaptcha_public_key):
@@ -25,14 +34,9 @@ def recaptcha(recaptcha_public_key):
     r = browser()
     rc = r.get('http://www.google.com/recaptcha/api/challenge?k=%s&ajax=1&cachestop=%s' % (recaptcha_public_key, random())).text
     recaptcha_challenge = re.search("challenge : '(.+)',", rc).group(1)
-    captcha_img = BytesIO(r.get('http://www.google.com/recaptcha/api/image?c=%s' % (recaptcha_challenge)).content)
+    captcha_img = r.get('http://www.google.com/recaptcha/api/image?c=%s' % (recaptcha_challenge)).content
 
-    client = decaptcha(decaptchercom_username, decaptchercom_password)  # TODO: choose good acc info
-    captcha = client.decode(captcha_img)
-    if captcha:
-        return recaptcha_challenge, captcha['text']
-    else:
-        return False
+    return recaptcha_challenge, captcha(captcha_img)
 
 
 def recaptchaReportWrong():
