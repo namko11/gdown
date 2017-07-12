@@ -54,6 +54,12 @@ def accInfo(username, passwd, date_birth=True, proxy=False):
             sleep(5)
             return accInfo(username, passwd)
 
+    if 'Account Pending Deletion' in content:
+        acc_info['status'] = 'deleted'
+        return acc_info
+
+    content = r.get('https://www.filefactory.com/account/').text
+
     if '<strong>Free Member</strong>' in content:
         acc_info['status'] = 'free'
         return acc_info
