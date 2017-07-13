@@ -30,6 +30,7 @@ __all__ = [
     'mediafire',
     'megashares',
     'netload',
+    'nitroflare',
     'onet',
     'pornhub',
     'rapidshare',
