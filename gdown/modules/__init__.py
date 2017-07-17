@@ -27,7 +27,6 @@ __all__ = [
     'letitbit',
     'lunaticfiles',
     'mediafire',
-    'megashares',
     'netload',
     'nitroflare',
     'onet',
