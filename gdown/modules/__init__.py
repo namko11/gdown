@@ -12,7 +12,6 @@ __all__ = [
     # 'easyshare',
     # 'enterupload',
     'expressvpn',
-    'extabit',
     'fileboom',
     'filefactory',
     'filejoker',
