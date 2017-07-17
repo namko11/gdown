@@ -30,7 +30,6 @@ __all__ = [
     'nitroflare',
     'onet',
     'pornhub',
-    'rapidshare',
     'rapidgator',
     'rapidu',
     'redtube',
