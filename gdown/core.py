@@ -8,13 +8,17 @@ This module implements the gdown's basic methods.
 
 """
 import re
+import sys
 from random import random
 from io import BytesIO
 
 from .config import deathbycaptcha_username as decaptcha_username, deathbycaptcha_password as decaptcha_password
 # from .config import decaptchercom_username, decaptchercom_password
 from .module import browser
-from .deathbycaptcha import SocketClient as decaptcha
+if sys.version_info[0] == 2 or '__pypy__' in sys.builtin_module_names:
+    from .decaptchercom2 import SocketClient as decaptcha
+else:
+    from .deathbycaptcha import SocketClient as decaptcha
 # from .decaptchercom import client as decaptcha
 
 
