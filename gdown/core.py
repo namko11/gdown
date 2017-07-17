@@ -16,7 +16,7 @@ from .config import deathbycaptcha_username as decaptcha_username, deathbycaptch
 # from .config import decaptchercom_username, decaptchercom_password
 from .module import browser
 if sys.version_info[0] == 2 or '__pypy__' in sys.builtin_module_names:
-    from .decaptchercom2 import SocketClient as decaptcha
+    from .deathbycaptcha2 import SocketClient as decaptcha
 else:
     from .deathbycaptcha import SocketClient as decaptcha
 # from .decaptchercom import client as decaptcha
