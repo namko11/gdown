@@ -41,7 +41,7 @@ def accInfo(username, passwd, proxy=False):
     elif 'Sammler        </p>' in rc:
         acc_info['status'] = 'free'
         return acc_info
-    elif 'Premium        </p>' in rc:
+    elif 'Premium        </p>' in rc or 'VIP-Special        </p>' in rc:
         acc_info['status'] = 'premium'
         expire_date = re.search("<span class='green'>([0-9\., :]+?)</span>", rc).group(1)  # this probably won't be "green" allways
         acc_info['expire_date'] = parser.parse(expire_date, dayfirst=True)
