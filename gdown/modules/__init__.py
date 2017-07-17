@@ -38,7 +38,6 @@ __all__ = [
     'rapidu',
     'redtube',
     'rlslog',
-    'ryushare',
     'shareonline',
     # 'soundclound',
     'turbobit',
