@@ -9,49 +9,58 @@ This module contains handlers for mediafire.
 """
 
 import re
+from hashlib import sha1
 from dateutil import parser
 
 from ..module import browser, acc_info_template
-from mediafire import MediaFireApi
-from mediafire.api import MediaFireApiError
+from ..exceptions import ModuleError
 
 
 def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
-    r = MediaFireApi()
-    try:
-        r.session = r.user_get_session_token(42511, username, passwd)
-    except MediaFireApiError as e:
-        if e.code == 107:
+    r = browser(proxy=proxy)
+    application_id = 42511  # mediafireapi official client
+    signature = sha1()
+    signature.update(username.encode('ascii'))
+    signature.update(passwd.encode('ascii'))
+    signature.update(str(application_id).encode('ascii'))
+    signature = signature.hexdigest()
+    data = {'application_id': application_id,
+            'signature': signature,
+            'email': username,
+            'password': passwd,
+            'response_format': 'json'}
+    rc = r.post('https://www.mediafire.com/api/1.3/user/get_session_token.php', data=data).json()
+    # print(rc)
+    result = rc['response']['result']  # TODO: validate this
+    if result == 'Error':
+        if rc['response']['message'] == 'The Credentials you entered are invalid':
             acc_info['status'] = 'deleted'
             return acc_info
-        elif e.code == 114:
-            acc_info['status'] = 'blocked'
-            return acc_info
-        elif e.code == 129:
-            print('ip blocked?')
-            asasdas
-        print(e)
-        print(r.session)
-    rc = r.user_get_info()
-    #print(rc)
-    if rc['user_info']['premium'] == 'no':
+        else:
+            raise ModuleError('Unknown error during login.')
+    token = rc['response']['session_token']
+    # ekey = rc['response']['ekey']
+    # pkey = rc['response']['pkey']
+
+    data = {'session_token': token,
+            'response_format': 'json'}
+    rc = r.post('http://www.mediafire.com/api/1.3/user/get_info.php', data=data).json()
+    # result = rc['response']['result']  # TODO?: validate this
+    premium = rc['response']['user_info']['premium'] == 'yes'
+    # print(rc)
+    if premium:
+        acc_info['status'] = 'premium'
+        data = {'session_token': token,
+                'response_format': 'json'}
+        rc = r.post('https://www.mediafire.com/api/1.3/billing/get_invoice.php', data=data).json()
+        # print(rc)
+        # result = rc['response']['result']  # TODO?: validate this
+        acc_info['expire_date'] = parser.parse(rc['response']['invoice']['recurring_startdate'])
+        # TODO: transfer https://www.mediafire.com/developers/core_api/1.3/user/#get_limits
+    else:
         acc_info['status'] = 'free'
-        return acc_info
-    rc = r.request('billing/get_invoice')
-    #print(rc)
-    acc_info['status'] = 'premium'
-    acc_info['expire_date'] = parser.parse(rc['invoice']['recurring_startdate'])
     return acc_info
-    '''
-    rc = r.get('https://www.mediafire.com/templates/login_signup/login_signup.php').text
-    token = re.search('name="security" value="(.+?)"', rc).group(1)
-    data = {'security': token, 'login_email': username, 'login_pass': passwd, 'login_remember': 'on'}
-    rc = r.post('https://www.mediafire.com/dynamic/client_login/mediafire.php', data).text
-    open('log.log', 'w').write(rc)
-    et = re.search('var et = ([\-0-9]+);', rc).group(1)
-    print('et: %s' % et)
-    '''
 
 
 def getUrl(link, premium_key, username=None, passwd=None):
