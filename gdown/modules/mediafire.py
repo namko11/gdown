@@ -9,6 +9,7 @@ This module contains handlers for mediafire.
 """
 
 import re
+import time
 from hashlib import sha1
 from dateutil import parser
 
@@ -39,6 +40,9 @@ def accInfo(username, passwd, proxy=False):
         elif rc['response']['message'] == 'Account Suspended':
             acc_info['status'] = 'blocked'
             return acc_info
+        elif rc['response']['message'] == 'Internal server error':
+            time.sleep(5)
+            return accInfo(username, passwd, proxy=proxy)
         else:
             print(rc)
             raise ModuleError('Unknown error during login.')
@@ -49,6 +53,8 @@ def accInfo(username, passwd, proxy=False):
     data = {'session_token': token,
             'response_format': 'json'}
     rc = r.post('http://www.mediafire.com/api/1.3/user/get_info.php', data=data).json()
+    if 'user_info' not in rc['response']:  # DEBUG
+        print(rc)
     # result = rc['response']['result']  # TODO?: validate this
     premium = rc['response']['user_info']['premium'] == 'yes'
     # print(rc)
