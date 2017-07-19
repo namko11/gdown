@@ -31,13 +31,16 @@ def accInfo(username, passwd, proxy=False):
             'password': passwd,
             'response_format': 'json'}
     rc = r.post('https://www.mediafire.com/api/1.3/user/get_session_token.php', data=data).json()
-    # print(rc)
     result = rc['response']['result']  # TODO: validate this
     if result == 'Error':
         if rc['response']['message'] == 'The Credentials you entered are invalid':
             acc_info['status'] = 'deleted'
             return acc_info
+        elif rc['response']['message'] == 'Account Suspended':
+            acc_info['status'] = 'blocked'
+            return acc_info
         else:
+            print(rc)
             raise ModuleError('Unknown error during login.')
     token = rc['response']['session_token']
     # ekey = rc['response']['ekey']
