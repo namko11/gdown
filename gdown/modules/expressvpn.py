@@ -41,6 +41,8 @@ def accInfo(username, passwd, proxy=False):
         acc_info['expire_date'] = parser.parse(expire_date)
     elif 'This subscription expired' in rc:
         acc_info['status'] = 'free'
+    elif 'Need 5 or more licences?' in rc:  # blind guess
+        acc_info['status'] = 'free'
     else:
         print('unknown status')
         asdasdasdasd
