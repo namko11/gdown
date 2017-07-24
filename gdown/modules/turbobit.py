@@ -58,7 +58,7 @@ def accInfo(username, passwd, captcha=False, proxy=False):
         values['user[captcha_subtype]'] = ''
     r.headers['Referer'] = 'https://turbobit.net/login'
     content = r.post('https://turbobit.net/user/login', values).text  # login
-    open('log.log', 'w').write(content)
+    open('gdown.log', 'w').write(content)
     if captcha and 'Incorrect captcha code' in content:
         recaptchaReportWrong()  # add captcha_id
         return accInfo(username, passwd, captcha=True, proxy=proxy)
@@ -81,6 +81,10 @@ def accInfo(username, passwd, captcha=False, proxy=False):
         acc_info['status'] = 'premium'
         acc_info['expire_date'] = parser.parse(content, dayfirst=True)
         return acc_info
+    elif 'The site is temporarily unavailable because of datacenter technical issues.' in content:
+        raise ModuleError('site temporarily unavailable')
+    else:
+        raise ModuleError('Unknown status')
 '''
     try:
         content = re.search('<u>Turbo Access</u> [to ]{,3}(.*?)\.?[	]+</div>', content).group(1)
