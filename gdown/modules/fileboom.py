@@ -55,6 +55,7 @@ def accInfo(username, passwd, proxy=False):
         acc_info['status'] = 'free'
         return acc_info
     elif 'Premium expires: ' in rc:
+        acc_info['transfer'] = re.findall('<b><a href="/user/statistic.html">([0-9\.]+ M?G?B)</a></b><br>', rc)[1]  # first is used
         acc_info['status'] = 'premium'
         if '<b>LifeTime</b>' in rc:
             acc_info['expire_date'] = datetime.max
