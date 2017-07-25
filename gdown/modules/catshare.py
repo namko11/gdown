@@ -10,8 +10,8 @@ This module contains handlers for uploaded.
 
 import re
 from datetime import datetime, timedelta
-from time import sleep
-from decimal import Decimal
+# from time import sleep
+# from decimal import Decimal
 
 from ..module import browser, acc_info_template
 
@@ -33,7 +33,7 @@ def accInfo(username, passwd, proxy=False):
         if 'godzin</span></b>' in rc:  # < 1 day
             acc_info['expire_date'] = expire_date + timedelta(days=1)
         else:
-            s = re.search('<span class="hidden-xs">Premium</span> <b>([0-9]+) dni</b> \( ([0-9\.]+ GB) \)', rc)
+            s = re.search('<span class="hidden-xs">Premium</span> <b>([0-9]+) dni</b> \( ([\-0-9\.]+ GB) \)', rc)
             '''
             if seconds:
                 expire_date += timedelta(seconds=int(seconds.group(1)))
