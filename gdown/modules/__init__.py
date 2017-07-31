@@ -21,7 +21,7 @@ __all__ = [
     'hidemyass',
     'imgur',
     'interia',
-    # 'ipvanish',
+    'ipvanish',
     'keep2share',
     'kickass',
     'letitbit',
