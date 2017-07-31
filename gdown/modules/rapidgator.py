@@ -22,7 +22,8 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser(proxy)
     content = r.post('https://rapidgator.net/auth/login', {'LoginForm[email]': username, 'LoginForm[password]': passwd, 'LoginForm[rememberMe]': '1'}).text
-    if 'The code from a picture does not coincide' in content or 'ACCOUNT LOCKED FOR VIOLATION OF OUR TERMS. PLEASE CONTACT SUPPORT.' in content:
+    open('gdown.log', 'w').write(content)
+    if 'The code from a picture does not coincide' in content or 'ACCOUNT LOCKED FOR VIOLATION OF OUR TERMS. PLEASE CONTACT SUPPORT.' in content or 'We discovered that you try to access your account from unusual location. In order to confirm ownership of this account, we sent an pincode to your email.' in content:
         acc_info['status'] = 'blocked'
         return acc_info
     elif 'Frequent logins. Please wait 20 sec...' in content:
