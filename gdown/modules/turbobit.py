@@ -51,6 +51,7 @@ def accInfo(username, passwd, captcha=False, proxy=False):
     r = browser(proxy)
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
     if captcha:
+        print('captcha')
         recaptcha_challenge, recaptcha_response = recaptcha(recaptcha_public_key)
         values['recaptcha_challenge_field'] = recaptcha_challenge
         values['recaptcha_response_field'] = recaptcha_response
