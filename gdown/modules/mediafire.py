@@ -40,7 +40,7 @@ def accInfo(username, passwd, proxy=False):
         elif rc['response']['message'] == 'Account Suspended':
             acc_info['status'] = 'blocked'
             return acc_info
-        elif rc['response']['message'] == 'Internal server error':
+        elif 'Internal server error' in rc['response']['message']:
             time.sleep(5)
             return accInfo(username, passwd, proxy=proxy)
         else:
