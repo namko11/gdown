@@ -23,16 +23,13 @@ def accInfo(username, passwd, proxy=False):
     r = browser(proxy)
     rc = r.get('https://www.expressvpn.com/users/sign_in').text
     open('gdown.log', 'w').write(rc)
-    token = re.search('name="authenticity_token" type="hidden" value="(.+?)"', rc).group(1)
+    token = re.search('name="authenticity_token" value="(.+?)"', rc).group(1)
     data = {'utf8': '✓',
             'authenticity_token': token,
-            'user[email]': username,
-            'user[password]': passwd,
+            'email': username,
+            'password': passwd,
             'commit': 'Sign In'}
-    r.headers['Referer'] = 'https://www.expressvpn.com/pl/users/sign_in'
-    rc = r.post('https://www.expressvpn.com/users/sign_in', data=data).text
-    open('gdown.log', 'w').write(rc)
-    rc = r.get('https://www.expressvpn.com/subscriptions').text
+    rc = r.post('https://www.expressvpn.com/v2/sessions', data=data).text
     open('gdown.log', 'w').write(rc)
     if 'Expires on' in rc:
         bs = BeautifulSoup(rc, 'lxml')
