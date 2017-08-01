@@ -34,7 +34,7 @@ def accInfo(username, passwd, proxy=False):
     rc = r.post('https://www.mediafire.com/api/1.5/user/get_session_token.php', data=data).json()
     result = rc['response']['result']  # TODO: validate this
     if result == 'Error':
-        if rc['response']['message'] == 'The Credentials you entered are invalid':
+        if rc['response']['message'] in ('The Credentials you entered are invalid', 'One or more parameters for this request are invalid'):
             acc_info['status'] = 'deleted'
             return acc_info
         elif rc['response']['message'] == 'Account Suspended':
