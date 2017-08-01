@@ -13,6 +13,7 @@ import os
 from dateutil import parser
 
 from ..module import browser, acc_info_template
+from ..exceptions import ModuleError
 
 
 def upload(username, passwd, filename):
@@ -35,7 +36,9 @@ def accInfo(username, passwd, proxy=False):
             'pass': passwd}
     rc = r.post('https://www.share-online.biz/user/login', data=data).text
     open('gdown.log', 'w').write(rc)
-    if 'This account is disabled, please contact support' in rc:
+    if 'Too many failed logins - Please try again later!' in rc:
+        raise ModuleError('ip banned')
+    elif 'This account is disabled, please contact support' in rc:
         acc_info['status'] = 'blocked'
         return acc_info
     elif 'Sammler        </p>' in rc:
