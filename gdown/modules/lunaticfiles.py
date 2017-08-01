@@ -13,6 +13,7 @@ from dateutil import parser
 # from datetime import datetime
 
 from ..module import browser, acc_info_template
+from ..exceptions import ModuleError
 
 
 def accInfo(username, passwd, proxy=False):
@@ -28,6 +29,8 @@ def accInfo(username, passwd, proxy=False):
     if 'Bledny login lub haslo' in rc:
         acc_info['status'] = 'deleted'
         return acc_info
+    elif 'Your IP is banned' in rc:
+        raise ModuleError('ip banned')
     elif 'Wyloguj' in rc and 'EXPIRE_DATE_FORMAT2' not in rc:
         acc_info['status'] = 'free'
         return acc_info
