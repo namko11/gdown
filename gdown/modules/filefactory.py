@@ -54,7 +54,7 @@ def accInfo(username, passwd, date_birth=True, proxy=False):
             sleep(5)
             return accInfo(username, passwd)
 
-    if 'Account Pending Deletion' in content:
+    if 'Account Pending Deletion' in content or 'The Email Address submitted was invalid' in content:
         acc_info['status'] = 'deleted'
         return acc_info
 
