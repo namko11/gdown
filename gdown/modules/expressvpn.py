@@ -31,7 +31,9 @@ def accInfo(username, passwd, proxy=False):
             'commit': 'Sign In'}
     rc = r.post('https://www.expressvpn.com/v2/sessions', data=data).text
     open('gdown.log', 'w').write(rc)
-    if 'Expires on' in rc:
+    if 'Invalid email or password.' in rc:
+        acc_info['status'] = 'deleted'
+    elif 'Expires on' in rc:
         bs = BeautifulSoup(rc, 'lxml')
         expire_date = bs.find('div', class_='table-col c15').contents[2]
         acc_info['status'] = 'premium'
