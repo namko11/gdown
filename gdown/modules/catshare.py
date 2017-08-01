@@ -22,7 +22,7 @@ def accInfo(username, passwd, proxy=False):
     r = browser(proxy)
     data = {'user_email': username, 'user_password': passwd}
     rc = r.post('https://catshare.net/login', data).text
-    if 'Podane hasło jest nieprawidłowe' in rc:
+    if 'Podane hasło jest nieprawidłowe' in rc or 'Konto o podanym loginie lub adresie e-mail nie istnieje' in rc:
         acc_info['status'] = 'deleted'
     elif '<span style="color: red">Darmowe</span>' in rc:
         acc_info['status'] = 'free'
