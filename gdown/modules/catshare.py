@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 # from decimal import Decimal
 
 from ..module import browser, acc_info_template
+from ..exceptions import ModuleError
 
 
 def accInfo(username, passwd, proxy=False):
@@ -22,7 +23,9 @@ def accInfo(username, passwd, proxy=False):
     r = browser(proxy)
     data = {'user_email': username, 'user_password': passwd}
     rc = r.post('https://catshare.net/login', data).text
-    if 'Podane hasło jest nieprawidłowe' in rc or 'Konto o podanym loginie lub adresie e-mail nie istnieje' in rc:
+    if 'Za wiele nieudanych prób logowania. Spróbuj ponownie później' in rc:
+        raise ModuleError('ip banned')
+    elif 'Podane hasło jest nieprawidłowe' in rc or 'Konto o podanym loginie lub adresie e-mail nie istnieje' in rc:
         acc_info['status'] = 'deleted'
     elif '<span style="color: red">Darmowe</span>' in rc:
         acc_info['status'] = 'free'
