@@ -20,7 +20,7 @@ def accInfo(username, passwd, proxy=False):
     data = {'login': 'login', 'loginemail': username, 'loginpassword': passwd, 'submit': 'login', 'rememberme': 'on', 'language': 2}
     rc = r.post('https://depfile.com', data=data).text
     open('gdown.log', 'w').write(rc)
-    if 'Incorrect password' in rc or 'E-mail not found.' in rc:
+    if 'Incorrect password' in rc or 'E-mail not found.' in rc:  # same error if ip banned
         acc_info['status'] = 'deleted'
         return acc_info
     elif 'Enter TOTP:' in rc:
@@ -33,8 +33,11 @@ def accInfo(username, passwd, proxy=False):
     open('gdown.log', 'w').write(rc)
     if 'Premium account expired' in rc:
         acc_info['status'] = 'free'
-        return acc_info
-    expire_date = re.search("href='/myspace/space/premium'>(.+?)<img", rc).group(1)
-    acc_info['status'] = 'premium'
-    acc_info['expire_date'] = parser.parse(expire_date)
+    expire_date = re.search("href='/myspace/space/premium'>(.+?)<img", rc)
+    if expire_date:
+        expire_date.group(1)
+        acc_info['status'] = 'premium'
+        acc_info['expire_date'] = parser.parse(expire_date)
+    else:
+        acc_info['status'] = 'free'
     return acc_info
