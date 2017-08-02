@@ -23,6 +23,10 @@ def accInfo(username, passwd, proxy=False):
     if 'Incorrect password' in rc or 'E-mail not found.' in rc:
         acc_info['status'] = 'deleted'
         return acc_info
+    elif 'Enter TOTP:' in rc:
+        # raise ModuleError('TOTP required')
+        acc_info['status'] = 'deleted'
+        return acc_info
     data = {'SetLng': 'SetLng',
             'language': '2'}
     rc = r.post('https://depfile.com/myspace/space/personal', data=data).text
