@@ -12,6 +12,7 @@ import re
 import time
 from hashlib import sha1
 from dateutil import parser
+from requests.exceptions import ConnectionError  # TODO?: import connection errors into gdown
 
 from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
@@ -31,7 +32,12 @@ def accInfo(username, passwd, proxy=False):
             'email': username,
             'password': passwd,
             'response_format': 'json'}
-    rc = r.post('https://www.mediafire.com/api/1.5/user/get_session_token.php', data=data).json()
+    try:
+        rc = r.post('https://www.mediafire.com/api/1.5/user/get_session_token.php', data=data).json()
+    except ConnectionError as e:
+        print('connection error')
+        time.sleep(1)
+        return accInfo(username=username, passwd=passwd, proxy=proxy)
     result = rc['response']['result']  # TODO: validate this
     if result == 'Error':
         if rc['response']['message'] in ('The Credentials you entered are invalid', 'One or more parameters for this request are invalid'):
