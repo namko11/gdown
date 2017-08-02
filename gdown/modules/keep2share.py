@@ -36,14 +36,15 @@ def accInfo(username, passwd, proxy=False):
         data['LoginForm[verifyCode]'] = captcha(img)  # TODO: verification (False)
         # raise ModuleError('CAPTCHA')
     rc = r.post('https://keep2share.cc/login.html', data=data).text
-    open('gdown.log', 'w').write(rc)
+    open('gdown4.log', 'w').write(rc)
 
     # if '<a href="/premium.html" class="free" style="color: red">free</a>' in rc:
     if 'The verification code is incorrect.' in rc:  # wrong captcha
         # TODO: report wrong captcha
         print('wrong captcha')
         return accInfo(username, passwd, proxy)
-    elif '<strong>Free <br>' in rc:
+    # elif '<strong>Free <br>' in rc:
+    elif '<strong>Free</strong>' in rc:
         acc_info['status'] = 'free'
         return acc_info
     elif 'You account was used from a different countries and automatically locked for security reasons.' in rc:
