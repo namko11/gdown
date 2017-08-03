@@ -11,6 +11,7 @@ This module contains handlers for filefactory.
 import re
 from datetime import datetime
 from dateutil import parser
+from time import sleep
 
 from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
@@ -39,25 +40,36 @@ def accInfo(username, passwd, date_birth=True, proxy=False):
             raise ModuleError('Birth date not set.')
         print('date birth',)  # DEBUG
         content = r.post('https://www.filefactory.com/member/setdob.php', {'newDobMonth': '1', 'newDobDay': '1', 'newDobYear': '1970', 'Submit': 'Continue'}).text
+        open('gdown.log', 'w').write(content)
 
     if 'Please Update your Password' in content:
         if not date_birth:
             raise ModuleError('Password has to be updated.')
         print('password resetting',)  # DEBUG
         content = r.post('https://www.filefactory.com/member/setpwd.php', {'dobMonth': '1', 'dobDay': '1', 'dobYear': '1970', 'newPassword': passwd, 'Submit': 'Continue'}).text
+        open('gdown.log', 'w').write(content)
         if 'Your Date of Birth was incorrect.' in content:
             print('wrong date birth',)  # DEBUG
             acc_info['status'] = 'free'
             return acc_info
         elif 'You have been signed out of your account due to a change being made to one of your core account settings.  Please sign in again.' in content or 'Your password has been changed successfully' in content:
             print('relogging after password reset',)  # DEBUG
-            from time import sleep
             sleep(5)
             return accInfo(username, passwd)
 
-    if 'Account Pending Deletion' in content or 'The Email Address submitted was invalid' in content:
+    if 'Review Acceptable Use Policy' in content:  # new policy
+        print('new policy')
+        content = r.post('https://www.filefactory.com/member/settos.php', data={'agree': '1', 'Submit': 'I understand'}).text()
+
+
+    if 'Account Pending Deletion' in content or 'The Email Address submitted was invalid' in content or 'The email address or password you have entered is incorrect.' in content:
         acc_info['status'] = 'deleted'
         return acc_info
+    elif 'Too Many Failed Sign In Attempts' in content:
+        # raise ModuleError('ip banned')
+        # print('ip banned')  # DEBUG
+        sleep(30)
+        return accInfo(username=username, passwd=passwd, proxy=proxy)
 
     content = r.get('https://www.filefactory.com/account/').text
 
