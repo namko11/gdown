@@ -9,6 +9,7 @@ This module contains handlers for filejoker.
 """
 
 import re
+# import time
 from dateutil import parser
 # from datetime import datetime
 
@@ -28,7 +29,12 @@ def accInfo(username, passwd, proxy=False):
     rc = r.post('https://filejoker.net/login', data=data).text
     open('gdown.log', 'w').write(rc)
 
-    if 'Incorrect Login or Password' in rc or 'Invalid email' in rc:
+    if 'Why do I have to complete a CAPTCHA?' in rc:
+        # print('captcha')
+        # time.sleep(5)
+        # return accInfo(username=username, passwd=passwd, proxy=proxy)
+        raise ModuleError('captcha')
+    elif 'Incorrect Login or Password' in rc or 'Invalid email' in rc:
         acc_info['status'] = 'deleted'
     elif 'Premium account expires:' in rc:
         acc_info['status'] = 'premium'
