@@ -9,9 +9,11 @@ This module contains handlers for filejoker.
 """
 
 import re
-from datetime import datetime
+from dateutil import parser
+# from datetime import datetime
 
 from ..module import browser, acc_info_template
+from ..exceptions import ModuleError
 
 
 def accInfo(username, passwd, proxy=False):
@@ -24,12 +26,17 @@ def accInfo(username, passwd, proxy=False):
             'redirect': '',
             'rand': ''}
     rc = r.post('https://filejoker.net/login', data=data).text
-    open('gdown.log', )
-    acc_info['transfer'] = re.search('<td>Traffic Available:</td>\n<td>([0-9 MGB]+?)</td>', rc).group(1)  # not tested
-    if 'Premium account expires:' in rc:
+    open('gdown.log', 'w').write(rc)
+
+    if 'Incorrect Login or Password' in rc or 'Invalid email' in rc:
+        acc_info['status'] = 'deleted'
+    elif 'Premium account expires:' in rc:
         acc_info['status'] = 'premium'
-        print(re.search('Premium account expires: ([0-9 a-Z]+?)\n', rc).group(1))
-        asdasdsa
-        # acc_info['expire_date'] =
+        acc_info['transfer'] = re.search('<td>Traffic Available:</td>\n<td>([0-9 MGB]+?)</td>', rc).group(1)
+        expire_date = re.search('Premium account expires: ([0-9 a-zA-Z]+?)\n', rc).group(1)
+        acc_info['expire_date'] = parser.parse(expire_date)
+    elif 'Buy Premium' in rc:  # kinda blind guess
+        acc_info['status'] = 'free'
     else:
-        asddsadsadsa
+        raise ModuleError('unknown error')
+    return acc_info
