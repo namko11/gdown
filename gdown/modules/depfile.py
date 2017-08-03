@@ -35,7 +35,7 @@ def accInfo(username, passwd, proxy=False):
         acc_info['status'] = 'free'
     expire_date = re.search("href='/myspace/space/premium'>(.+?)<img", rc)
     if expire_date:
-        expire_date.group(1)
+        expire_date = expire_date.group(1)
         acc_info['status'] = 'premium'
         acc_info['expire_date'] = parser.parse(expire_date)
     else:
