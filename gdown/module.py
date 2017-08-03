@@ -12,7 +12,7 @@ import requests
 import random
 import string
 
-from .config import headers, proxies
+from .config import headers, proxies, max_retries
 
 
 def acc_info_template():
@@ -28,6 +28,8 @@ def acc_info_template():
 
 def browser(proxy=False):
     r = requests.Session()
+    r.mount('http://', requests.adapters.HTTPAdapter(max_retries=max_retries))
+    r.mount('https://', requests.adapters.HTTPAdapter(max_retries=max_retries))
     r.headers = headers
     if proxy:
         r.proxies = proxies
