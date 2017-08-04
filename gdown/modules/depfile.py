@@ -31,10 +31,10 @@ def accInfo(username, passwd, proxy=False):
             'language': '2'}
     rc = r.post('https://depfile.com/myspace/space/personal', data=data).text
     open('gdown.log', 'w').write(rc)
+    expire_date = re.search("href='/myspace/space/premium'>(.+?)<img", rc)
     if 'Premium account expired' in rc:
         acc_info['status'] = 'free'
-    expire_date = re.search("href='/myspace/space/premium'>(.+?)<img", rc)
-    if expire_date:
+    elif expire_date:
         expire_date = expire_date.group(1)
         acc_info['status'] = 'premium'
         acc_info['expire_date'] = parser.parse(expire_date)
