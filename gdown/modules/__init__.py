@@ -44,4 +44,5 @@ __all__ = [
     'youjizz',
     'youporn',
     'youtube',
+    'zevera'
 ]
