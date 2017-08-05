@@ -29,6 +29,8 @@ def accInfo(username, passwd, proxy=False):
     #     status = re.search('<b>Account Status:</b></span>\n    <span class="profile_label">(.+?)</span>', rc).group(1)
     if 'Access Denied: Failed attempt limit reached.' in rc:
         raise ModuleError('ip banned')
+    elif 'Please update your billing information to reactivate your service' in rc:
+        acc_info['status'] = 'free'
     elif '<span class="profile_label">Active</span>' in rc:
         acc_info['status'] = 'premium'
         expire_date = re.search('Renewal Date:</b></span>\n<span class="profile_label">([0-9/]+?)</span>', rc).group(1)
