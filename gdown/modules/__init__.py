@@ -33,6 +33,7 @@ __all__ = [
     'pornhub',
     'rapidgator',
     'rapidu',
+    'realdebrid',
     'redtube',
     'rlslog',
     'shareonline',
