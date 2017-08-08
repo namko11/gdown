@@ -9,6 +9,7 @@ This module contains handlers for uploaded.
 """
 
 import re
+import time
 from datetime import datetime, timedelta
 # from time import sleep
 # from decimal import Decimal
@@ -24,7 +25,10 @@ def accInfo(username, passwd, proxy=False):
     data = {'user_email': username, 'user_password': passwd}
     rc = r.post('https://catshare.net/login', data).text
     if 'Za wiele nieudanych prób logowania. Spróbuj ponownie później' in rc:
-        raise ModuleError('ip banned')
+        # raise ModuleError('ip banned')
+        print('ip banned')
+        time.sleep(600)
+        return accInfo(username=username, passwd=passwd, proxy=proxy)
     elif 'Podane hasło jest nieprawidłowe' in rc or 'Konto o podanym loginie lub adresie e-mail nie istnieje' in rc:
         acc_info['status'] = 'deleted'
     elif '<span style="color: red">Darmowe</span>' in rc:
