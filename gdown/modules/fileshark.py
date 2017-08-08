@@ -11,8 +11,10 @@ This module contains handlers for fileshark.
 import re
 # from datetime import datetime
 from dateutil import parser
+from requests.exceptions import ConnectionError
 
 from ..module import browser, acc_info_template
+from ..exceptions import ModuleError
 
 
 def accInfo(username, passwd, proxy=False):
@@ -20,7 +22,10 @@ def accInfo(username, passwd, proxy=False):
     r = browser(proxy)
     acc_info = acc_info_template()
     # r.headers['X-Requested-With'] = 'XMLHttpRequest'
-    rc = r.get('http://fileshark.pl/zaloguj')
+    try:
+        rc = r.get('http://fileshark.pl/zaloguj')
+    except ConnectionError as e:
+        raise ModuleError('ip banned')
     open('gdown.log', 'w').write(rc.text)
     csrf_token = re.search('name="_csrf_token" value="(.+?)"', rc.text).group(1)
     data = {'_username': username,
