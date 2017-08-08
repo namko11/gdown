@@ -30,11 +30,11 @@ def accInfo(username, passwd, proxy=False):
             'LoginForm[rememberMe]': 0,
             'YII_CSRF_TOKEN': csrf_token}
     if 'LoginForm_verifyCode' in rc:
+        raise ModuleError('captcha')
         print('captcha')  # DEBUG
         img_url = 'https://keep2share.cc' + re.search('id="captcha_auth0" src="(/auth/captcha.html\?v=.+?)"', rc).group(1)
         img = r.get(img_url).content
         data['LoginForm[verifyCode]'] = captcha(img)  # TODO: verification (False)
-        # raise ModuleError('CAPTCHA')
     rc = r.post('https://keep2share.cc/login.html', data=data).text
     open('gdown4.log', 'w').write(rc)
 

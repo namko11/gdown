@@ -42,6 +42,7 @@ def accInfo(username, passwd, proxy=False):
         acc_info['status'] = 'free'
     elif 'Sign Out' in rc and 'Need 5 or more ExpressVPN licenses?' in rc:  # blind guess
         acc_info['status'] = 'free'
+    # TODO: not responding when ip banned (short time) - use timeout
     else:
         print('unknown status')
         asdasdasdasd

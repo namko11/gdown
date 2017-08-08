@@ -30,7 +30,7 @@ def accInfo(username, passwd, proxy=False):
             acc_info['status'] = 'free'
             return acc_info
         else:
-            days = re.search('A?c?c?o?u?n?t?K?o?n?t?o?: <b>Premium \(([0-9]+) da?y?s?n?i?\)</b>', rc).group(1)  # TODO: this is just wrong
+            days = re.search('A?c?c?o?u?n?t?K?o?n?t?o?: <b>Premium \(([0-9]+) dz?i?e?ń?a?y?s?n?i?\)</b>', rc).group(1)  # TODO: this is just wrong
             acc_info['status'] = 'premium'
             acc_info['expire_date'] = datetime.utcnow() + timedelta(days=int(days))
             acc_info['transfer'] = re.search('class="tipsyS"><b>(.+?)</b>', rc).group(1)

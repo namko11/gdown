@@ -20,3 +20,4 @@ def accInfo(username, passwd, proxy=False):
     """Returns account info."""
     acc_info = acc_info_template()
     r = browser(proxy)
+    # cloudflare challenge
