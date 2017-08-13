@@ -60,13 +60,13 @@ def accInfo(username, passwd, captcha=False, proxy=False):
     elif rc['status'] == 'Error':
         if rc['error'] == 'CaptchaRequired':
             print('CAPTCHA')
-            asddsasda
-            # return accInfo(username, passwd, captcha=True, proxy=proxy)
+            # asddsasda
+            return accInfo(username, passwd, captcha=True, proxy=proxy)
         elif rc['error'] == 'CaptchaInvalid':
-            print('CAPTCHA')
-            asddsasda
+            print('invalid CAPTCHA')
+            # asddsasda
             # recaptchaReportWrong()  # add captcha_id
-            # return accInfo(username, passwd, captcha=True, proxy=proxy)
+            return accInfo(username, passwd, captcha=True, proxy=proxy)
         elif rc['error'] == 'LoginInvalid':
             acc_info['status'] = 'deleted'
             return acc_info

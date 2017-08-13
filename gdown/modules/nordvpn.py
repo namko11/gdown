@@ -11,7 +11,7 @@ This module contains handlers for nordvpn.
 import re
 import time
 # from dateutil import parser
-# from datetime import datetime, timedelta
+from datetime import datetime, timedelta
 # from bs4 import BeautifulSoup
 
 from ..module import browser, acc_info_template
@@ -50,6 +50,13 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser(proxy)
 
+    # r.cookies = {'__cfduid': 'dc1e9794ba6ae701621b422ae3cb7e6951502627281',
+    #              '_icl_current_language': 'en',
+    #              'cf_clearance': 'ceebe7c1bd8c2de1966d39d3f8e7366e66e8eeaf-1502183226-604800'}
+    r.cookies['__cfduid'] = 'dc1e9794ba6ae701621b422ae3cb7e6951502627281'
+    r.cookies['_icl_current_language'] = 'en'
+    r.cookies['cf_clearance'] = 'ceebe7c1bd8c2de1966d39d3f8e7366e66e8eeaf-1502183226-604800'
+
     # cloudflare anty-ddos
     rc = r.get("https://nordvpn.com/login").text
     open('gdown.log', 'w').write(rc)
@@ -76,7 +83,7 @@ def accInfo(username, passwd, proxy=False):
         rc = r.get('https://nordvpn.com/cdn-cgi/l/chk_jschl', params=params).text
         open('gdown.log', 'w').write(rc)
 
-    print(r.cookies)  # There should be cf_clearance cookie
+    # print(r.cookies)  # There should be cf_clearance cookie
     mgmnonce = re.search('name="_mgmnonce_user_login" value="(.+?)"', rc).group(1)
     data = {'log': username,
             'pwd': passwd,
@@ -88,6 +95,13 @@ def accInfo(username, passwd, proxy=False):
     rc = r.post('https://nordvpn.com/login/', data=data).text
     if 'Your account has expired.' in rc:
         acc_info['status'] = 'free'
+    elif '<th>Expiry date</th>' in rc:
+        expire_date = re.search('<th><b>([0-9]+) days left.</b>', rc).group(1)
+        expire_date = datetime.utcnow() + timedelta(days=int(expire_date))
+        acc_info['status'] = 'premium'
+        acc_info['expire_date'] = expire_date
+    elif 'The password you entered for the username' in rc or 'ERROR</strong>: Invalid username.' in rc:
+        acc_info['status'] = 'deleted'
     else:
         print(r.cookies)
         open('gdown.log', 'w').write(rc)
