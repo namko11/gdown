@@ -36,7 +36,7 @@ def accInfo(username, passwd, proxy=False):
         img = r.get(img_url).content
         data['LoginForm[verifyCode]'] = captcha(img)  # TODO: verification (False)
     rc = r.post('https://keep2share.cc/login.html', data=data).text
-    open('gdown4.log', 'w').write(rc)
+    open('gdown.log', 'w').write(rc)
 
     # if '<a href="/premium.html" class="free" style="color: red">free</a>' in rc:
     if 'The verification code is incorrect.' in rc:  # wrong captcha
@@ -66,6 +66,9 @@ def accInfo(username, passwd, proxy=False):
             else:
                 acc_info['expire_date'] = parser.parse(expire_date)
             # acc_info['expire_date'] = datetime(int(d.group(1)), int(d.group(2)), int(d.group(3)))
+            rc = r.get('https://keep2share.cc/site/profile.html').text
+            open('gdown.log', 'w').write(rc)
+            acc_info['transfer'] = re.findall('href="/user/statistic.html">([0-9\. MGB]+)</a>', rc)[1]
         return acc_info
     else:
         open('gdown.log', 'w').write(rc)
