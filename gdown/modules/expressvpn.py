@@ -38,6 +38,8 @@ def accInfo(username, passwd, proxy=False):
         expire_date = bs.find('div', class_='table-col c15').contents[2]
         acc_info['status'] = 'premium'
         acc_info['expire_date'] = parser.parse(expire_date)
+    elif 'Your account is suspended' in rc and 'As we were unable to verify your billing information, your payment has been refunded.' in rc:
+        acc_info['status'] = 'blocked'
     elif 'This subscription expired' in rc:
         acc_info['status'] = 'free'
     elif 'Sign Out' in rc and 'Need 5 or more ExpressVPN licenses?' in rc:  # blind guess
