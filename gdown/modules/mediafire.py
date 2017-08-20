@@ -13,6 +13,7 @@ import time
 from hashlib import sha1
 from dateutil import parser
 from requests.exceptions import ConnectionError  # TODO?: import connection errors into gdown
+from simplejson.scanner import JSONDecodeError
 
 from ..module import browser, acc_info_template
 from ..exceptions import ModuleError
@@ -58,7 +59,12 @@ def accInfo(username, passwd, proxy=False):
 
     data = {'session_token': token,
             'response_format': 'json'}
-    rc = r.post('http://www.mediafire.com/api/1.5/user/get_info.php', data=data).json()
+    try:
+        rc = r.post('http://www.mediafire.com/api/1.5/user/get_info.php', data=data).json()
+    except JSONDecodeError:
+        print('ip banned?')
+        time.sleep(5)
+        rc = r.post('http://www.mediafire.com/api/1.5/user/get_info.php', data=data).json()
     if 'user_info' not in rc['response']:  # DEBUG
         if rc['response'].get('message') == 'Internal server error (1002)':
             time.sleep(5)
