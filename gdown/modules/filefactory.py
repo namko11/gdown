@@ -34,6 +34,9 @@ def accInfo(username, passwd, date_birth=True, proxy=False):
     r = browser(proxy)
     content = r.post('https://www.filefactory.com/member/signin.php', data={'loginEmail': username, 'loginPassword': passwd, 'Submit': 'Sign In'}).text
     open('gdown.log', 'w').write(content)
+    # r.cookies['locale'] = 'en_US.utf8'
+    # content = r.get('https://www.filefactory.com', params={'language': 'en_US.utf8'}).text
+    # open('gdownl.log', 'w').write(content)
 
     if 'What is your date of birth?' in content:
         if not date_birth:
@@ -73,7 +76,7 @@ def accInfo(username, passwd, date_birth=True, proxy=False):
 
     content = r.get('https://www.filefactory.com/account/').text
 
-    if '<strong>Free Member</strong>' in content:
+    if '<strong>Free Member</strong>' in content or '<strong>Kostenloses Mitglied</strong>' in content or '<strong>Membro Gratuito</strong>' in content:
         acc_info['status'] = 'free'
         return acc_info
     elif any(i in content for i in ('The account you are trying to use has been deleted.', 'This account has been automatically suspended due to account sharing.', 'The account you have tried to sign into is pending deletion.')):
