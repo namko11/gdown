@@ -47,7 +47,7 @@ def accInfo(username, passwd, proxy=False):
     elif '<strong>Free</strong>' in rc:
         acc_info['status'] = 'free'
         return acc_info
-    elif 'You account was used from a different countries and automatically locked for security reasons.' in rc:
+    elif 'You account was used from a different countries and automatically locked for security reasons.' in rc or 'Your account is blocked for sharing' in rc:
         acc_info['status'] = 'blocked'
         return acc_info
     elif 'Incorrect username or password' in rc:
