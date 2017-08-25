@@ -29,6 +29,8 @@ def accInfo(username, passwd, proxy=False):
     #     status = re.search('<b>Account Status:</b></span>\n    <span class="profile_label">(.+?)</span>', rc).group(1)
     if 'Access Denied: Failed attempt limit reached.' in rc:
         raise ModuleError('ip banned')
+    elif 'You’ve had too many failed login attempts. Please check the box to confirm you are not a robot.' in rc:
+        raise ModuleError('recaptcha')
     elif 'Please update your billing information to reactivate your service' in rc or 'There was a billing failure.' in rc:
         acc_info['status'] = 'free'
     elif '<span class="profile_label">Active</span>' in rc:
