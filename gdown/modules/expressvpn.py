@@ -29,7 +29,7 @@ def accInfo(username, passwd, proxy=False):
             'email': username,
             'password': passwd,
             'commit': 'Sign In'}
-    rc = r.post('https://www.expressvpn.com/v2/sessions', data=data).text
+    rc = r.post('https://www.expressvpn.com/sessions', data=data).text
     open('gdown.log', 'w').write(rc)
     if 'Invalid email or password.' in rc:
         acc_info['status'] = 'deleted'
