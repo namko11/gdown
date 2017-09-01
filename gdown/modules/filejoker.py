@@ -42,6 +42,8 @@ def accInfo(username, passwd, proxy=False):
         raise ModuleError('recaptcha')
     elif 'Incorrect Login or Password' in rc or 'Invalid email' in rc:
         acc_info['status'] = 'deleted'
+    elif 'Your account was suspended by administrator.' in rc:
+        acc_info['status'] = 'blocked'
     elif 'Premium account expires:' in rc:
         acc_info['status'] = 'premium'
         acc_info['transfer'] = re.search('<td>Traffic Available:</td>\n<td>([\-0-9 MGB]+?)</td>', rc).group(1)
