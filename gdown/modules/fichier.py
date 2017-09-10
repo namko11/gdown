@@ -12,6 +12,7 @@ import re
 from dateutil import parser
 
 from ..module import browser, acc_info_template
+from ..exceptions import ModuleError
 
 
 def accInfo(username, passwd, proxy=False):
@@ -27,8 +28,7 @@ def accInfo(username, passwd, proxy=False):
         acc_info['status'] = 'deleted'
         return acc_info
     elif 'For security reasons, following many identification errors, your IP address (' in rc:
-        print('ip AND ACC blocked')
-        asdasdsad
+        raise ModuleError('ip AND ACC blocked')
     elif 'Logout' not in rc:
         print('?')
         asdasddas
@@ -48,4 +48,4 @@ def accInfo(username, passwd, proxy=False):
         acc_info['status'] = 'free'
         return acc_info
     else:
-        asdasdasdqw
+        raise ModuleError('unknown status')

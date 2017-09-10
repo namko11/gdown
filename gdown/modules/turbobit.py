@@ -46,12 +46,12 @@ def upload(username, passwd, filename):
 
 def accInfo(username, passwd, captcha=False, proxy=False):
     """Returns account info."""
-    time.sleep(5)
+    time.sleep(1)
     acc_info = acc_info_template()
     r = browser(proxy)
     values = {'user[login]': username, 'user[pass]': passwd, 'user[memory]': '1', 'user[submit]': 'Login'}
     if captcha:
-        print('captcha')
+        print('recaptcha')
         recaptcha_challenge, recaptcha_response = recaptcha(recaptcha_public_key)
         values['recaptcha_challenge_field'] = recaptcha_challenge
         values['recaptcha_response_field'] = recaptcha_response

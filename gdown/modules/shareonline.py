@@ -40,19 +40,20 @@ def accInfo(username, passwd, proxy=False):
         raise ModuleError('ip banned')
     elif 'This account is disabled, please contact support' in rc:
         acc_info['status'] = 'blocked'
-        return acc_info
     elif 'Sammler        </p>' in rc:
         acc_info['status'] = 'free'
-        return acc_info
-    elif 'Premium        </p>' in rc or 'VIP-Special        </p>' in rc:
+    elif 'VIP-Special        </p>' in rc:
+        # raise ModuleError('vip special == free (expired premium)?')
+        print('vip special')
+        acc_info['status'] = 'free'
+    elif 'Premium        </p>' in rc:
         acc_info['status'] = 'premium'
         expire_date = re.search("<span class='green'>([0-9\., :]+?)</span>", rc).group(1)  # this probably won't be "green" allways
         acc_info['expire_date'] = parser.parse(expire_date, dayfirst=True)
         transfer = re.search("\(([\-0-9\. GiB]+?)\)", rc).group(1)
         acc_info['transfer'] = transfer
-        return acc_info
     elif '* Login data invalid *' in rc:
         acc_info['status'] = 'deleted'
-        return acc_info
     else:
         asddsadsa
+    return acc_info
