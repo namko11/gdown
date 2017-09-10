@@ -30,9 +30,9 @@ def accInfo(username, passwd, proxy=False):
         print('ip/acc blocked')
         acc_info['status'] = 'blocked'
         return acc_info
-        #sleep(20)
-        #return accInfo(username, passwd)
-    elif 'Error e-mail or password.' in content or 'Wrong e-mail or password.' in content:
+        # sleep(20)
+        # return accInfo(username, passwd)
+    elif 'Error e-mail or password.' in content or 'Wrong e-mail or password.' in content or 'Invalid auth code' in content:  # auth code == two step verification on email
         acc_info['status'] = 'deleted'
         return acc_info
     elif 'Account:&nbsp;<a href="/article/premium">Free</a>' in content:
