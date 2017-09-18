@@ -48,7 +48,7 @@ def accInfo(username, passwd, proxy=False):
         acc_info['status'] = 'free'
     elif 'Premium        </p>' in rc:
         acc_info['status'] = 'premium'
-        expire_date = re.search("<span class='green'>([0-9\., :]+?)</span>", rc).group(1)  # this probably won't be "green" allways
+        expire_date = re.search("<span class='g?ree?n?d?'>([0-9\., :]+?)</span>", rc).group(1)  # this probably won't be "green" allways
         acc_info['expire_date'] = parser.parse(expire_date, dayfirst=True)
         transfer = re.search("\(([\-0-9\. GiB]+?)\)", rc).group(1)
         acc_info['transfer'] = transfer
