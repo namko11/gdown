@@ -46,12 +46,12 @@ def accInfo(username, passwd, proxy=False):
     elif 'Incorrect username or password' in rc:
         acc_info['status'] = 'deleted'
         return acc_info
-    elif 'You account was used from a different countries and automatically locked for security reasons.' in rc:
+    elif 'You account was used from a different countries and automatically locked for security reasons.' in rc or 'Your account is blocked for sharing' in rc:
         acc_info['status'] = 'blocked'
         return acc_info
 
     rc = r.get('https://fileboom.me/site/profile.html').text  # TODO?: redirect on login?
-    open('gdown.log', 'w').write(rc)
+    open('gdown2.log', 'w').write(rc)
     if '<strong>Free <br>' in rc or '    Free</span>' in rc:
         acc_info['status'] = 'free'
         return acc_info
@@ -72,5 +72,5 @@ def accInfo(username, passwd, proxy=False):
             # acc_info['expire_date'] = datetime(int(d.group(1)), int(d.group(2)), int(d.group(3)))
         return acc_info
     else:
-        open('gdown.log', 'w').write(rc)
+        # open('gdown.log', 'w').write(rc)
         raise ModuleError('Unknown error, full log in gdown.log')
