@@ -20,7 +20,7 @@ def accInfo(username, passwd, proxy=False):
     acc_info = acc_info_template()
     r = browser()
     data = {'login': 'login', 'loginemail': username, 'loginpassword': passwd, 'submit': 'login', 'rememberme': 'on', 'language': 2}
-    rc = r.post('https://depfile.com', data=data).text
+    rc = r.post('https://depfile.us', data=data).text
     open('gdown.log', 'w').write(rc)
     if 'Incorrect password' in rc or 'E-mail not found.' in rc or 'Please enter your E-mail.' in rc:  # same error if ip banned
         acc_info['status'] = 'deleted'
@@ -40,7 +40,7 @@ def accInfo(username, passwd, proxy=False):
         raise ModuleError('unknown status')
     data = {'SetLng': 'SetLng',
             'language': '2'}
-    rc = r.post('https://depfile.com/myspace/space/personal', data=data).text
+    rc = r.post('https://depfile.us/myspace/space/personal', data=data).text
     open('gdown2.log', 'w').write(rc)
     expire_date = re.search("href='/myspace/space/premium'>(.+?)<img", rc)
     if 'Premium account expired' in rc:
