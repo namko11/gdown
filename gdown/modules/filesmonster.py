@@ -8,8 +8,9 @@ This module contains handlers for filesmonster.
 
 """
 
-# import re
+import re
 # from datetime import datetime
+from dateutil import parser
 
 from ..module import browser, acc_info_template
 from ..exceptions import ModuleError  # , IpBlocked
@@ -34,6 +35,10 @@ def accInfo(username, passwd, proxy=False):
         # TODO: parse date
         # <span class='red em'>Expired: 06/25/12</span>
         acc_info['status'] = 'free'
+    elif '<strong>Premium</strong>' in rc:  # Your membership type:
+        date_expire = re.search("<span class='em-success'>(.+)</span>", rc).group(1)
+        acc_info['status'] = 'premium'
+        acc_info['expire_date'] = parser.parse(date_expire)
     else:
         raise ModuleError('unknown status')
     return acc_info

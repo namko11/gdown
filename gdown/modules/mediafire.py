@@ -78,7 +78,7 @@ def accInfo(username, passwd, proxy=False):
         acc_info['status'] = 'premium'
         data = {'session_token': token,
                 'response_format': 'json'}
-        rc = r.post('https://www.mediafire.com/api/1.5/billing/get_invoice.php', data=data).json()
+        rc = r.post('https://www.mediafire.com/api/1.5/billing/get_invoice.php', data=data).json()  # invoice details are delayed (after you click on payment details on page?)
         # print(rc)
         # result = rc['response']['result']  # TODO?: validate this
         acc_info['expire_date'] = parser.parse(rc['response']['invoice']['recurring_startdate'])
