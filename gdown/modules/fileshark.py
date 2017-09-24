@@ -38,6 +38,8 @@ def accInfo(username, passwd, proxy=False):
         acc_info['status'] = 'premium'
         date_expire = re.search('Premium <span title="([0-9\- \:]+?)"', rc).group(1)
         acc_info['expire_date'] = parser.parse(date_expire)
+        rc = re.search('data-min="0" data-max="([0-9]+)" data-angleOffset=90 data-linecap=round value="([0-9]+)"', rc)
+        acc_info['transfer'] = int((int(rc.group(1)) - int(rc.group(2))) / 1024 / 1024 / 1024)
     elif 'Rodzaj konta <strong>Standardowe' in rc:
         acc_info['status'] = 'free'
     elif 'Nieprawidłowe dane.' in rc:
